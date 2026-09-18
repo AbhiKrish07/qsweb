@@ -1,9 +1,10 @@
 import { FormEvent, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, Github, MoveUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Github, MoveUpRight, Sparkles } from "lucide-react";
 import { Link, useRoute } from "wouter";
 import { getCategoryLabel, getProduct, products } from "@/lib/products";
 import { ProductVisual } from "./Home";
 import { toast } from "sonner";
+import { CaptureLiveApp, LearnLoopLiveApp, ZenAILiveApp } from "@/components/ProductApps";
 
 function BetaForm({ productName }: { productName: string }) {
   const [email, setEmail] = useState("");
@@ -42,6 +43,20 @@ export default function ProductPage() {
   return <div className="product-page">
     <div className="product-breadcrumb"><Link href="/"><ArrowLeft size={14} /> all projects</Link><span>—</span><span>{getCategoryLabel(product.category)}</span></div>
     <section className={`product-hero product-hero-${product.color}`}><div className="product-hero-copy"><p className="eyebrow"><span className="pulse-dot" /> {product.index} — {product.status}</p><h1>{product.name}<span className="orange-period">.</span></h1><p className="product-kicker">{product.kicker}</p><p className="product-description">{product.description}</p><div className="product-hero-actions">{isOSS ? <a className="primary-button" href={repoUrl} target="_blank" rel="noreferrer">View repository <Github size={15} /></a> : <BetaForm productName={product.name} />}<span className="product-hero-note">{isOSS ? "Public source / MIT license" : "A quiet note when it’s ready."}</span></div></div><div className="product-hero-visual"><ProductVisual product={product} /></div><div className="hero-scroll-label">PRODUCT — {product.index}</div></section>
+
+    {/* Live Interactive Product Web App Section */}
+    {(product.slug === "capture" || product.slug === "learnloop" || product.slug === "zen-ai") && (
+      <section className="live-product-app-section" style={{ padding: "6vw 9.2vw", background: "var(--card)", borderBottom: "1px solid var(--line)" }}>
+        <div className="section-marker">[ LIVE INTERACTIVE DEMO ]</div>
+        <h2 style={{ font: "700 clamp(2.8rem, 5vw, 5.5rem)/.85 'Space Grotesk', sans-serif", letterSpacing: "-.08em", textTransform: "uppercase", margin: "14px 0 30px" }}>
+          Experience {product.name}<br /><em style={{ color: "var(--orange)", fontStyle: "normal" }}>live right now.</em>
+        </h2>
+
+        {product.slug === "capture" && <CaptureLiveApp />}
+        {product.slug === "learnloop" && <LearnLoopLiveApp />}
+        {product.slug === "zen-ai" && <ZenAILiveApp />}
+      </section>
+    )}
 
     <section className="product-details"><div className="detail-stat"><span className="meta-label">Signal</span><strong>{product.metric}</strong><span>{product.metricLabel}</span></div><div className="detail-intro"><span className="section-marker">[ THE WHY ]</span><h2>{product.oneLiner}</h2></div><div className="detail-tags">{product.tags.map((tag) => <span key={tag}>{tag}</span>)}</div></section>
     <section className="problem-section"><div className="section-marker">[ THE PROBLEM ]</div><div className="problem-layout"><p className="problem-quote">“{product.problem}”</p><div className="approach-copy"><span className="meta-label">Our approach</span><p>{product.approach}</p></div></div></section>
