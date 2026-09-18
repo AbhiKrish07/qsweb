@@ -1,48 +1,62 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Check, Copy, Download, Layers, Play, RefreshCw, RotateCcw, Search, Sparkles, Terminal, Trash2, Zap } from "lucide-react";
+import { ArrowRight, BookOpen, Check, CheckSquare, Copy, Cpu, Download, FileText, Globe, Key, Layers, Mic, MicOff, Play, RefreshCw, RotateCcw, Search, Sparkles, Terminal, Trash2, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { playClick, playSuccess, playTick } from "@/lib/sound";
 
 // ==========================================
-// 1. CAPTURE WORKING LIVE WEB APP
+// 1. UPGRADED CAPTURE LIVE APP (VECTOR WORKSPACE)
 // ==========================================
 
 interface CapturedItem {
   id: string;
   rawText: string;
+  mode: "Text" | "Voice" | "Link";
   category: "Action Item" | "Research Insight" | "System Note";
   summary: string;
-  actionItems: string[];
+  actionItems: { text: string; done: boolean }[];
   purityScore: number;
+  tags: string[];
   timestamp: string;
 }
 
 const initialCaptures: CapturedItem[] = [
   {
     id: "cap-1",
-    rawText: "Remember to verify SCTM isotropic whitening alpha threshold with 0.85 tomorrow morning",
+    rawText: "Verify SCTM isotropic whitening alpha threshold with 0.85 tomorrow morning in PyTorch test suite",
+    mode: "Text",
     category: "Research Insight",
     summary: "SCTM Isotropic Whitening Threshold Calibration",
-    actionItems: ["Run PyTorch benchmark on 128k context dataset", "Calibrate authority gate alpha to 0.85"],
+    actionItems: [
+      { text: "Run PyTorch benchmark on 128k context dataset", done: true },
+      { text: "Calibrate authority gate alpha threshold to 0.85", done: false },
+    ],
     purityScore: 98,
+    tags: ["SCTM", "PyTorch", "Memory"],
     timestamp: "Today, 14:30 IST",
   },
   {
     id: "cap-2",
-    rawText: "Redesign LearnLoop concept cards with Space Grotesk typography and 3D card flip animation",
+    rawText: "Redesign LearnLoop concept cards with Space Grotesk typography and living notebook concept connectors",
+    mode: "Voice",
     category: "Action Item",
-    summary: "LearnLoop UI Card Animation Refactoring",
-    actionItems: ["Apply Space Grotesk font to headers", "Add CSS perspective transform for 3D flip"],
-    purityScore: 95,
+    summary: "LearnLoop Thinking Notebook Refactoring",
+    actionItems: [
+      { text: "Apply Space Grotesk font hierarchy", done: true },
+      { text: "Add concept graph connector lines between paragraphs", done: false },
+    ],
+    purityScore: 96,
+    tags: ["LearnLoop", "UI/UX", "Notebook"],
     timestamp: "Yesterday, 18:15 IST",
-  }
+  },
 ];
 
 export function CaptureLiveApp() {
   const [input, setInput] = useState("");
+  const [ingestMode, setIngestMode] = useState<"Text" | "Voice" | "Link">("Text");
+  const [isRecording, setIsRecording] = useState(false);
   const [captures, setCaptures] = useState<CapturedItem[]>(() => {
     try {
-      const saved = localStorage.getItem("quiet_capture_inbox");
+      const saved = localStorage.getItem("quiet_capture_workspace_v2");
       return saved ? JSON.parse(saved) : initialCaptures;
     } catch {
       return initialCaptures;
@@ -50,76 +64,120 @@ export function CaptureLiveApp() {
   });
 
   const [isProcessing, setIsProcessing] = useState(false);
+  const [pipelineStep, setPipelineStep] = useState<number>(0);
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("All");
 
   useEffect(() => {
     try {
-      localStorage.setItem("quiet_capture_inbox", JSON.stringify(captures));
+      localStorage.setItem("quiet_capture_workspace_v2", JSON.stringify(captures));
     } catch {
       /* fallback */
     }
   }, [captures]);
 
   const samples = [
-    "Verify SCTM isotropic whitening alpha=0.85 tomorrow",
-    "Redesign LearnLoop concept cards with Space Grotesk font",
-    "Prepare Zen AI local Rust inference benchmark for Friday",
+    "Verify SCTM isotropic whitening alpha=0.85 tomorrow in test suite",
+    "Redesign LearnLoop concept cards with Space Grotesk font and connectors",
+    "Prepare Zen AI local Rust inference benchmark for Friday drop",
   ];
+
+  const toggleActionDone = (itemId: string, actionIdx: number) => {
+    playClick();
+    setCaptures(
+      captures.map((item) => {
+        if (item.id === itemId) {
+          const newActions = [...item.actionItems];
+          newActions[actionIdx] = {
+            ...newActions[actionIdx],
+            done: !newActions[actionIdx].done,
+          };
+          return { ...item, actionItems: newActions };
+        }
+        return item;
+      })
+    );
+  };
 
   const handleCapture = (textToCapture?: string) => {
     const text = textToCapture || input;
-    if (!text.trim()) {
-      toast("Enter a thought before capturing.");
+    if (!text.trim() && ingestMode !== "Voice") {
+      toast("Enter a thought fragment or link before capturing.");
       return;
     }
 
+    const finalText = text.trim() || "Voice note: Test SCTM vector whitening decorrelation pipeline";
+
     playClick();
     setIsProcessing(true);
+    setPipelineStep(1);
+
+    setTimeout(() => setPipelineStep(2), 200);
+    setTimeout(() => setPipelineStep(3), 400);
 
     setTimeout(() => {
       let cat: CapturedItem["category"] = "System Note";
-      let summary = text;
-      let actions: string[] = ["Review captured fragment"];
-      const lower = text.toLowerCase();
+      let summary = finalText;
+      let actions = [{ text: "Review captured fragment", done: false }];
+      let tags = ["System"];
+      const lower = finalText.toLowerCase();
 
       if (lower.includes("verify") || lower.includes("test") || lower.includes("sctm") || lower.includes("alpha")) {
         cat = "Research Insight";
-        summary = "SCTM Research & Mathematical Formulation";
-        actions = ["Execute vector test benchmark", "Verify matrix whitening decorrelation"];
+        summary = "SCTM Research & Whitening Calibration";
+        actions = [
+          { text: "Execute vector test benchmark", done: false },
+          { text: "Verify matrix whitening decorrelation", done: true },
+        ];
+        tags = ["SCTM", "Research", "AI Memory"];
       } else if (lower.includes("redesign") || lower.includes("prepare") || lower.includes("fix") || lower.includes("build")) {
         cat = "Action Item";
-        summary = "Studio Product Execution";
-        actions = ["Draft component specification", "Deploy updated build to staging"];
+        summary = "Studio Product & Interface Execution";
+        actions = [
+          { text: "Draft component specification schema", done: false },
+          { text: "Deploy updated build to staging environment", done: false },
+        ];
+        tags = ["Product", "UI/UX", "Execution"];
       }
 
       const newItem: CapturedItem = {
         id: `cap-${Date.now()}`,
-        rawText: text,
+        rawText: finalText,
+        mode: ingestMode,
         category: cat,
         summary,
         actionItems: actions,
-        purityScore: Math.floor(Math.random() * 5) + 95,
+        purityScore: Math.floor(Math.random() * 4) + 96,
+        tags,
         timestamp: "Just now",
       };
 
       setCaptures([newItem, ...captures]);
       setIsProcessing(false);
+      setPipelineStep(0);
       setInput("");
+      setIsRecording(false);
       playSuccess();
-      toast("Thought saved to local vector memory!");
-    }, 450);
+      toast("Thought parsed & cached in local vector memory!");
+    }, 600);
   };
 
   const deleteCapture = (id: string) => {
     playClick();
     setCaptures(captures.filter((c) => c.id !== id));
-    toast("Item removed.");
+    toast("Capture removed from inbox.");
   };
 
   const exportMarkdown = () => {
     playClick();
-    const md = `# Quiet Studio Capture Export\n\n` + captures.map((c) => `## [${c.category}] ${c.summary}\n- Raw: "${c.rawText}"\n- Actions: ${c.actionItems.join(", ")}\n- Purity: ${c.purityScore}%\n- Date: ${c.timestamp}\n`).join("\n");
+    const md =
+      `# Quiet Studio Capture Workspace Export\n\n` +
+      captures
+        .map(
+          (c) =>
+            `## [${c.category}] ${c.summary}\n- Mode: ${c.mode}\n- Raw: "${c.rawText}"\n- Actions: ${c.actionItems.map((a) => `${a.done ? "[x]" : "[ ]"} ${a.text}`).join("; ")}\n- Tags: ${c.tags.join(", ")}\n- Purity: ${c.purityScore}%\n- Date: ${c.timestamp}\n`
+        )
+        .join("\n");
     const blob = new Blob([md], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -127,34 +185,54 @@ export function CaptureLiveApp() {
     a.download = "quiet-capture-export.md";
     a.click();
     URL.revokeObjectURL(url);
-    toast("Captured inbox exported to Markdown!");
+    toast("Exported captures to Markdown!");
   };
 
   const filtered = captures.filter((c) => {
     const matchCat = activeCategory === "All" || c.category === activeCategory;
-    const matchQ = `${c.rawText} ${c.summary}`.toLowerCase().includes(query.toLowerCase());
+    const matchQ = `${c.rawText} ${c.summary} ${c.tags.join(" ")}`.toLowerCase().includes(query.toLowerCase());
     return matchCat && matchQ;
   });
 
   return (
-    <div className="live-app-card capture-app-wrap">
+    <div className="live-app-card capture-app-wrap" style={{ padding: "36px" }}>
       <div className="app-header-bar">
         <div className="app-title">
           <span className="pulse-dot" />
-          <span>CAPTURE INTERACTIVE APP</span>
+          <span>CAPTURE AI VECTOR WORKSPACE</span>
           <span className="app-ver">v2.4 LOCAL-FIRST</span>
         </div>
         <div className="app-header-actions">
-          <button className="outline-button" onClick={exportMarkdown} style={{ padding: "6px 12px", fontSize: "9px" }}>
-            Export Markdown <Download size={12} />
+          <button className="outline-button" onClick={exportMarkdown} style={{ padding: "7px 14px", fontSize: "10px" }}>
+            Export Markdown <Download size={13} />
           </button>
         </div>
       </div>
 
+      {/* Ingest Mode Tabs */}
+      <div className="capture-mode-tabs">
+        <button className={`mode-tab ${ingestMode === "Text" ? "active" : ""}`} onClick={() => setIngestMode("Text")}>
+          <FileText size={13} /> Text Fragment
+        </button>
+        <button
+          className={`mode-tab ${ingestMode === "Voice" ? "active" : ""}`}
+          onClick={() => {
+            setIngestMode("Voice");
+            setIsRecording(!isRecording);
+          }}
+        >
+          <Mic size={13} /> Voice Note {isRecording ? "(Recording...)" : ""}
+        </button>
+        <button className={`mode-tab ${ingestMode === "Link" ? "active" : ""}`} onClick={() => setIngestMode("Link")}>
+          <Globe size={13} /> Web Link Ingest
+        </button>
+      </div>
+
+      {/* Input Stage */}
       <div className="capture-input-section">
         <div className="input-prompt-label">
           <span>01 / THOUGHT INGEST LAYER</span>
-          <span>PRESS ⌘ ENTER TO SAVE</span>
+          <span>PRESS ⌘ ENTER TO CAPTURE</span>
         </div>
 
         <div className={`capture-textarea-wrap ${isProcessing ? "processing" : ""}`}>
@@ -168,16 +246,47 @@ export function CaptureLiveApp() {
                 handleCapture();
               }
             }}
-            placeholder="Type or paste a raw thought fragment without formatting..."
+            placeholder={
+              ingestMode === "Voice"
+                ? "Speak your thought... (Simulated voice-to-text active)"
+                : ingestMode === "Link"
+                ? "Paste URL or article link (e.g. https://arxiv.org/abs/2409...)..."
+                : "Type or paste a raw thought fragment without formatting..."
+            }
           />
           <button className="primary-button capture-btn" onClick={() => handleCapture()} disabled={isProcessing}>
-            {isProcessing ? "Structuring..." : "Capture Thought"} <ArrowRight size={14} />
+            {isProcessing ? "Ingesting..." : "Capture Thought"} <ArrowRight size={14} />
           </button>
         </div>
 
-        {/* Quick Sample Chips */}
+        {/* Real-Time SCTM Processing Pipeline Gauge */}
+        {isProcessing && (
+          <div className="capture-pipeline-gauge">
+            <div className="pipeline-step-item">
+              <span className={`step-dot ${pipelineStep >= 1 ? "done" : ""}`} />
+              <span>01 INGEST</span>
+            </div>
+            <div className="pipeline-line" />
+            <div className="pipeline-step-item">
+              <span className={`step-dot ${pipelineStep >= 2 ? "done" : ""}`} />
+              <span>02 ISOTROPIC WHITENING</span>
+            </div>
+            <div className="pipeline-line" />
+            <div className="pipeline-step-item">
+              <span className={`step-dot ${pipelineStep >= 3 ? "done" : ""}`} />
+              <span>03 AUTHORITY GATE (α=0.85)</span>
+            </div>
+            <div className="pipeline-line" />
+            <div className="pipeline-step-item">
+              <span className={`step-dot ${pipelineStep >= 4 ? "done" : ""}`} />
+              <span>04 VECTOR STORE</span>
+            </div>
+          </div>
+        )}
+
+        {/* Sample Chips */}
         <div className="sample-chips-row">
-          <span className="sample-label">Try sample:</span>
+          <span className="sample-label">Sample thoughts:</span>
           {samples.map((s) => (
             <button
               key={s}
@@ -187,28 +296,24 @@ export function CaptureLiveApp() {
                 setInput(s);
               }}
             >
-              "{s.slice(0, 32)}..."
+              "{s.slice(0, 36)}..."
             </button>
           ))}
         </div>
       </div>
 
-      {/* Captured Inbox List */}
+      {/* Captured Vector Inbox */}
       <div className="capture-inbox-section">
         <div className="inbox-head">
           <div className="inbox-title">
-            <span className="section-marker">[ SAVED VECTOR INBOX ]</span>
-            <span>{filtered.length} thoughts saved</span>
+            <span className="section-marker">[ LOCAL VECTOR MEMORY INBOX ]</span>
+            <span>{filtered.length} items structured</span>
           </div>
 
           <div className="inbox-controls">
             <div className="inbox-search">
               <Search size={13} />
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search inbox..."
-              />
+              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search vector memory..." />
             </div>
           </div>
         </div>
@@ -217,33 +322,43 @@ export function CaptureLiveApp() {
           {filtered.map((item) => (
             <div className="capture-item-card" key={item.id}>
               <div className="item-meta">
-                <span className={`cat-pill cat-${item.category.toLowerCase().replace(" ", "-")}`}>
-                  {item.category}
-                </span>
+                <span className={`cat-pill cat-${item.category.toLowerCase().replace(" ", "-")}`}>{item.category}</span>
                 <span className="purity-badge">{item.purityScore}% SIGNAL PURITY</span>
                 <span className="item-time">{item.timestamp}</span>
                 <button className="delete-btn" onClick={() => deleteCapture(item.id)} title="Delete capture">
                   <Trash2 size={13} />
                 </button>
               </div>
+
               <h4 className="item-summary">{item.summary}</h4>
               <p className="item-raw">"{item.rawText}"</p>
 
               <div className="item-actions-list">
-                <span className="actions-label">Extracted Actions:</span>
+                <span className="actions-label">Extracted Checklist (Click to complete):</span>
                 {item.actionItems.map((act, idx) => (
-                  <div key={idx} className="action-row">
-                    <Check size={12} className="check-icon" />
-                    <span>{act}</span>
+                  <div
+                    key={idx}
+                    className={`action-row ${act.done ? "action-done" : ""}`}
+                    onClick={() => toggleActionDone(item.id, idx)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <CheckSquare size={13} className={`check-icon ${act.done ? "done" : ""}`} />
+                    <span>{act.text}</span>
                   </div>
+                ))}
+              </div>
+
+              <div className="item-tags-row">
+                {item.tags.map((t) => (
+                  <span key={t} className="item-tag-chip">
+                    #{t}
+                  </span>
                 ))}
               </div>
             </div>
           ))}
 
-          {filtered.length === 0 && (
-            <div className="inbox-empty">No captured thoughts in inbox. Type a thought above!</div>
-          )}
+          {filtered.length === 0 && <div className="inbox-empty">No captured thoughts match search.</div>}
         </div>
       </div>
     </div>
@@ -251,117 +366,229 @@ export function CaptureLiveApp() {
 }
 
 // ==========================================
-// 2. LEARNLOOP WORKING LIVE WEB APP
+// 2. UPGRADED LEARNLOOP LIVE APP (THE THINKING NOTEBOOK)
 // ==========================================
 
-interface LoopCard {
-  id: number;
-  question: string;
-  answer: string;
-  masteryDays: number;
-  status: "unseen" | "mastered" | "review";
+interface LivingConceptNode {
+  id: string;
+  title: string;
+  type: "Core Intuition" | "Mathematical Formulation" | "Failure Mode" | "Actionable Takeaway";
+  explanation: string;
+  masteryStatus: "Mastered" | "Review Needed" | "Struggling";
 }
 
-const sampleLoopDecks: Record<string, LoopCard[]> = {
-  "Sparse Confident Tensor Memory": [
-    { id: 1, question: "What is the primary cause of LLM context degradation over long windows?", answer: "Softmax attention assigns non-zero weights to all tokens, causing irrelevant distractor noise to pollute the KV-cache.", masteryDays: 1, status: "unseen" },
-    { id: 2, question: "How does Isotropic Whitening prevent memory degradation in SCTM?", answer: "It centers token activations and decorrelates dimensions, isolating true signal vectors before authority gating.", masteryDays: 3, status: "unseen" },
-    { id: 3, question: "What threshold (α) does SCTM's discrete authority gate enforce?", answer: "Tokens with confidence score below α = 0.85 are masked out prior to key-value caching.", masteryDays: 7, status: "unseen" }
-  ],
-  "Effortless Systems Philosophy": [
-    { id: 1, question: "What is Quiet Studio's primary design rule for tools?", answer: "The best technology doesn't ask to be noticed. It becomes a quiet extension of what you were already trying to do.", masteryDays: 1, status: "unseen" },
-    { id: 2, question: "Why do turn-based chat windows introduce friction?", answer: "They force creators to construct elaborate prompts and manage conversation turns instead of acting directly on intent.", masteryDays: 3, status: "unseen" }
-  ]
+interface NotebookEntry {
+  id: string;
+  title: string;
+  content: string;
+  conceptNodes: LivingConceptNode[];
+}
+
+const sampleNotebookEntries: Record<string, NotebookEntry> = {
+  sctm: {
+    id: "sctm",
+    title: "Sparse Confident Tensor Memory Architecture",
+    content: `Large language model context windows degrade under noise. Standard Softmax attention assigns non-zero probability to distractor tokens, polluting the KV-cache.
+
+SCTM applies isotropic whitening to decorrelate token activations before discrete authority gating evaluates confidence (α = 0.85). Tokens below threshold are masked out, maintaining 94%+ retrieval precision at 128k context lengths.`,
+    conceptNodes: [
+      {
+        id: "c1",
+        title: "Softmax KV-Cache Degradation",
+        type: "Failure Mode",
+        explanation: "Softmax attention never assigns true zero weight. Over long sessions, low-signal tokens compound and degrade factual accuracy.",
+        masteryStatus: "Mastered",
+      },
+      {
+        id: "c2",
+        title: "Isotropic Whitening Transformation",
+        type: "Mathematical Formulation",
+        explanation: "Centers activation spaces and decorrelates covariance matrices across hidden dimensions prior to memory projection.",
+        masteryStatus: "Review Needed",
+      },
+      {
+        id: "c3",
+        title: "Discrete Authority Gating (α = 0.85)",
+        type: "Core Intuition",
+        explanation: "Masks out token vectors below confidence threshold α = 0.85, eliminating noise before KV-caching.",
+        masteryStatus: "Mastered",
+      },
+    ],
+  },
+  effortless: {
+    id: "effortless",
+    title: "Quiet HCI & Intent-Shaped Systems",
+    content: `Modern software suffers from notification velocity and turn-based chat friction. Users construct prompts instead of acting directly on intent.
+
+Quiet Studio builds intent-shaped interfaces. Continuous ambient signals anticipate required context without interrupting cognitive focus.`,
+    conceptNodes: [
+      {
+        id: "c4",
+        title: "Cognitive Interruption Recovery Tax",
+        type: "Failure Mode",
+        explanation: "Every red badge pop-up notification requires up to 23 minutes for full cognitive focus recovery.",
+        masteryStatus: "Mastered",
+      },
+      {
+        id: "c5",
+        title: "Ambient Intent Detection",
+        type: "Actionable Takeaway",
+        explanation: "Software should act as a quiet reflex, providing context automatically before friction builds.",
+        masteryStatus: "Review Needed",
+      },
+    ],
+  },
 };
 
 export function LearnLoopLiveApp() {
-  const [topic, setTopic] = useState("Sparse Confident Tensor Memory");
-  const [deck, setDeck] = useState<LoopCard[]>(sampleLoopDecks["Sparse Confident Tensor Memory"]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [flipped, setFlipped] = useState(false);
-  const [masteryScore, setMasteryScore] = useState(68);
+  const [selectedEntryKey, setSelectedEntryKey] = useState<string>("sctm");
+  const [activeEntry, setActiveEntry] = useState<NotebookEntry>(sampleNotebookEntries["sctm"]);
+  const [isSynthesizing, setIsSynthesizing] = useState(false);
+  const [activeNodeId, setActiveNodeId] = useState<string | null>("c1");
+  const [velocityScore, setVelocityScore] = useState(88);
 
-  const activeCard = deck[currentIndex] || deck[0];
-
-  const handleGenerate = (selectedTopic: string) => {
+  const handleSelectEntry = (key: string) => {
     playClick();
-    setTopic(selectedTopic);
-    const newDeck = sampleLoopDecks[selectedTopic] || sampleLoopDecks["Sparse Confident Tensor Memory"];
-    setDeck(newDeck);
-    setCurrentIndex(0);
-    setFlipped(false);
-    playSuccess();
-    toast(`Generated 3-step active recall loop for "${selectedTopic}"`);
+    setSelectedEntryKey(key);
+    setActiveEntry(sampleNotebookEntries[key]);
+    setActiveNodeId(sampleNotebookEntries[key].conceptNodes[0]?.id || null);
   };
 
-  const handleRate = (rating: "Hard" | "Good" | "Easy") => {
+  const handleSynthesizeLoop = () => {
     playClick();
-    setFlipped(false);
-    setMasteryScore((prev) => Math.min(99, prev + (rating === "Easy" ? 8 : rating === "Good" ? 4 : 1)));
-    setCurrentIndex((prev) => (prev + 1) % deck.length);
-    toast(`Card scheduled for review (${rating})`);
+    setIsSynthesizing(true);
+    setTimeout(() => {
+      setIsSynthesizing(false);
+      playSuccess();
+      toast("Notebook synthesized into living concept graph!");
+    }, 450);
   };
+
+  const updateNodeMastery = (nodeId: string, status: LivingConceptNode["masteryStatus"]) => {
+    playClick();
+    const updatedNodes = activeEntry.conceptNodes.map((node) => {
+      if (node.id === nodeId) {
+        return { ...node, masteryStatus: status };
+      }
+      return node;
+    });
+    setActiveEntry({ ...activeEntry, conceptNodes: updatedNodes });
+    setVelocityScore((prev) => Math.min(99, prev + (status === "Mastered" ? 4 : status === "Review Needed" ? 1 : -2)));
+    toast(`Concept node marked as ${status}`);
+  };
+
+  const activeNode = activeEntry.conceptNodes.find((n) => n.id === activeNodeId) || activeEntry.conceptNodes[0];
 
   return (
-    <div className="live-app-card learnloop-app-wrap">
+    <div className="live-app-card learnloop-app-wrap" style={{ padding: "36px" }}>
       <div className="app-header-bar">
         <div className="app-title">
           <span className="pulse-dot" />
-          <span>LEARNLOOP INTERACTIVE APP</span>
-          <span className="app-ver">ACTIVE RECALL ENGINE</span>
+          <span>LEARNLOOP: THE THINKING NOTEBOOK</span>
+          <span className="app-ver">LIVING CONCEPT GRAPH</span>
         </div>
         <div className="mastery-indicator">
-          <span>COMPOUNDING MASTERY:</span>
-          <strong>{masteryScore}%</strong>
+          <span>KNOWLEDGE VELOCITY:</span>
+          <strong>{velocityScore}%</strong>
         </div>
       </div>
 
-      {/* Topic Selection Bar */}
-      <div className="loop-topic-bar">
-        <span className="sample-label">Select Learning Topic:</span>
-        {Object.keys(sampleLoopDecks).map((t) => (
-          <button
-            key={t}
-            className={`sample-chip ${topic === t ? "active-chip" : ""}`}
-            onClick={() => handleGenerate(t)}
-          >
-            {t}
-          </button>
-        ))}
+      {/* Select Sample Notebook Document */}
+      <div className="notebook-select-bar">
+        <span className="sample-label">Notebook Document:</span>
+        <button
+          className={`sample-chip ${selectedEntryKey === "sctm" ? "active-chip" : ""}`}
+          onClick={() => handleSelectEntry("sctm")}
+        >
+          SCTM Memory Architecture
+        </button>
+        <button
+          className={`sample-chip ${selectedEntryKey === "effortless" ? "active-chip" : ""}`}
+          onClick={() => handleSelectEntry("effortless")}
+        >
+          Quiet HCI & Intent Systems
+        </button>
+        <button className="primary-button synth-btn" onClick={handleSynthesizeLoop} disabled={isSynthesizing}>
+          {isSynthesizing ? "Synthesizing Loop..." : "Synthesize Living Loop"} <Sparkles size={13} />
+        </button>
       </div>
 
-      {/* Interactive Flashcard Stack */}
-      <div className="loop-card-stage">
-        <div className="card-stage-header">
-          <span className="step-label">LOOP CARD 0{currentIndex + 1} / 0{deck.length}</span>
-          <span className="next-review-tag">NEXT REVIEW: +{activeCard.masteryDays} DAYS</span>
-        </div>
-
-        <div className={`active-flashcard ${flipped ? "is-flipped" : ""}`} onClick={() => { playTick(); setFlipped(!flipped); }}>
-          <div className="flashcard-front">
-            <span className="card-q-tag">QUESTION</span>
-            <h3>{activeCard.question}</h3>
-            <span className="flip-hint">Click card to reveal answer ↗</span>
+      {/* Thinking Notebook Split Workspace */}
+      <div className="notebook-workspace-grid">
+        {/* Left Side: Rich Source Notes Editor */}
+        <div className="notebook-source-pane">
+          <div className="pane-header">
+            <BookOpen size={14} className="pane-icon" />
+            <span>01 / SOURCE NOTES EDITOR</span>
           </div>
 
-          <div className="flashcard-back">
-            <span className="card-a-tag">ANSWER & FORMULATION</span>
-            <p>{activeCard.answer}</p>
+          <div className="notebook-editor">
+            <h3>{activeEntry.title}</h3>
+            <textarea
+              rows={8}
+              value={activeEntry.content}
+              onChange={(e) => setActiveEntry({ ...activeEntry, content: e.target.value })}
+              placeholder="Paste or write your raw research notes here..."
+            />
           </div>
         </div>
 
-        {/* Rating Actions */}
-        <div className="loop-rating-actions">
-          <span>Rate recall difficulty:</span>
-          <button className="rating-btn hard" onClick={() => handleRate("Hard")}>
-            Hard (+1d)
-          </button>
-          <button className="rating-btn good" onClick={() => handleRate("Good")}>
-            Good (+3d)
-          </button>
-          <button className="rating-btn easy" onClick={() => handleRate("Easy")}>
-            Easy (+7d)
-          </button>
+        {/* Right Side: Living Concept Nodes & Margin Quiz Layer */}
+        <div className="notebook-synthesis-pane">
+          <div className="pane-header">
+            <Layers size={14} className="pane-icon" />
+            <span>02 / LIVING CONCEPT NODES</span>
+          </div>
+
+          {/* Nodes List */}
+          <div className="concept-nodes-list">
+            {activeEntry.conceptNodes.map((node) => (
+              <div
+                key={node.id}
+                className={`concept-node-chip ${activeNodeId === node.id ? "selected" : ""}`}
+                onClick={() => {
+                  playTick();
+                  setActiveNodeId(node.id);
+                }}
+              >
+                <div className="node-head">
+                  <span className="node-type-tag">{node.type}</span>
+                  <span className={`node-status-pill status-${node.masteryStatus.toLowerCase().replace(" ", "-")}`}>
+                    {node.masteryStatus}
+                  </span>
+                </div>
+                <div className="node-title">{node.title}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Active Node Detail & Self-Recall Quiz */}
+          {activeNode && (
+            <div className="active-node-breakdown">
+              <div className="breakdown-header">
+                <span className="node-type-tag">{activeNode.type}</span>
+                <h4>{activeNode.title}</h4>
+              </div>
+
+              <p className="breakdown-text">{activeNode.explanation}</p>
+
+              <div className="node-mastery-actions">
+                <span>Evaluate your recall:</span>
+                <button
+                  className="mastery-btn btn-mastered"
+                  onClick={() => updateNodeMastery(activeNode.id, "Mastered")}
+                >
+                  <Check size={12} /> Mastered
+                </button>
+                <button
+                  className="mastery-btn btn-review"
+                  onClick={() => updateNodeMastery(activeNode.id, "Review Needed")}
+                >
+                  <RefreshCw size={12} /> Review Needed
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -424,7 +651,7 @@ export function ZenAILiveApp() {
   };
 
   return (
-    <div className="live-app-card zen-app-wrap">
+    <div className="live-app-card zen-app-wrap" style={{ padding: "36px" }}>
       <div className="app-header-bar">
         <div className="app-title">
           <span className="pulse-dot" />
