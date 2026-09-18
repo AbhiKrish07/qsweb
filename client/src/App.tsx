@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, Route, Switch, useLocation } from "wouter";
-import { ArrowUpRight, Github, Moon, Search, Sun, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Github, Menu, Moon, Search, Sun, Volume2, VolumeX, X } from "lucide-react";
 import { Toaster } from "sonner";
 import Home from "./pages/Home";
 import ProductPage from "./pages/ProductPage";
@@ -16,7 +16,15 @@ import Changelog from "./pages/Changelog";
 import System from "./pages/System";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
-import { isSoundEnabled, toggleSound } from "./lib/sound";
+import { isSoundEnabled, toggleSound, playClick } from "./lib/sound";
+
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  return null;
+}
 
 function Header({
   dark,
@@ -29,8 +37,9 @@ function Header({
   onOpenCommand: () => void;
   onOpenContact: () => void;
 }) {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const [soundOn, setSoundOn] = useState(isSoundEnabled());
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isProduct = location.startsWith("/products/");
 
   const handleSoundToggle = () => {
@@ -38,50 +47,156 @@ function Header({
     setSoundOn(nextState);
   };
 
+  const navLinks = [
+    { label: "Products", href: "/#products" },
+    { label: "Thesis", href: "/thesis" },
+    { label: "Research", href: "/research" },
+    { label: "Notion", href: "/notion-templates" },
+    { label: "Prompts", href: "/prompt-templates" },
+    { label: "Code", href: "/coding-assets" },
+    { label: "Changelog", href: "/changelog" },
+    { label: "System", href: "/system" },
+    { label: "Notes", href: "/notes" },
+    { label: "About", href: "/about" },
+  ];
+
+  const handleNavClick = (href: string) => {
+    playClick();
+    setMobileNavOpen(false);
+    if (href.startsWith("/#")) {
+      if (location !== "/") {
+        setLocation("/");
+        setTimeout(() => {
+          const el = document.getElementById(href.replace("/#", ""));
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      } else {
+        const el = document.getElementById(href.replace("/#", ""));
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      setLocation(href);
+    }
+  };
+
   return (
-    <header className="site-header">
-      <Link href="/" className="brand-mark" aria-label="Quiet Studio home">
-        <span className="brand-dot" />
-        <span>quiet studio</span>
-      </Link>
-      <nav className="main-nav" aria-label="Main navigation">
-        <a href="/#products" className={location === "/" ? "active" : ""}>Products</a>
-        <a href="/thesis" className={location.startsWith("/thesis") ? "active" : ""}>Thesis</a>
-        <a href="/research" className={location.startsWith("/research") ? "active" : ""}>Research</a>
-        <a href="/notion-templates" className={location.startsWith("/notion-templates") ? "active" : ""}>Notion</a>
-        <a href="/prompt-templates" className={location.startsWith("/prompt-templates") ? "active" : ""}>Prompts</a>
-        <a href="/coding-assets" className={location.startsWith("/coding-assets") ? "active" : ""}>Code</a>
-        <a href="/changelog" className={location.startsWith("/changelog") ? "active" : ""}>Changelog</a>
-        <a href="/system" className={location.startsWith("/system") ? "active" : ""}>System</a>
-        <a href="/notes" className={location.startsWith("/notes") ? "active" : ""}>Notes</a>
-        <a href="/about" className={location.startsWith("/about") ? "active" : ""}>About</a>
-      </nav>
-      <div className="header-actions">
-        <button className="command-trigger-btn" onClick={onOpenCommand} title="Search studio (⌘K)">
-          <Search size={14} />
-          <span className="kbd-shortcut">⌘K</span>
-        </button>
+    <>
+      <header className="site-header">
+        {/* Three Line Collapsible Menu Icon (Mobile Left) */}
         <button
-          className="icon-button"
-          onClick={handleSoundToggle}
-          title={soundOn ? "Mute studio sound" : "Enable studio sound"}
-          aria-label={soundOn ? "Mute studio sound" : "Enable studio sound"}
+          className="mobile-menu-toggle"
+          onClick={() => {
+            playClick();
+            setMobileNavOpen(!mobileNavOpen);
+          }}
+          aria-label={mobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
+          title="Toggle Navigation Menu"
         >
-          {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
+          {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
-        <button
-          className="icon-button"
-          onClick={onToggle}
-          aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-        >
-          {dark ? <Sun size={16} /> : <Moon size={16} />}
-        </button>
-        <button className="header-cta" onClick={onOpenContact}>
-          Start a conversation <ArrowUpRight size={14} />
-        </button>
-      </div>
-      {isProduct && <Link href="/" className="mobile-back">← back to studio</Link>}
-    </header>
+
+        <Link href="/" className="brand-mark" aria-label="Quiet Studio home">
+          <span className="brand-dot" />
+          <span>quiet studio</span>
+        </Link>
+
+        {/* Desktop Navigation */}
+        <nav className="main-nav" aria-label="Main navigation">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(link.href);
+              }}
+              className={
+                link.href === "/#products"
+                  ? location === "/"
+                    ? "active"
+                    : ""
+                  : location.startsWith(link.href)
+                  ? "active"
+                  : ""
+              }
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+
+        <div className="header-actions">
+          <button className="command-trigger-btn" onClick={onOpenCommand} title="Search studio (⌘K)">
+            <Search size={14} />
+            <span className="kbd-shortcut">⌘K</span>
+          </button>
+
+          <button
+            className="icon-button"
+            onClick={handleSoundToggle}
+            title={soundOn ? "Mute studio sound" : "Enable studio sound"}
+            aria-label={soundOn ? "Mute studio sound" : "Enable studio sound"}
+          >
+            {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
+          </button>
+
+          <button
+            className="icon-button"
+            onClick={onToggle}
+            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {dark ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+
+          <button className="header-cta" onClick={onOpenContact}>
+            Start a conversation <ArrowUpRight size={14} />
+          </button>
+        </div>
+
+        {isProduct && <Link href="/" className="mobile-back">← back to studio</Link>}
+      </header>
+
+      {/* Collapsible Mobile Navigation Drawer */}
+      {mobileNavOpen && (
+        <div className="mobile-nav-drawer-overlay" onClick={() => setMobileNavOpen(false)}>
+          <div className="mobile-nav-drawer" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-nav-head">
+              <span className="section-marker">[ NAVIGATION MENU ]</span>
+              <button className="icon-button" onClick={() => setMobileNavOpen(false)}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="mobile-nav-links">
+              {navLinks.map((link, idx) => {
+                const isActive =
+                  link.href === "/#products"
+                    ? location === "/"
+                    : location.startsWith(link.href);
+                return (
+                  <button
+                    key={link.href}
+                    className={`mobile-nav-link-btn ${isActive ? "active" : ""}`}
+                    onClick={() => handleNavClick(link.href)}
+                  >
+                    <span className="nav-idx">0{idx + 1}</span>
+                    <span className="nav-label">{link.label}</span>
+                    {isActive && <span className="active-tag">CURRENT</span>}
+                    <ArrowRight size={16} className="nav-arrow" />
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mobile-nav-foot">
+              <button className="primary-button" onClick={() => { setMobileNavOpen(false); onOpenContact(); }} style={{ width: "100%", justifyContent: "center" }}>
+                Start a conversation <ArrowUpRight size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -104,6 +219,7 @@ function Footer({ onOpenContact }: { onOpenContact: () => void }) {
             <a href="/changelog">Changelog</a>
             <a href="/system">Design System</a>
             <a href="/notes">Notes</a>
+            <a href="/about">About Abhinav</a>
           </div>
           <div>
             <span className="meta-label">Elsewhere</span>
@@ -142,6 +258,7 @@ function AppShell() {
 
   return (
     <div className="app-shell">
+      <ScrollToTop />
       <Header
         dark={dark}
         onToggle={() => setDark((value) => !value)}
