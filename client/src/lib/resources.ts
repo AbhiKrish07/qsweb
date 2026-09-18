@@ -4,6 +4,8 @@ export interface NotionTemplate {
   slug: string;
   tagline: string;
   category: "Operating System" | "Research" | "Product Studio" | "Knowledge";
+  price: string;
+  isPremium?: boolean;
   description: string;
   features: string[];
   tags: string[];
@@ -12,6 +14,7 @@ export interface NotionTemplate {
   duplicateUrl: string;
   version: string;
   visualBg: string;
+  coverBannerText?: string;
 }
 
 export interface PromptTemplate {
@@ -44,86 +47,185 @@ export interface CodingAsset {
   filename: string;
 }
 
+const GUMROAD_STORE_URL = "https://quietstudioo.gumroad.com/";
+
 export const notionTemplates: NotionTemplate[] = [
   {
-    id: "quiet-os",
-    title: "Quiet OS",
-    slug: "quiet-os",
-    tagline: "A minimalist personal operating system for focus & execution.",
-    category: "Operating System",
-    description: "Quiet OS integrates capture inbox, daily reflect logs, deep work sessions, project milestones, and a commonplace reading vault into a single serene Notion workspace.",
-    features: [
-      "Zero-friction 1-click Capture Inbox",
-      "Daily Reflection & Energy Tracker",
-      "Kanban & Timeline Project Matrix",
-      "Commonplace Book & Literature Vault"
-    ],
-    tags: ["Productivity", "Personal OS", "Notion", "Minimal"],
-    views: 2450,
-    downloads: 1120,
-    duplicateUrl: "https://notion.so",
-    version: "v2.4",
-    visualBg: "#111110"
-  },
-  {
-    id: "sctm-research-engine",
-    title: "SCTM Research Engine",
-    slug: "sctm-research-engine",
-    tagline: "Academic paper database & paper synthesis framework.",
-    category: "Research",
-    description: "Designed for researchers, computer scientists, and builders. Track arXiv papers, extract core mathematical intuition, tag methodology, and link literature references.",
-    features: [
-      "arXiv & BibTeX Paper Database",
-      "Formula & Intuition Extraction Matrix",
-      "Citation & Literature Dependency Map",
-      "Weekly Research Journal Generator"
-    ],
-    tags: ["Research", "Academic", "Paper Tracking", "AI Research"],
-    views: 1890,
-    downloads: 840,
-    duplicateUrl: "https://notion.so",
-    version: "v1.2",
-    visualBg: "#ff5a1f"
-  },
-  {
-    id: "prd-studio",
-    title: "Product Blueprint & PRD Studio",
-    slug: "prd-studio",
-    tagline: "Turn vague technical ideas into shipping blueprints.",
+    id: "quietstudio-os",
+    title: "QuietStudio OS",
+    slug: "quietstudio-os",
+    tagline: "The flagship complete developer & product studio workspace.",
     category: "Product Studio",
-    description: "A comprehensive spec workspace for solo founders and technical teams. Document problem statements, system architecture, API schemas, and user flows.",
+    price: "₹4,699.30",
+    isPremium: true,
+    description: "A complete developer command center, thoughtfully designed for coders and project leaders. Integrate your coding workspace, innovation bank, task lists, metric tracking, and project execution in one organized space.",
     features: [
-      "Spec & PRD Template with Edge Case Checkers",
-      "System Architecture & Data Schema Mapper",
-      "Milestone & Release Readiness Checklist",
-      "User Feedback & Signal Collector"
+      "Integrated Developer Command Center & Task Matrix",
+      "Innovation Bank & Raw Capture Repository",
+      "Project Timeline & Milestone Tracking",
+      "Third-Party Integration & API Schema Mapper"
     ],
-    tags: ["Product Specs", "PRD", "Founders", "Engineering"],
-    views: 3100,
-    downloads: 1450,
-    duplicateUrl: "https://notion.so",
-    version: "v3.0",
-    visualBg: "#e9e8e1"
+    tags: ["Developer OS", "Product Studio", "Flagship", "Notion"],
+    views: 5420,
+    downloads: 1890,
+    duplicateUrl: GUMROAD_STORE_URL,
+    version: "v3.2",
+    visualBg: "linear-gradient(135deg, #111110 0%, #1c261e 100%)",
+    coverBannerText: "QUIETSTUDIO OS"
   },
   {
-    id: "commonplace-vault",
-    title: "Commonplace & Zine Library",
-    slug: "commonplace-vault",
-    tagline: "A digital sanctuary for highlights, quotes, and zines.",
-    category: "Knowledge",
-    description: "Save quotes from books, zines, and research articles. Automatically surface forgotten highlights and cluster notes into underlying thesis ideas.",
+    id: "aesthetic-os",
+    title: "Aesthetic OS",
+    slug: "aesthetic-os",
+    tagline: "Dark-themed student & creator life dashboard.",
+    category: "Operating System",
+    price: "Free (₹0+)",
+    description: "Designed to streamline your student and creative life, helping you track your progress and manage your time effectively. Dive in, customize your sections, and turn late-night strides into productive goals.",
     features: [
-      "Quote & Highlight Storage",
-      "Spaced Reflection Digest",
-      "Theme & Thesis Tagging System",
-      "Zine & Book Archive Gallery"
+      "Dark-Themed Task List & Daily Matrix",
+      "Live Weather & Time Widget Embeds",
+      "Built-In Dictionary & Reference Notebook",
+      "Goal Tracker & Productivity Streaks"
     ],
-    tags: ["Commonplace", "Books", "Quotes", "Zines"],
-    views: 1420,
-    downloads: 620,
-    duplicateUrl: "https://notion.so",
+    tags: ["Student OS", "Aesthetic", "Minimal", "Notion"],
+    views: 4890,
+    downloads: 2410,
+    duplicateUrl: GUMROAD_STORE_URL,
+    version: "v2.0",
+    visualBg: "linear-gradient(135deg, #181716 0%, #282420 100%)",
+    coverBannerText: "GET SHIT DONE."
+  },
+  {
+    id: "creator-os",
+    title: "Creator OS",
+    slug: "creator-os",
+    tagline: "Business command center for digital creators & builders.",
+    category: "Operating System",
+    price: "Free (₹0+)",
+    description: "Your complete business command center, thoughtfully designed for creators and digital founders. From managing digital products and content planning to tracking life goals and Pomodoro timers.",
+    features: [
+      "Digital Product & Revenue Pipeline",
+      "Content Calendar & Editorial Matrix",
+      "Integrated Pomodoro Timer & Focus Log",
+      "Creator Business Command Center"
+    ],
+    tags: ["Creator OS", "Business", "Content", "Founders"],
+    views: 3950,
+    downloads: 1980,
+    duplicateUrl: GUMROAD_STORE_URL,
+    version: "v1.8",
+    visualBg: "linear-gradient(135deg, #1e1e1e 0%, #343230 100%)",
+    coverBannerText: "CREATOR OS"
+  },
+  {
+    id: "minimalist-weekly-planner",
+    title: "Minimalist Weekly Planner",
+    slug: "minimalist-weekly-planner",
+    tagline: "Designed to maintain simplicity & clarity in daily life.",
+    category: "Operating System",
+    price: "Free (₹0+)",
+    description: "Minimalist Weekly Planner helps you stay organized while maintaining absolute simplicity. Feel free to customize any section—from categories and tasks to whatever best suits your workflow.",
+    features: [
+      "Clean Weekly & Daily Task Columns",
+      "Weather & Location Embed Support",
+      "In Progress / Completed Status Tags",
+      "Minimalist Zero-Clutter Interface"
+    ],
+    tags: ["Planner", "Weekly", "Minimal", "Focus"],
+    views: 3100,
+    downloads: 1650,
+    duplicateUrl: GUMROAD_STORE_URL,
+    version: "v1.2",
+    visualBg: "linear-gradient(135deg, #111110 0%, #202020 100%)",
+    coverBannerText: "WEEKLY PLANNER"
+  },
+  {
+    id: "the-annual-reset",
+    title: "The Annual Reset",
+    slug: "the-annual-reset",
+    tagline: "Personal space for annual reflection, review, & renewal.",
+    category: "Knowledge",
+    price: "Free (₹0+)",
+    description: "Designed to help you process your past year and set your vision for the upcoming year. Whether you've had a year of triumphs, challenges, or somewhere in between, use this space for meaningful momentum.",
+    features: [
+      "Looking Back & Moving Forward Prompts",
+      "Triumphs & Challenge Reflection Matrix",
+      "Embedded Deep Focus Playlist",
+      "Vision Setting for the Year Ahead"
+    ],
+    tags: ["Annual Reset", "Reflection", "Journal", "Goals"],
+    views: 2840,
+    downloads: 1420,
+    duplicateUrl: GUMROAD_STORE_URL,
     version: "v1.0",
-    visualBg: "#292825"
+    visualBg: "linear-gradient(135deg, #1c1428 0%, #39194d 100%)",
+    coverBannerText: "ANNUAL RESET"
+  },
+  {
+    id: "phone-ui",
+    title: "Phone UI",
+    slug: "phone-ui",
+    tagline: "Minimalist phone launcher interface template inside Notion.",
+    category: "Operating System",
+    price: "Free (₹0+)",
+    description: "A serene phone launcher style layout built within Notion. Features dark minimalist typography quotes ('Be the best version of yourself'), weather widgets, task lists, and focus zones.",
+    features: [
+      "Phone Launcher Minimal Layout",
+      "Dark Typography & Quote Wall",
+      "Task List & Quick Notes",
+      "Serene Mobile Aesthetic"
+    ],
+    tags: ["Phone UI", "Mobile", "Minimal", "Launcher"],
+    views: 2410,
+    downloads: 1280,
+    duplicateUrl: GUMROAD_STORE_URL,
+    version: "v1.5",
+    visualBg: "linear-gradient(135deg, #0d0d0d 0%, #1f1e1d 100%)",
+    coverBannerText: "PHONE UI"
+  },
+  {
+    id: "startup-ui",
+    title: "Startup UI",
+    slug: "startup-ui",
+    tagline: "Complete startup command center for founders & entrepreneurs.",
+    category: "Product Studio",
+    price: "Free (₹0+)",
+    description: "Thoughtfully designed for founders and entrepreneurs. From tracking key metrics to managing tasks and capturing critical notes, everything you need to build your startup is organized in one place.",
+    features: [
+      "Startup Command Center & Roadmap",
+      "Task Status (Not Started, In Progress, Completed)",
+      "Critical Notes & Decision Log",
+      "Process & Moving Parts Matrix"
+    ],
+    tags: ["Startup UI", "Founders", "Business", "Product"],
+    views: 3200,
+    downloads: 1750,
+    duplicateUrl: GUMROAD_STORE_URL,
+    version: "v2.1",
+    visualBg: "linear-gradient(135deg, #1f1a24 0%, #3a2238 100%)",
+    coverBannerText: "STARTUP UI"
+  },
+  {
+    id: "team-ui",
+    title: "Team UI",
+    slug: "team-ui",
+    tagline: "Team management hub for project leaders & managers.",
+    category: "Product Studio",
+    price: "Free (₹0+)",
+    description: "Thoughtfully designed for leaders and project managers. From tracking timelines to monitoring progress metrics and facilitating collaboration, everything you need to lead your team smoothly.",
+    features: [
+      "Team Management Hub & Mission Statement",
+      "Vision, Values, & Goals Architecture",
+      "Project & Meeting Logs",
+      "Collaboration & Progress Metrics"
+    ],
+    tags: ["Team UI", "Management", "Projects", "Leadership"],
+    views: 2750,
+    downloads: 1390,
+    duplicateUrl: GUMROAD_STORE_URL,
+    version: "v1.4",
+    visualBg: "linear-gradient(135deg, #111a24 0%, #1e2e3d 100%)",
+    coverBannerText: "TEAM UI"
   }
 ];
 

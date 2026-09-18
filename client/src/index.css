@@ -530,12 +530,21 @@
 .mastery-btn.btn-mastered:hover { border-color: #059669; color: #059669; background: rgba(16,185,129,0.06); }
 .mastery-btn.btn-review:hover { border-color: #d97706; color: #d97706; background: rgba(245,158,11,0.06); }
 
-@media (max-width: 800px) {
-  .notebook-workspace-grid { grid-template-columns: 1fr; }
-  .capture-pipeline-gauge { flex-direction: column; gap: 8px; align-items: flex-start; }
-  .pipeline-line { display: none; }
-  .synth-btn { width: 100%; margin-top: 10px; }
-}
+/* Gumroad Notion Store Card Styling */
+.featured-notion-card { border-color: var(--orange); box-shadow: 0 10px 30px rgba(255,90,31,0.12); }
+.price-badge { font: 700 10px "DM Mono", monospace; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; }
+.price-free { background: rgba(16,185,129,0.12); color: #059669; border: 1px solid rgba(16,185,129,0.3); }
+.price-premium { background: var(--orange); color: #fff; border: 1px solid var(--orange); box-shadow: 0 0 12px color-mix(in srgb, var(--orange) 30%, transparent); }
+
+.notion-cover-mockup { position: relative; height: 135px; border-radius: 6px; overflow: hidden; margin-bottom: 18px; border: 1px solid var(--line); display: flex; flex-direction: column; justify-content: space-between; padding: 14px; box-sizing: border-box; }
+.mockup-banner-content { display: flex; flex-direction: column; gap: 8px; z-index: 2; }
+.mockup-text { font: 700 16px/1 "Space Grotesk", sans-serif; letter-spacing: -.03em; text-transform: uppercase; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+.mockup-ui-lines { display: flex; flex-direction: column; gap: 4px; opacity: 0.6; }
+.m-line { display: block; height: 3px; background: #fff; border-radius: 2px; }
+.m-line.long { width: 60%; }
+.m-line.short { width: 35%; }
+.mockup-ribbon { position: absolute; right: 0; bottom: 0; background: var(--orange); color: #fff; font: 700 10px "DM Mono", monospace; padding: 4px 12px; border-radius: 6px 0 0 0; text-transform: uppercase; box-shadow: -2px -2px 8px rgba(0,0,0,0.3); }
+
 
 
 
