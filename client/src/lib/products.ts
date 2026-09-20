@@ -8,7 +8,7 @@ export type Product = {
 };
 
 export const categories: { id: ProductCategory; label: string; short: string; count: string }[] = [
-  { id: "flagship", label: "Flagship products", short: "Products", count: "02" },
+  { id: "flagship", label: "Modules", short: "Modules", count: "01" },
   { id: "open-source", label: "Open source", short: "Open source", count: "01" },
   { id: "research", label: "Research concepts", short: "Research", count: "13" },
 ];

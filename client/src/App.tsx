@@ -269,6 +269,7 @@ function AppShell() {
         <div key={String(location)} className="page-transition">
           <Switch>
             <Route path="/" component={Home} />
+            <Route path="/capture">{() => <ProductPage />}</Route>
             <Route path="/products/:slug" component={ProductPage} />
             <Route path="/research" component={Research} />
             <Route path="/research/:slug" component={ResearchArticle} />
