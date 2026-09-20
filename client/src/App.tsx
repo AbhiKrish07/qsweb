@@ -12,6 +12,7 @@ import Thesis from "./pages/Thesis";
 import NotionTemplates from "./pages/NotionTemplates";
 import PromptTemplates from "./pages/PromptTemplates";
 import CodingAssets from "./pages/CodingAssets";
+import Templates from "./pages/Templates";
 import Changelog from "./pages/Changelog";
 import System from "./pages/System";
 import CommandPalette from "./components/CommandPalette";
@@ -51,11 +52,7 @@ function Header({
     { label: "Products", href: "/#products" },
     { label: "Thesis", href: "/thesis" },
     { label: "Research", href: "/research" },
-    { label: "Notion", href: "/notion-templates" },
-    { label: "Prompts", href: "/prompt-templates" },
-    { label: "Code", href: "/coding-assets" },
-    { label: "Changelog", href: "/changelog" },
-    { label: "System", href: "/system" },
+    { label: "Templates", href: "/templates" },
     { label: "Notes", href: "/notes" },
     { label: "About", href: "/about" },
   ];
@@ -213,9 +210,8 @@ function Footer({ onOpenContact }: { onOpenContact: () => void }) {
             <span className="meta-label">Explore</span>
             <a href="/#products">Products</a>
             <a href="/thesis">Thesis</a>
-            <a href="/notion-templates">Notion Templates</a>
-            <a href="/prompt-templates">Prompt Templates</a>
-            <a href="/coding-assets">Coding Assets</a>
+            <a href="/research">Research</a>
+            <a href="/templates">Templates</a>
             <a href="/changelog">Changelog</a>
             <a href="/system">Design System</a>
             <a href="/notes">Notes</a>
@@ -273,9 +269,10 @@ function AppShell() {
             <Route path="/products/:slug" component={ProductPage} />
             <Route path="/research" component={Research} />
             <Route path="/research/:slug" component={ResearchArticle} />
-            <Route path="/notion-templates" component={NotionTemplates} />
-            <Route path="/prompt-templates" component={PromptTemplates} />
-            <Route path="/coding-assets" component={CodingAssets} />
+            <Route path="/templates" component={Templates} />
+            <Route path="/notion-templates" component={Templates} />
+            <Route path="/prompt-templates" component={Templates} />
+            <Route path="/coding-assets" component={Templates} />
             <Route path="/changelog" component={Changelog} />
             <Route path="/system" component={System} />
             <Route path="/notes" component={Notes} />

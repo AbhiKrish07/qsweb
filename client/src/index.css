@@ -2018,6 +2018,211 @@
   }
 }
 
+/* ==========================================
+   UNIFIED TEMPLATES PAGE STYLING
+========================================== */
+.templates-page {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.templates-hero-header {
+  padding: 8vw 9.2vw 3vw;
+  border-bottom: 1px solid var(--line);
+}
+
+.templates-title {
+  font: 700 clamp(3.2rem, 7vw, 7.5rem)/0.84 "Space Grotesk", sans-serif;
+  letter-spacing: -0.09em;
+  text-transform: uppercase;
+  margin: 24px 0 20px;
+}
+
+.templates-title em {
+  color: var(--orange);
+  font-style: normal;
+}
+
+.templates-lead {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted-ink);
+  max-width: 580px;
+  margin-bottom: 40px;
+}
+
+.templates-controls-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.templates-tabs-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.templates-tab-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted-ink);
+  padding: 8px 16px;
+  border-radius: 100px;
+  font: 600 11px "DM Mono", monospace;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.templates-tab-btn:hover,
+.templates-tab-btn.active {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+}
+
+.templates-search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 8px 16px;
+  min-width: 280px;
+}
+
+.templates-search-box .search-icon {
+  color: var(--muted-ink);
+}
+
+.templates-search-box input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--foreground);
+  font: 400 12px "DM Sans", sans-serif;
+  width: 100%;
+}
+
+.templates-search-box .clear-btn {
+  border: 0;
+  background: transparent;
+  color: var(--muted-ink);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.templates-main-content {
+  padding: 5vw 9.2vw 8vw;
+  display: flex;
+  flex-direction: column;
+  gap: 6vw;
+}
+
+.template-group-block {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.group-heading .group-marker {
+  font: 600 10px "DM Mono", monospace;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.group-heading h2 {
+  font: 700 clamp(2.2rem, 4vw, 4rem)/0.9 "Space Grotesk", sans-serif;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  margin: 8px 0 0;
+}
+
+.templates-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.full-width-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.dark-outline {
+  border-color: color-mix(in srgb, var(--background) 30%, transparent) !important;
+  color: var(--background) !important;
+}
+
+.dark-outline:hover {
+  border-color: var(--orange) !important;
+  color: var(--orange) !important;
+}
+
+.variables-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font: 500 10px "DM Mono", monospace;
+  color: var(--muted-ink);
+  margin-top: 12px;
+}
+
+.var-chip {
+  background: var(--line);
+  padding: 3px 7px;
+  border-radius: 4px;
+  color: var(--foreground);
+}
+
+.code-snippet-box {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid color-mix(in srgb, var(--background) 15%, transparent);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin: 12px 0;
+  font: 400 11px/1.4 "DM Mono", monospace;
+}
+
+.snippet-filename {
+  color: var(--orange);
+  font-size: 10px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.code-install-bar .copy-mini-btn {
+  border: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--background) 60%, transparent);
+  cursor: pointer;
+  margin-left: auto;
+  transition: color 0.15s ease;
+}
+
+.code-install-bar .copy-mini-btn:hover {
+  color: var(--orange);
+}
+
+.templates-empty-state {
+  padding: 8vw;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: var(--muted-ink);
+}
+
 
 
 
