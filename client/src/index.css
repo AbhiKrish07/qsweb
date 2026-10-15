@@ -3781,140 +3781,223 @@
   50% { transform: translateY(-8px) rotate(4.5deg); }
 }
 
-/* Desktop: widgets tray expands so children are positioned spatially */
-.hero-spatial-widgets-tray {
-  display: contents;
-}
-
-.mobile-widgets-indicator {
-  display: none;
-}
-
 @media (max-width: 900px) {
   .human-spatial-canvas {
-    min-height: auto;
-    padding: 36px 16px 44px;
-    overflow: visible;
+    min-height: clamp(580px, 92svh, 780px);
+    padding: 16px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Center Content: scaled & constrained to middle column */
+  .human-hero-brand-badge {
+    width: clamp(34px, 8.5vw, 44px);
+    height: clamp(34px, 8.5vw, 44px);
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+
+  .human-hero-brand-badge .brand-dot {
+    width: clamp(10px, 2.5vw, 13px);
+    height: clamp(10px, 2.5vw, 13px);
   }
 
   .human-hero-headline-prioritize {
-    font-size: clamp(2.3rem, 8.5vw, 3.8rem);
+    font-size: clamp(1.65rem, 6.4vw, 2.7rem);
+    line-height: 0.94;
     letter-spacing: -0.06em;
-    margin: 0 0 14px;
+    max-width: clamp(230px, 60vw, 360px);
+    margin: 0 auto 10px;
   }
 
   .human-hero-sub-prioritize {
-    font-size: 14.5px;
-    line-height: 1.5;
-    margin: 0 0 24px;
-    padding: 0 8px;
+    font-size: clamp(10px, 2.6vw, 13px);
+    line-height: 1.45;
+    max-width: clamp(230px, 58vw, 340px);
+    margin: 0 auto 16px;
   }
 
   .human-hero-cta-group {
-    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    max-width: clamp(240px, 64vw, 360px);
   }
 
-  .human-hero-cta-btn,
+  .human-hero-cta-btn {
+    padding: 8px 14px;
+    font-size: clamp(9.5px, 2.4vw, 11px);
+    gap: 5px;
+  }
+
   .human-hero-secondary-btn {
-    padding: 10px 18px;
-    font-size: 12px;
+    padding: 7px 12px;
+    font-size: clamp(9px, 2.2vw, 10.5px);
+    gap: 5px;
   }
 
-  /* Tactile Yellow Sticky Note on Mobile */
+  /* Top-Left: Mini Yellow Sticky Note (matches PC position) */
   .floating-widget-note {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    margin: 0 auto 22px !important;
-    width: min(88vw, 290px) !important;
-    transform: rotate(-2.5deg) !important;
-    animation: none !important;
-    display: block !important;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
-    padding: 20px 18px 16px !important;
-    font-size: 13px !important;
+    position: absolute;
+    top: clamp(10px, 2.5vh, 24px);
+    left: clamp(8px, 2.5vw, 20px);
+    width: clamp(105px, 29vw, 145px);
+    padding: clamp(10px, 2.5vw, 14px) clamp(8px, 2vw, 12px);
+    font-size: clamp(7.5px, 2vw, 9.5px);
+    line-height: 1.35;
+    border-radius: 3px;
+    transform: rotate(-5deg);
+    display: block;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06);
+    z-index: 3;
   }
 
-  /* Tactile Checkmark Badge on Mobile */
+  .floating-widget-note .pin-dot {
+    width: 6px;
+    height: 6px;
+    top: 3px;
+  }
+
+  /* Mid-Left: Mini Checkmark Badge (matches PC position) */
   .floating-check-badge {
-    position: absolute !important;
-    top: 18px !important;
-    right: 18px !important;
-    left: auto !important;
-    width: 38px !important;
-    height: 38px !important;
-    display: flex !important;
-    animation: none !important;
-    border-radius: 10px !important;
+    position: absolute;
+    top: 36%;
+    left: clamp(8px, 2.5vw, 18px);
+    width: clamp(24px, 6.5vw, 34px);
+    height: clamp(24px, 6.5vw, 34px);
+    border-radius: clamp(6px, 1.8vw, 9px);
+    display: flex;
+    z-index: 4;
   }
 
   .floating-check-badge svg {
-    width: 20px !important;
-    height: 20px !important;
+    width: clamp(12px, 3.2vw, 18px);
+    height: clamp(12px, 3.2vw, 18px);
   }
 
-  /* Mobile Widgets Tray (Swipeable Carousel) */
-  .hero-spatial-widgets-tray {
-    display: flex !important;
-    flex-direction: row;
-    gap: 14px;
-    width: calc(100% + 32px);
-    margin: 32px -16px 0;
-    padding: 12px 20px 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    z-index: 5;
-  }
-
-  .hero-spatial-widgets-tray::-webkit-scrollbar {
-    display: none;
-  }
-
-  .hero-spatial-widgets-tray .floating-widget-deadlines,
-  .hero-spatial-widgets-tray .floating-widget-sprints,
-  .hero-spatial-widgets-tray .floating-widget-sync {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    transform: none !important;
-    animation: none !important;
-    flex: 0 0 min(84vw, 295px);
-    scroll-snap-align: center;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
-    border: 1px solid var(--line);
-    display: block !important;
+  /* Top-Right: Mini Zen AI Runtime Widget (matches PC position) */
+  .floating-widget-deadlines {
+    position: absolute;
+    top: clamp(10px, 2.5vh, 24px);
+    right: clamp(8px, 2.5vw, 20px);
+    width: clamp(112px, 31vw, 160px);
+    padding: clamp(7px, 1.8vw, 11px) clamp(8px, 2vw, 12px);
+    border-radius: clamp(10px, 2.5vw, 14px);
+    transform: rotate(3.5deg);
+    display: block;
     text-align: left;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    z-index: 3;
   }
 
-  .hero-spatial-widgets-tray .floating-widget-deadlines {
-    padding: 16px 18px;
-    border-radius: 18px;
+  .floating-widget-deadlines .widget-stopwatch-circle {
+    width: clamp(18px, 4.8vw, 24px);
+    height: clamp(18px, 4.8vw, 24px);
+    margin-bottom: 3px;
   }
 
-  .hero-spatial-widgets-tray .floating-widget-sprints {
-    padding: 16px 18px;
-    border-radius: 18px;
+  .floating-widget-deadlines .widget-stopwatch-circle svg {
+    width: clamp(9px, 2.4vw, 12px);
+    height: clamp(9px, 2.4vw, 12px);
   }
 
-  .hero-spatial-widgets-tray .floating-widget-sync {
-    padding: 16px 18px;
-    border-radius: 18px;
+  .floating-widget-deadlines .widget-deadlines-head {
+    font-size: clamp(8px, 2.2vw, 10px);
+    margin-bottom: 1px;
   }
 
-  .mobile-widgets-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font: 600 10px/1 "DM Mono", monospace;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted-ink);
-    margin-top: 10px;
-    opacity: 0.75;
+  .floating-widget-deadlines .widget-deadlines-sub {
+    font-size: clamp(7px, 1.8vw, 8px);
+    margin-bottom: 5px;
+    line-height: 1.2;
+  }
+
+  .floating-widget-deadlines .widget-deadlines-time-pill {
+    padding: 2px 6px;
+    font-size: clamp(6.5px, 1.6vw, 8px);
+    border-radius: 12px;
+  }
+
+  /* Bottom-Left: Mini Active Open Core Apps Widget (matches PC position) */
+  .floating-widget-sprints {
+    position: absolute;
+    bottom: clamp(10px, 2.5vh, 22px);
+    left: clamp(8px, 2.5vw, 20px);
+    width: clamp(120px, 33vw, 175px);
+    padding: clamp(7px, 1.8vw, 11px) clamp(8px, 2vw, 12px);
+    border-radius: clamp(10px, 2.5vw, 14px);
+    transform: rotate(-3deg);
+    display: block;
+    text-align: left;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    z-index: 3;
+  }
+
+  .floating-widget-sprints .sprint-header {
+    font-size: clamp(8px, 2.1vw, 9.5px);
+    margin-bottom: 5px;
+  }
+
+  .floating-widget-sprints .resource-version {
+    font-size: 6.5px;
+  }
+
+  .floating-widget-sprints .sprint-row {
+    gap: 3px;
+    margin-bottom: 4px;
+  }
+
+  .floating-widget-sprints .sprint-meta-line {
+    font-size: clamp(7px, 1.8vw, 8px);
+  }
+
+  .floating-widget-sprints .sprint-badge-num {
+    font-size: 6.5px;
+    padding: 1px 3px;
+  }
+
+  .floating-widget-sprints .sprint-progress-track {
+    height: 2px;
+  }
+
+  /* Bottom-Right: Mini Open Core Stack Widget (matches PC position) */
+  .floating-widget-sync {
+    position: absolute;
+    bottom: clamp(10px, 2.5vh, 22px);
+    right: clamp(8px, 2.5vw, 20px);
+    width: clamp(110px, 30vw, 155px);
+    padding: clamp(7px, 1.8vw, 11px) clamp(8px, 2vw, 12px);
+    border-radius: clamp(10px, 2.5vw, 14px);
+    transform: rotate(3deg);
+    display: block;
+    text-align: left;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    z-index: 3;
+  }
+
+  .floating-widget-sync .sync-header {
+    font-size: clamp(8px, 2.1vw, 9.5px);
+    margin-bottom: 5px;
+  }
+
+  .floating-widget-sync .sync-icon-row {
+    gap: 4px;
+  }
+
+  .floating-widget-sync .sync-app-box {
+    width: clamp(24px, 6.5vw, 32px);
+    height: clamp(24px, 6.5vw, 32px);
+    border-radius: 6px;
+  }
+
+  .floating-widget-sync .sync-app-box svg {
+    width: clamp(11px, 2.8vw, 14px);
+    height: clamp(11px, 2.8vw, 14px);
   }
 }
 
