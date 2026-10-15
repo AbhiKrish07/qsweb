@@ -26,6 +26,15 @@ const SEPARATED_MODULE_POSITIONS = [
   new THREE.Vector3(-2.5, 0.75, 0),  // 04 Templates (left separated)
 ];
 
+// Dynamic camera distance helper: adjusts z-distance on mobile portrait screens to keep models in frame
+function getResponsiveCameraZ(aspect: number): number {
+  if (aspect >= 1.3) return 7.8;
+  if (aspect >= 1.0) return 8.6;
+  if (aspect >= 0.75) return 9.8;
+  // Mobile portrait (aspect ~0.44 - 0.72)
+  return Math.min(12.5, 7.8 * (0.82 / Math.max(0.44, aspect)));
+}
+
 export default function QuietStudioLab3D() {
   const trackRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -36,8 +45,11 @@ export default function QuietStudioLab3D() {
   const [labProgress, setLabProgress] = useState(0);
   const [webglSupported, setWebglSupported] = useState(true);
   const [activeDossierOpen, setActiveDossierOpen] = useState(false);
+  const [windowWidth, setWindowWidth] = useState<number>(() =>
+    typeof window !== "undefined" ? window.innerWidth : 1200
+  );
 
-
+  const touchStartX = useRef<number | null>(null);
 
   // Performance refs for Three.js instances
   const sceneState = useRef<{
@@ -144,11 +156,14 @@ export default function QuietStudioLab3D() {
 
     const width = sceneState.current.rect.width;
     const height = sceneState.current.rect.height;
+    const aspect = width / height;
+    const isMobile = width < 768 || aspect < 0.9;
 
-    // 1. Scene & Camera
+    // 1. Scene & Camera (Dynamically scaled z-distance ensures full model visibility on mobile portrait)
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
-    camera.position.set(0, 0.4, 7.8);
+    const camera = new THREE.PerspectiveCamera(42, aspect, 0.1, 100);
+    const initialCamZ = getResponsiveCameraZ(aspect);
+    camera.position.set(0, isMobile ? 0.7 : 0.4, initialCamZ);
 
     // 2. High-Performance Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -200,6 +215,10 @@ export default function QuietStudioLab3D() {
 
     // 5. Central Geometric Core (Polygonal Titanium Nucleus)
     const coreGroup = new THREE.Group();
+    if (isMobile) {
+      coreGroup.scale.setScalar(0.76);
+      coreGroup.position.y = 0.5;
+    }
     scene.add(coreGroup);
 
     // Titanium faceted outer polyhedron
@@ -387,10 +406,15 @@ export default function QuietStudioLab3D() {
           setLabProgress(prog);
           sceneState.current.activeProgress = prog;
 
-          // Interpolate modules from DOCKED to SEPARATED
+          // Interpolate modules from DOCKED to SEPARATED (scaled tighter on mobile to stay within viewport)
+          const isMobileNow = window.innerWidth < 768;
+          const sepScale = isMobileNow ? 0.68 : 1.0;
+
           modules.forEach((mod, idx) => {
             const docked = DOCKED_MODULE_POSITIONS[idx];
-            const separated = SEPARATED_MODULE_POSITIONS[idx];
+            const separated = SEPARATED_MODULE_POSITIONS[idx].clone();
+            separated.x *= sepScale;
+            separated.z *= sepScale;
             mod.position.lerpVectors(docked, separated, Math.min(1, Math.max(0, (prog - 0.12) * 2.8)));
 
             // Update tether line vertices
@@ -422,8 +446,8 @@ export default function QuietStudioLab3D() {
 
     // Elevate 3D core into background crown position behind monolith cards on scroll
     animTimeline
-      .to(coreGroup.position, { y: 0.75, z: -0.6, ease: "none" }, 0)
-      .to(camera.position, { z: 7.2, y: 0.1, ease: "none" }, 0.3);
+      .to(coreGroup.position, { y: isMobile ? 1.35 : 0.75, z: -0.6, ease: "none" }, 0)
+      .to(camera.position, { z: initialCamZ - 0.6, y: isMobile ? 0.4 : 0.1, ease: "none" }, 0.3);
 
     sceneState.current.timeline = animTimeline;
 
@@ -431,15 +455,27 @@ export default function QuietStudioLab3D() {
     const handleResize = () => {
       if (!viewport || !renderer || !camera) return;
       const r = viewport.getBoundingClientRect();
+      const newW = r.width || window.innerWidth;
+      const newH = r.height || window.innerHeight;
+      const newAspect = newW / newH;
+      const newIsMobile = newW < 768 || newAspect < 0.9;
+      setWindowWidth(newW);
+
       sceneState.current.rect = {
         left: r.left,
         top: r.top,
-        width: r.width || window.innerWidth,
-        height: r.height || window.innerHeight,
+        width: newW,
+        height: newH,
       };
-      camera.aspect = sceneState.current.rect.width / sceneState.current.rect.height;
+      camera.aspect = newAspect;
+      const newCamZ = getResponsiveCameraZ(newAspect);
+      camera.position.z = newCamZ;
+      camera.position.y = newIsMobile ? 0.7 : 0.4;
+      if (coreGroup) {
+        coreGroup.scale.setScalar(newIsMobile ? 0.76 : 1.0);
+      }
       camera.updateProjectionMatrix();
-      renderer.setSize(sceneState.current.rect.width, sceneState.current.rect.height);
+      renderer.setSize(newW, newH);
       ScrollTrigger.refresh();
     };
     window.addEventListener("resize", handleResize, { passive: true });
@@ -628,16 +664,36 @@ export default function QuietStudioLab3D() {
           </div>
 
           {/* Spatial Monolith Track (IT Empire smoked glass aesthetic matching user reference) */}
-          <div className="monolith-spatial-stage">
+          <div
+            className="monolith-spatial-stage"
+            onTouchStart={(e) => {
+              touchStartX.current = e.touches[0].clientX;
+            }}
+            onTouchEnd={(e) => {
+              if (touchStartX.current === null) return;
+              const touchEndX = e.changedTouches[0].clientX;
+              const deltaX = touchEndX - touchStartX.current;
+              if (Math.abs(deltaX) > 40) {
+                if (deltaX < 0 && activeStationIndex < STATIONS.length - 1) {
+                  selectStation(activeStationIndex + 1);
+                } else if (deltaX > 0 && activeStationIndex > 0) {
+                  selectStation(activeStationIndex - 1);
+                }
+              }
+              touchStartX.current = null;
+            }}
+          >
             <div className="monolith-cards-fan">
               {STATIONS.map((station, i) => {
-                // Continuous offset driven by scroll
+                // Continuous offset driven by scroll & responsive screen width
                 const diff = i - scrollStationVal;
-                const translateX = diff * 340;
-                const translateZ = Math.max(-240, 80 - Math.abs(diff) * 140);
-                const rotateY = Math.max(-35, Math.min(35, -diff * 18));
-                const scale = Math.max(0.68, 1 - Math.abs(diff) * 0.13);
-                const opacity = Math.max(0, 1 - Math.abs(diff) * 0.52);
+                const isMobileCard = windowWidth < 768;
+                const cardStep = isMobileCard ? Math.min(windowWidth * 0.76, 260) : 340;
+                const translateX = diff * cardStep;
+                const translateZ = Math.max(-240, (isMobileCard ? 30 : 80) - Math.abs(diff) * (isMobileCard ? 90 : 140));
+                const rotateY = Math.max(-28, Math.min(28, -diff * (isMobileCard ? 12 : 18)));
+                const scale = Math.max(0.72, 1 - Math.abs(diff) * (isMobileCard ? 0.14 : 0.13));
+                const opacity = Math.max(0, 1 - Math.abs(diff) * (isMobileCard ? 0.48 : 0.52));
                 const zIndex = Math.round(30 - Math.abs(diff) * 10);
                 const pointerEvents = Math.abs(diff) > 1.6 ? "none" : "auto";
                 const isCenter = Math.abs(diff) < 0.35;
@@ -737,7 +793,42 @@ export default function QuietStudioLab3D() {
             </div>
           </div>
 
+          {/* Station Navigation Quick Selector (Ensures all models easily accessible on mobile) */}
+          <div className="monolith-station-nav-bar">
+            <button
+              type="button"
+              className="station-nav-arrow"
+              onClick={() => selectStation(Math.max(0, activeStationIndex - 1))}
+              disabled={activeStationIndex === 0}
+              aria-label="Previous station"
+            >
+              <ChevronLeft size={16} />
+            </button>
 
+            <div className="station-nav-pills">
+              {STATIONS.map((s, idx) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  className={`station-nav-pill ${activeStationIndex === idx ? "active" : ""}`}
+                  onClick={() => selectStation(idx)}
+                >
+                  <span className="pill-index">{s.index}</span>
+                  <span className="pill-name">{s.name.split(" ")[0]}</span>
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              className="station-nav-arrow"
+              onClick={() => selectStation(Math.min(STATIONS.length - 1, activeStationIndex + 1))}
+              disabled={activeStationIndex === STATIONS.length - 1}
+              aria-label="Next station"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
         </div>
 
         {/* WebGL Fallback */}
