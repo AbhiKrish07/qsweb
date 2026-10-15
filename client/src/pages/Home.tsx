@@ -467,18 +467,6 @@ export default function Home({
               <Check size={24} strokeWidth={2.8} />
             </div>
 
-            {/* Top-Right Floating Deadlines Widget */}
-            <div className="floating-widget-deadlines" aria-hidden="true">
-              <div className="widget-stopwatch-circle">
-                <Sparkles size={16} />
-              </div>
-              <div className="widget-deadlines-head">Zen AI Runtime</div>
-              <div className="widget-deadlines-sub">Local Quantized Inference Engine</div>
-              <div className="widget-deadlines-time-pill">
-                <span>0.2ms Latency / Zero Telemetry</span>
-              </div>
-            </div>
-
             {/* Center Hero Content (Quiet Studio Manifesto Content) */}
             <div className="human-hero-brand-badge">
               <span className="brand-dot" />
@@ -535,50 +523,69 @@ export default function Home({
               )}
             </div>
 
-            {/* Bottom-Left Floating Sprints Widget */}
-            <div className="floating-widget-sprints" aria-hidden="true">
-              <div className="sprint-header">
-                <span>Active Open Core Apps</span>
-                <span className="resource-version">ONLINE</span>
-              </div>
-              <div className="sprint-row">
-                <div className="sprint-meta-line">
-                  <span>
-                    <span className="sprint-badge-num orange">01</span> Zen AI Local Runtime
-                  </span>
-                  <span style={{ color: "var(--muted-ink)", fontSize: "10.5px" }}>SHIPPED</span>
+            {/* Spatial Showcase Widgets Tray (Tactile corner widgets on desktop, smooth swipeable showcase on mobile) */}
+            <div className="hero-spatial-widgets-tray">
+              {/* Widget 1: Zen AI Runtime */}
+              <div className="floating-widget-deadlines" aria-hidden="true">
+                <div className="widget-stopwatch-circle">
+                  <Sparkles size={16} />
                 </div>
-                <div className="sprint-progress-track">
-                  <div className="sprint-progress-fill cyan" />
+                <div className="widget-deadlines-head">Zen AI Runtime</div>
+                <div className="widget-deadlines-sub">Local Quantized Inference Engine</div>
+                <div className="widget-deadlines-time-pill">
+                  <span>0.2ms Latency / Zero Telemetry</span>
                 </div>
               </div>
-              <div className="sprint-row">
-                <div className="sprint-meta-line">
-                  <span>
-                    <span className="sprint-badge-num green">02</span> LearnLoop Engine
-                  </span>
-                  <span style={{ color: "var(--muted-ink)", fontSize: "10.5px" }}>IN LAB</span>
+
+              {/* Widget 2: Active Open Core Apps */}
+              <div className="floating-widget-sprints" aria-hidden="true">
+                <div className="sprint-header">
+                  <span>Active Open Core Apps</span>
+                  <span className="resource-version">ONLINE</span>
                 </div>
-                <div className="sprint-progress-track">
-                  <div className="sprint-progress-fill blue" />
+                <div className="sprint-row">
+                  <div className="sprint-meta-line">
+                    <span>
+                      <span className="sprint-badge-num orange">01</span> Zen AI Local Runtime
+                    </span>
+                    <span style={{ color: "var(--muted-ink)", fontSize: "10.5px" }}>SHIPPED</span>
+                  </div>
+                  <div className="sprint-progress-track">
+                    <div className="sprint-progress-fill cyan" />
+                  </div>
+                </div>
+                <div className="sprint-row">
+                  <div className="sprint-meta-line">
+                    <span>
+                      <span className="sprint-badge-num green">02</span> LearnLoop Engine
+                    </span>
+                    <span style={{ color: "var(--muted-ink)", fontSize: "10.5px" }}>IN LAB</span>
+                  </div>
+                  <div className="sprint-progress-track">
+                    <div className="sprint-progress-fill blue" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Widget 3: Open Core Stack */}
+              <div className="floating-widget-sync" aria-hidden="true">
+                <div className="sync-header">Open Core Stack</div>
+                <div className="sync-icon-row">
+                  <div className="sync-app-box" title="Rust Inference">
+                    <Terminal size={18} />
+                  </div>
+                  <div className="sync-app-box" title="Local Intelligence">
+                    <Cpu size={18} />
+                  </div>
+                  <div className="sync-app-box" title="Zero Telemetry">
+                    <Zap size={18} />
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Bottom-Right Floating Sync Widget */}
-            <div className="floating-widget-sync" aria-hidden="true">
-              <div className="sync-header">Open Core Stack</div>
-              <div className="sync-icon-row">
-                <div className="sync-app-box" title="Rust Inference">
-                  <Terminal size={18} />
-                </div>
-                <div className="sync-app-box" title="Local Intelligence">
-                  <Cpu size={18} />
-                </div>
-                <div className="sync-app-box" title="Zero Telemetry">
-                  <Zap size={18} />
-                </div>
-              </div>
+            <div className="mobile-widgets-indicator" aria-hidden="true">
+              <span>← swipe to explore open core stack →</span>
             </div>
           </section>
 

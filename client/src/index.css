@@ -3781,13 +3781,140 @@
   50% { transform: translateY(-8px) rotate(4.5deg); }
 }
 
-@media (max-width: 1024px) {
-  .floating-widget-note,
-  .floating-check-badge,
-  .floating-widget-deadlines,
-  .floating-widget-sprints,
-  .floating-widget-sync {
+/* Desktop: widgets tray expands so children are positioned spatially */
+.hero-spatial-widgets-tray {
+  display: contents;
+}
+
+.mobile-widgets-indicator {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .human-spatial-canvas {
+    min-height: auto;
+    padding: 36px 16px 44px;
+    overflow: visible;
+  }
+
+  .human-hero-headline-prioritize {
+    font-size: clamp(2.3rem, 8.5vw, 3.8rem);
+    letter-spacing: -0.06em;
+    margin: 0 0 14px;
+  }
+
+  .human-hero-sub-prioritize {
+    font-size: 14.5px;
+    line-height: 1.5;
+    margin: 0 0 24px;
+    padding: 0 8px;
+  }
+
+  .human-hero-cta-group {
+    gap: 10px;
+  }
+
+  .human-hero-cta-btn,
+  .human-hero-secondary-btn {
+    padding: 10px 18px;
+    font-size: 12px;
+  }
+
+  /* Tactile Yellow Sticky Note on Mobile */
+  .floating-widget-note {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    margin: 0 auto 22px !important;
+    width: min(88vw, 290px) !important;
+    transform: rotate(-2.5deg) !important;
+    animation: none !important;
+    display: block !important;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+    padding: 20px 18px 16px !important;
+    font-size: 13px !important;
+  }
+
+  /* Tactile Checkmark Badge on Mobile */
+  .floating-check-badge {
+    position: absolute !important;
+    top: 18px !important;
+    right: 18px !important;
+    left: auto !important;
+    width: 38px !important;
+    height: 38px !important;
+    display: flex !important;
+    animation: none !important;
+    border-radius: 10px !important;
+  }
+
+  .floating-check-badge svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Mobile Widgets Tray (Swipeable Carousel) */
+  .hero-spatial-widgets-tray {
+    display: flex !important;
+    flex-direction: row;
+    gap: 14px;
+    width: calc(100% + 32px);
+    margin: 32px -16px 0;
+    padding: 12px 20px 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    z-index: 5;
+  }
+
+  .hero-spatial-widgets-tray::-webkit-scrollbar {
     display: none;
+  }
+
+  .hero-spatial-widgets-tray .floating-widget-deadlines,
+  .hero-spatial-widgets-tray .floating-widget-sprints,
+  .hero-spatial-widgets-tray .floating-widget-sync {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    animation: none !important;
+    flex: 0 0 min(84vw, 295px);
+    scroll-snap-align: center;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--line);
+    display: block !important;
+    text-align: left;
+  }
+
+  .hero-spatial-widgets-tray .floating-widget-deadlines {
+    padding: 16px 18px;
+    border-radius: 18px;
+  }
+
+  .hero-spatial-widgets-tray .floating-widget-sprints {
+    padding: 16px 18px;
+    border-radius: 18px;
+  }
+
+  .hero-spatial-widgets-tray .floating-widget-sync {
+    padding: 16px 18px;
+    border-radius: 18px;
+  }
+
+  .mobile-widgets-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 600 10px/1 "DM Mono", monospace;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted-ink);
+    margin-top: 10px;
+    opacity: 0.75;
   }
 }
 
