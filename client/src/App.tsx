@@ -32,11 +32,15 @@ function Header({
   onToggle,
   onOpenCommand,
   onOpenContact,
+  studioMode,
+  onStudioModeChange,
 }: {
   dark: boolean;
   onToggle: () => void;
   onOpenCommand: () => void;
   onOpenContact: () => void;
+  studioMode: "human" | "agent";
+  onStudioModeChange: (mode: "human" | "agent") => void;
 }) {
   const [location, setLocation] = useLocation();
   const [soundOn, setSoundOn] = useState(isSoundEnabled());
@@ -48,14 +52,20 @@ function Header({
     setSoundOn(nextState);
   };
 
-  const navLinks = [
-    { label: "Products", href: "/#products" },
-    { label: "Thesis", href: "/thesis" },
-    { label: "Research", href: "/research" },
-    { label: "Templates", href: "/templates" },
-    { label: "Notes", href: "/notes" },
-    { label: "About", href: "/about" },
-  ];
+  const navLinks =
+    studioMode === "human"
+      ? [
+          { label: "Open Core Apps", href: "/#apps" },
+          { label: "Blog & Notes", href: "/blog" },
+          { label: "About", href: "/about" },
+        ]
+      : [
+          { label: "AI Lab", href: "/#overview" },
+          { label: "Models", href: "/#models" },
+          { label: "Research", href: "/research" },
+          { label: "Thesis", href: "/thesis" },
+          { label: "About", href: "/about" },
+        ];
 
   const handleNavClick = (href: string) => {
     playClick();
@@ -97,7 +107,29 @@ function Header({
           <span>quiet studio</span>
         </Link>
 
-        {/* Desktop Navigation */}
+        {/* Global Studio Mode Switcher: Human (Open Core Apps & Studio) vs AI Lab (Models & Research) */}
+        <div className="header-mode-toggle" role="group" aria-label="Studio Mode Switcher">
+          <button
+            type="button"
+            className={`mode-toggle-btn ${studioMode === "human" ? "active" : ""}`}
+            onClick={() => onStudioModeChange("human")}
+            title="Products: Open Core Apps & Software"
+          >
+            <span className="mode-btn-symbol">✦</span>
+            <span>Products</span>
+          </button>
+          <button
+            type="button"
+            className={`mode-toggle-btn ${studioMode === "agent" ? "active" : ""}`}
+            onClick={() => onStudioModeChange("agent")}
+            title="AI Lab: Vertical Models & Research Papers"
+          >
+            <span className="mode-btn-symbol">✱</span>
+            <span>AI Lab</span>
+          </button>
+        </div>
+
+        {/* Contextual Desktop Navigation */}
         <nav className="main-nav" aria-label="Main navigation">
           {navLinks.map((link) => (
             <a
@@ -107,15 +139,7 @@ function Header({
                 e.preventDefault();
                 handleNavClick(link.href);
               }}
-              className={
-                link.href === "/#products"
-                  ? location === "/"
-                    ? "active"
-                    : ""
-                  : location.startsWith(link.href)
-                  ? "active"
-                  : ""
-              }
+              className={location.startsWith(link.href) ? "active" : ""}
             >
               {link.label}
             </a>
@@ -235,11 +259,31 @@ function AppShell() {
   const [dark, setDark] = useState(true);
   const [commandOpen, setCommandOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const [studioMode, setStudioMode] = useState<"human" | "agent">(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("quiet-studio-mode");
+      if (saved === "human" || saved === "agent") return saved;
+    }
+    return "human";
+  });
+
+  const handleStudioModeChange = (nextMode: "human" | "agent") => {
+    playClick();
+    setStudioMode(nextMode);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("quiet-studio-mode", nextMode);
+      document.documentElement.setAttribute("data-studio-mode", nextMode);
+    }
+  };
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
     document.documentElement.style.colorScheme = dark ? "dark" : "light";
   }, [dark]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-studio-mode", studioMode);
+  }, [studioMode]);
 
   useEffect(() => {
     const handleOpenCommand = () => setCommandOpen(true);
@@ -260,12 +304,13 @@ function AppShell() {
         onToggle={() => setDark((value) => !value)}
         onOpenCommand={() => setCommandOpen(true)}
         onOpenContact={() => setContactOpen(true)}
+        studioMode={studioMode}
+        onStudioModeChange={handleStudioModeChange}
       />
       <main>
-        <div key={String(location)} className="page-transition">
+        <div key={`${String(location)}-${studioMode}`} className="page-transition">
           <Switch>
-            <Route path="/" component={Home} />
-            <Route path="/capture">{() => <ProductPage />}</Route>
+            <Route path="/">{() => <Home mode={studioMode} onModeChange={handleStudioModeChange} />}</Route>
             <Route path="/products/:slug" component={ProductPage} />
             <Route path="/research" component={Research} />
             <Route path="/research/:slug" component={ResearchArticle} />
@@ -275,6 +320,8 @@ function AppShell() {
             <Route path="/coding-assets" component={Templates} />
             <Route path="/changelog" component={Changelog} />
             <Route path="/system" component={System} />
+            <Route path="/blog" component={Notes} />
+            <Route path="/blog/:slug" component={NotesIssue} />
             <Route path="/notes" component={Notes} />
             <Route path="/notes/:slug" component={NotesIssue} />
             <Route path="/about" component={About} />
