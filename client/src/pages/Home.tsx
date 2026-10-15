@@ -188,22 +188,182 @@ const noteContent = [
   },
 ];
 
+const LOOPS_FORM_ACTION = "https://app.loops.so/api/newsletter-form/cmatylqt31ghsxb0izxxyerf0";
+
+function StudioWaitlistForm() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const cleanEmail = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      toast("Please enter a valid email address.");
+      return;
+    }
+
+    // Rate limiting check: 60s cooldown per Loops instructions
+    const now = Date.now();
+    const previousTimestamp = localStorage.getItem("loops-form-timestamp");
+    if (previousTimestamp && Number(previousTimestamp) + 60000 > now) {
+      setStatus("error");
+      setErrorMessage("Too many signups, please try again in a little while");
+      return;
+    }
+    localStorage.setItem("loops-form-timestamp", String(now));
+
+    setStatus("loading");
+    playClick();
+
+    let loopSuccess = false;
+    let localSuccess = false;
+
+    // 1. Submit directly to Loops endpoint with urlencoded form
+    try {
+      const formBody = "userGroup=&mailingLists=&email=" + encodeURIComponent(cleanEmail);
+      const res = await fetch(LOOPS_FORM_ACTION, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: formBody,
+      });
+      if (res.ok) {
+        loopSuccess = true;
+      }
+    } catch (err) {
+      console.warn("Client Loops fetch failed or blocked by CORS/Adblocker:", err);
+    }
+
+    // 2. Submit to Quiet Studio server: stores in data/waitlist.json, logs alert to glexionstriker@gmail.com, and serves as server-side backup forwarder to Loops
+    try {
+      const localRes = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: cleanEmail,
+          source: "First Page Hero Waitlist",
+          ownerNotification: "glexionstriker@gmail.com",
+        }),
+      });
+      if (localRes.ok) {
+        localSuccess = true;
+      }
+    } catch (err) {
+      console.error("Local waitlist API error:", err);
+    }
+
+    if (loopSuccess || localSuccess) {
+      setStatus("success");
+      toast("You're on the waitlist! We'll be in touch.");
+    } else {
+      setStatus("error");
+      setErrorMessage("Oops! Something went wrong, please try again");
+      localStorage.setItem("loops-form-timestamp", "");
+    }
+  };
+
+  const handleReset = () => {
+    setStatus("idle");
+    setEmail("");
+    setErrorMessage("");
+  };
+
+  if (status === "success") {
+    return (
+      <div className="hero-waitlist-success-badge">
+        <div className="waitlist-success-icon">
+          <Check size={16} />
+        </div>
+        <div className="waitlist-success-text">
+          <strong>You're on the waitlist!</strong>
+          <span>We'll email updates and early access invites directly to your inbox.</span>
+        </div>
+        <button type="button" onClick={handleReset} className="waitlist-back-btn">
+          Add another &rarr;
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="hero-waitlist-container">
+      <form className={`hero-waitlist-form ${status === "loading" ? "is-loading" : ""}`} onSubmit={handleSubmit}>
+        <div className="hero-waitlist-input-wrap">
+          <Mail size={16} className="hero-waitlist-icon" />
+          <input
+            type="email"
+            className="hero-waitlist-input"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            disabled={status === "loading"}
+            aria-label="Join the Quiet Studio Waitlist"
+          />
+        </div>
+        <button
+          type="submit"
+          className="hero-waitlist-submit-btn"
+          disabled={status === "loading"}
+        >
+          {status === "loading" ? (
+            <>
+              <LoaderCircle size={15} className="spin" />
+              <span>Joining...</span>
+            </>
+          ) : (
+            <>
+              <span>Join Waitlist</span>
+              <ArrowRight size={14} />
+            </>
+          )}
+        </button>
+      </form>
+      {status === "error" && (
+        <div className="hero-waitlist-error">
+          <span>{errorMessage}</span>
+          <button type="button" onClick={handleReset} className="waitlist-try-again-btn">
+            Try again
+          </button>
+        </div>
+      )}
+      <div className="hero-waitlist-sub-micro">
+        <span className="dot-pulse" />
+        <span>Get studio updates, early access to apps, and labs research. No spam.</span>
+      </div>
+    </div>
+  );
+}
+
 function NewsletterForm() {
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "loading" | "done">("idle");
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    const cleanEmail = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
       toast("Enter a valid email address to subscribe.");
       return;
     }
     setState("loading");
+
+    // Submit to Loops
     try {
-      await fetch("/api/subscribe", {
+      await fetch(LOOPS_FORM_ACTION, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "userGroup=&mailingLists=&email=" + encodeURIComponent(cleanEmail),
+      });
+    } catch {
+      /* ignore client-side CORS errors */
+    }
+
+    try {
+      await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, page: "Home Newsletter", target: "glexionstriker@gmail.com" }),
+        body: JSON.stringify({ email: cleanEmail, source: "Home Footer Newsletter", target: "glexionstriker@gmail.com" }),
       });
     } catch {
       /* fallback graceful handler */
@@ -493,6 +653,11 @@ export default function Home({
               Quiet Studio is a one-person product studio exploring open-core apps, local-first computing, and tools
               that make the complex feel calm—without dashboards or productivity theatre.
             </p>
+
+            {/* Waitlist Form for updates & early access */}
+            <div className="hero-waitlist-wrap">
+              <StudioWaitlistForm />
+            </div>
 
             <div className="human-hero-cta-group">
               <a

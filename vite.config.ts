@@ -203,11 +203,54 @@ function vitePluginStorageProxy(): Plugin {
   };
 }
 
+const DATA_DIR = path.resolve(PROJECT_ROOT, "data");
+const WAITLIST_FILE = path.join(DATA_DIR, "waitlist.json");
+const OWNER_EMAIL = "glexionstriker@gmail.com";
+const LOOPS_API_URL = "https://app.loops.so/api/newsletter-form/cmatylqt31ghsxb0izxxyerf0";
+
+function saveWaitlistEntry(entry: { email: string; timestamp: string; source: string; ip?: string }) {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+  let list: any[] = [];
+  try {
+    if (fs.existsSync(WAITLIST_FILE)) {
+      list = JSON.parse(fs.readFileSync(WAITLIST_FILE, "utf-8"));
+    }
+  } catch {
+    list = [];
+  }
+  const normalized = entry.email.trim().toLowerCase();
+  const exists = list.some((item: any) => item.email?.toLowerCase() === normalized);
+  if (!exists) {
+    list.push({ ...entry, email: normalized });
+    fs.writeFileSync(WAITLIST_FILE, JSON.stringify(list, null, 2), "utf-8");
+  }
+  return list;
+}
+
 function vitePluginEmailApi(): Plugin {
   return {
     name: "manus-email-api-proxy",
     configureServer(server: ViteDevServer) {
-      server.middlewares.use("/api", (req, res, next) => {
+      server.middlewares.use("/api", async (req, res, next) => {
+        const cleanUrl = req.url?.split("?")[0] || "";
+
+        // Support GET /api/waitlist
+        if (req.method === "GET" && (cleanUrl === "/waitlist" || cleanUrl === "" || cleanUrl === "/")) {
+          if (fs.existsSync(WAITLIST_FILE)) {
+            try {
+              const list = JSON.parse(fs.readFileSync(WAITLIST_FILE, "utf-8"));
+              res.writeHead(200, { "Content-Type": "application/json" });
+              res.end(JSON.stringify({ count: list.length, waitlist: list }));
+              return;
+            } catch {}
+          }
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ count: 0, waitlist: [] }));
+          return;
+        }
+
         if (req.method !== "POST") {
           return next();
         }
@@ -217,18 +260,43 @@ function vitePluginEmailApi(): Plugin {
           body += chunk.toString();
         });
 
-        req.on("end", () => {
+        req.on("end", async () => {
           try {
             const data = JSON.parse(body || "{}");
-            const recipient = "glexionstriker@gmail.com";
-            console.log(`[EMAIL ROUTER] Action: ${req.url} -> Routing to: ${recipient}`, data);
+            const email = (data.email || data["newsletter-form-input"] || "").trim().toLowerCase();
+            const source = data.source || "Quiet Studio Waitlist";
+
+            if (email) {
+              // 1. Persist to data/waitlist.json
+              const updatedList = saveWaitlistEntry({
+                email,
+                source,
+                timestamp: new Date().toISOString(),
+                ip: req.socket.remoteAddress,
+              });
+
+              // 2. Forward to Loops
+              try {
+                await fetch(LOOPS_API_URL, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                  body: `userGroup=&mailingLists=&email=${encodeURIComponent(email)}`,
+                });
+              } catch (loopErr) {
+                console.warn("[LOOPS PROXY] Server forward error:", loopErr);
+              }
+
+              console.log(`[WAITLIST NOTIFICATION] 📧 Alert for ${OWNER_EMAIL}:`);
+              console.log(`  -> New signup: ${email} | Total subscribers: ${updatedList.length}`);
+            }
 
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(
               JSON.stringify({
                 success: true,
-                targetEmail: recipient,
-                message: `Notification successfully routed to ${recipient}`,
+                targetEmail: OWNER_EMAIL,
+                message: `Notification successfully routed to ${OWNER_EMAIL}`,
+                email,
                 received: data,
               })
             );
