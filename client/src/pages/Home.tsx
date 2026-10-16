@@ -651,7 +651,7 @@ export default function Home({
 
             <p className="human-hero-sub-prioritize">
               Quiet Studio is a one-person product studio exploring open-core apps, local-first computing, and tools
-              that make the complex feel calm—without dashboards or productivity theatre.
+              that make the complex feel calm, without dashboards or productivity theatre.
             </p>
 
             {/* Waitlist Form for updates & early access */}
@@ -902,7 +902,7 @@ export default function Home({
                 }}
               >
                 The AI Laboratory at Quiet Studio isn’t just working on isolated memory mathematics. Our central goal
-                is making artificial intelligence a proactive companion in your life—deeply vertical, task-specialized,
+                is making artificial intelligence a proactive companion in your daily life: deeply vertical, task-specialized,
                 and aware of your context so it executes what you need without syntax gymnastics.
               </p>
             </div>
