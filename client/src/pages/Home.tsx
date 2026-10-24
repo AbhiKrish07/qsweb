@@ -1204,7 +1204,7 @@ export default function Home({
           <br />
           <em>something useful.</em>
         </h2>
-        <div style={{ maxWidth: "480px", width: "100%", margin: "0 auto 32px" }}>
+        <div className="closing-waitlist-wrap">
           <StudioWaitlistForm />
         </div>
         <a
