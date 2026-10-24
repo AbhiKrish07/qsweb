@@ -651,13 +651,8 @@ export default function Home({
 
             <p className="human-hero-sub-prioritize">
               Quiet Studio is a one-person product studio exploring open-core apps, local-first computing, and tools
-              that make the complex feel calm, without dashboards or productivity theatre.
+              that make the complex feel calm—without dashboards or productivity theatre.
             </p>
-
-            {/* Waitlist Form for updates & early access */}
-            <div className="hero-waitlist-wrap">
-              <StudioWaitlistForm />
-            </div>
 
             <div className="human-hero-cta-group">
               <a
@@ -1096,6 +1091,9 @@ export default function Home({
           <br />
           <em>something useful.</em>
         </h2>
+        <div style={{ maxWidth: "480px", width: "100%", margin: "0 auto 32px" }}>
+          <StudioWaitlistForm />
+        </div>
         <button
           className="primary-button"
           onClick={() => {
