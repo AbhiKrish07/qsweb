@@ -30,6 +30,7 @@ import QuietStudioLab3D from "@/components/QuietStudioLab3D";
 import FluxLines from "@/components/FluxLines";
 import ElectricLogo from "@/components/ElectricLogo";
 import Strands from "@/components/Strands";
+import HalftoneReveal from "@/components/HalftoneReveal";
 import { BLOG_POSTS } from "@/pages/Notes";
 
 if (typeof window !== "undefined") {
@@ -697,11 +698,6 @@ export default function Home({
                   theme={isDark ? "dark" : "light"}
                 />
               </div>
-              <div className="electric-widget-footer">
-                <div className="widget-deadlines-time-pill">
-                  <span>0.2ms Latency / Zero Telemetry</span>
-                </div>
-              </div>
             </div>
 
             {/* Center Hero Content (Quiet Studio Manifesto Content) */}
@@ -760,33 +756,28 @@ export default function Home({
               )}
             </div>
 
-            {/* Bottom-Left Floating Sprints Widget */}
-            <div className="floating-widget-sprints" aria-hidden="true">
-              <div className="sprint-header">
-                <span>Active Open Core Apps</span>
-                <span className="resource-version">ONLINE</span>
+            {/* Bottom-Left Floating Widget: Interactive HalftoneReveal from React Bits */}
+            <div className="floating-widget-halftone" aria-label="Interactive Halftone Reveal">
+              <div className="halftone-widget-header">
+                <div className="halftone-widget-title">
+                  <span className="halftone-indicator-dot" />
+                  <span>Halftone Reveal</span>
+                </div>
+                <span className="halftone-tag-pill">SCREEN // 60°</span>
               </div>
-              <div className="sprint-row">
-                <div className="sprint-meta-line">
-                  <span>
-                    <span className="sprint-badge-num orange">01</span> Zen AI Local Runtime
-                  </span>
-                  <span style={{ color: "var(--muted-ink)", fontSize: "10.5px" }}>SHIPPED</span>
-                </div>
-                <div className="sprint-progress-track">
-                  <div className="sprint-progress-fill cyan" />
-                </div>
-              </div>
-              <div className="sprint-row">
-                <div className="sprint-meta-line">
-                  <span>
-                    <span className="sprint-badge-num green">02</span> LearnLoop Engine
-                  </span>
-                  <span style={{ color: "var(--muted-ink)", fontSize: "10.5px" }}>IN LAB</span>
-                </div>
-                <div className="sprint-progress-track">
-                  <div className="sprint-progress-fill blue" />
-                </div>
+              <div className="halftone-canvas-wrap">
+                <HalftoneReveal
+                  src="https://images.unsplash.com/photo-1693250707557-a846a014b321?q=80&w=1400&auto=format&fit=crop"
+                  mode="mono"
+                  shape="ellipse"
+                  cellSize={7}
+                  angle={60}
+                  inkColor={isDark ? "#f4f1ea" : "#141413"}
+                  paperColor={isDark ? "#120f17" : "#faf9f5"}
+                  revealRadius={140}
+                  roughness={0.7}
+                  clickBurst
+                />
               </div>
             </div>
 

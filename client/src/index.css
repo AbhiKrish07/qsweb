@@ -3893,20 +3893,61 @@
   font: 600 10.5px/1 "DM Mono", monospace;
 }
 
-.floating-widget-sprints {
+.floating-widget-sprints,
+.floating-widget-halftone {
   position: absolute;
   bottom: 8%;
   left: 3.5%;
-  width: 290px;
+  width: 270px;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 20px;
-  padding: 18px 20px;
+  padding: 14px 16px;
   text-align: left;
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.14);
-  z-index: 3;
+  z-index: 4;
   transform: rotate(-3deg);
   animation: floatSprints 8s ease-in-out infinite 1.2s;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.halftone-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.halftone-widget-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 600 12.5px/1 "DM Sans", sans-serif;
+  color: var(--foreground);
+}
+
+.halftone-indicator-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--orange);
+}
+
+.halftone-tag-pill {
+  font: 700 9px/1 "DM Mono", monospace;
+  color: var(--muted-ink);
+  letter-spacing: 0.05em;
+}
+
+.halftone-canvas-wrap {
+  width: 100%;
+  height: 135px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
 }
 
 .sprint-header {
@@ -4255,19 +4296,34 @@
     border-radius: 12px;
   }
 
-  /* Bottom-Left: Mini Active Open Core Apps Widget (matches PC position) */
-  .floating-widget-sprints {
+  /* Bottom-Left: Mini Halftone Reveal Widget (matches PC position) */
+  .floating-widget-sprints,
+  .floating-widget-halftone {
     position: absolute;
     bottom: clamp(10px, 2.5vh, 22px);
     left: clamp(8px, 2.5vw, 20px);
-    width: clamp(120px, 33vw, 175px);
+    width: clamp(130px, 35vw, 185px);
     padding: clamp(7px, 1.8vw, 11px) clamp(8px, 2vw, 12px);
     border-radius: clamp(10px, 2.5vw, 14px);
     transform: rotate(-3deg);
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4px, 1vw, 8px);
     text-align: left;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
     z-index: 3;
+  }
+
+  .floating-widget-halftone .halftone-canvas-wrap {
+    height: clamp(65px, 15vw, 100px);
+  }
+
+  .floating-widget-halftone .halftone-widget-title {
+    font-size: clamp(8px, 2.1vw, 9.5px);
+  }
+
+  .floating-widget-halftone .halftone-tag-pill {
+    font-size: 6.5px;
   }
 
   .floating-widget-sprints .sprint-header {
