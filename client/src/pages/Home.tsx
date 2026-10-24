@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { playClick } from "@/lib/sound";
 import QuietStudioLab3D from "@/components/QuietStudioLab3D";
 import FluxLines from "@/components/FluxLines";
+import ElectricLogo from "@/components/ElectricLogo";
 import { BLOG_POSTS } from "@/pages/Notes";
 
 if (typeof window !== "undefined") {
@@ -664,15 +665,33 @@ export default function Home({
               <Check size={24} strokeWidth={2.8} />
             </div>
 
-            {/* Top-Right Floating Deadlines Widget */}
-            <div className="floating-widget-deadlines" aria-hidden="true">
-              <div className="widget-stopwatch-circle">
-                <Sparkles size={16} />
+            {/* Top-Right Floating Widget: Interactive ElectricLogo from React Bits */}
+            <div className="floating-widget-electric" aria-label="Zen AI Electric Runtime">
+              <div className="electric-widget-header">
+                <div className="electric-widget-title">
+                  <span className="electric-live-dot" />
+                  <span>Zen AI Runtime</span>
+                </div>
+                <span className="electric-tag-pill">QUANTIZED</span>
               </div>
-              <div className="widget-deadlines-head">Zen AI Runtime</div>
-              <div className="widget-deadlines-sub">Local Quantized Inference Engine</div>
-              <div className="widget-deadlines-time-pill">
-                <span>0.2ms Latency / Zero Telemetry</span>
+              <div className="electric-logo-canvas-wrap">
+                <ElectricLogo
+                  color={isDark ? "#ffffff" : "#ff5a1f"}
+                  glowColor={isDark ? "#ff5a1f" : "#ff7849"}
+                  scale={0.75}
+                  strands={4}
+                  bend={0.6}
+                  crackle={1.5}
+                  arcs={1}
+                  speed={2.2}
+                  interactive
+                  theme={isDark ? "dark" : "light"}
+                />
+              </div>
+              <div className="electric-widget-footer">
+                <div className="widget-deadlines-time-pill">
+                  <span>0.2ms Latency / Zero Telemetry</span>
+                </div>
               </div>
             </div>
 

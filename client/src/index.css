@@ -3774,7 +3774,8 @@
   animation: floatCheck 6s ease-in-out infinite 0.5s;
 }
 
-.floating-widget-deadlines {
+.floating-widget-deadlines,
+.floating-widget-electric {
   position: absolute;
   top: 9%;
   right: 3.5%;
@@ -3785,9 +3786,64 @@
   padding: 16px 18px;
   text-align: left;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-  z-index: 3;
+  z-index: 4;
   transform: rotate(4deg);
   animation: floatDeadlines 7.5s ease-in-out infinite 0.8s;
+  backdrop-filter: blur(12px);
+}
+
+.electric-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.electric-widget-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font: 600 12.5px/1 "DM Sans", sans-serif;
+  color: var(--foreground);
+}
+
+.electric-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 8px var(--orange);
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.electric-tag-pill {
+  font: 700 9px/1 "DM Mono", monospace;
+  color: var(--orange);
+  background: color-mix(in srgb, var(--orange) 12%, transparent);
+  padding: 3px 6px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+}
+
+.electric-logo-canvas-wrap {
+  width: 100%;
+  height: 120px;
+  position: relative;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--foreground) 3%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.electric-widget-footer {
+  display: flex;
+  align-items: center;
 }
 
 .widget-stopwatch-circle {
@@ -4130,18 +4186,33 @@
   }
 
   /* Top-Right: Mini Zen AI Runtime Widget (matches PC position) */
-  .floating-widget-deadlines {
+  .floating-widget-deadlines,
+  .floating-widget-electric {
     position: absolute;
     top: clamp(10px, 2.5vh, 24px);
     right: clamp(8px, 2.5vw, 20px);
-    width: clamp(112px, 31vw, 160px);
+    width: clamp(118px, 32vw, 168px);
     padding: clamp(7px, 1.8vw, 11px) clamp(8px, 2vw, 12px);
     border-radius: clamp(10px, 2.5vw, 14px);
     transform: rotate(3.5deg);
     display: block;
     text-align: left;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-    z-index: 3;
+    z-index: 4;
+  }
+
+  .floating-widget-electric .electric-logo-canvas-wrap {
+    height: clamp(65px, 16vw, 90px);
+    margin-bottom: 6px;
+  }
+
+  .floating-widget-electric .electric-widget-title {
+    font-size: clamp(8.5px, 2.2vw, 10.5px);
+  }
+
+  .floating-widget-electric .electric-tag-pill {
+    font-size: clamp(7px, 1.8vw, 8px);
+    padding: 2px 4px;
   }
 
   .floating-widget-deadlines .widget-stopwatch-circle {
