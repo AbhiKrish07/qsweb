@@ -23,6 +23,7 @@ import { isSoundEnabled, toggleSound, playClick } from "./lib/sound";
 function ScrollToTop() {
   const [location] = useLocation();
   useEffect(() => {
+    if (location === "/models" || window.location.hash) return;
     window.scrollTo(0, 0);
   }, [location]);
   return null;
@@ -350,6 +351,7 @@ function AppShell() {
         <div key={`${String(location)}-${studioMode}`} className="page-transition">
           <Switch>
             <Route path="/">{() => <Home mode={studioMode} onModeChange={handleStudioModeChange} />}</Route>
+            <Route path="/models">{() => <Home mode="agent" onModeChange={handleStudioModeChange} defaultSection="models" />}</Route>
             <Route path="/products/:slug" component={ProductPage} />
             <Route path="/research" component={Research} />
             <Route path="/research/:slug" component={ResearchArticle} />

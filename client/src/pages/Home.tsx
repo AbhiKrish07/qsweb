@@ -406,9 +406,11 @@ function NewsletterForm() {
 export default function Home({
   mode = "human",
   onModeChange,
+  defaultSection,
 }: {
   mode?: "human" | "agent";
   onModeChange?: (m: "human" | "agent") => void;
+  defaultSection?: string;
 }) {
   const [activeCategory, setActiveCategory] = useState<ProductCategory>("flagship");
   const [query, setQuery] = useState("");
@@ -426,6 +428,18 @@ export default function Home({
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (!defaultSection || typeof window === "undefined") return;
+    const timer = setTimeout(() => {
+      const target = document.getElementById(defaultSection);
+      if (target) {
+        const top = target.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [defaultSection]);
 
   // Filter products across categories with search support
   const filtered = useMemo(

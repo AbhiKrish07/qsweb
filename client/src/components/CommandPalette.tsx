@@ -27,6 +27,7 @@ export default function CommandPalette({ open, onClose }: CommandPaletteProps) {
     const pages: SearchItem[] = [
       { id: "page-home", title: "Home", subtitle: "Quiet Studio home page & thesis overview", category: "Page", url: "/", icon: Command },
       { id: "page-thesis", title: "Thesis Status Board", subtitle: "Live signal tracker & research exploration board", category: "Page", url: "/thesis", icon: Sparkles },
+      { id: "page-models", title: "Vertical Models", subtitle: "Domain-vertical AI models & ambient intent engines", category: "Page", url: "/models", icon: Sparkles },
       { id: "page-research", title: "Research Journal", subtitle: "Independent AI & HCI research essays", category: "Page", url: "/research", icon: BookOpen },
       { id: "page-notion", title: "Notion Templates", subtitle: "Minimalist Notion workspaces & OS templates", category: "Page", url: "/notion-templates", icon: LayoutGrid },
       { id: "page-prompts", title: "Prompt Templates", subtitle: "Engineering system prompts & task frameworks", category: "Page", url: "/prompt-templates", icon: FileText },

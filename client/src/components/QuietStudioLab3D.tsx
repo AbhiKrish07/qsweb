@@ -605,34 +605,33 @@ export default function QuietStudioLab3D() {
 
             <div className="lab-hero-actions">
               <a
-                href="#laboratory"
-                onClick={(e) => {
-                  e.preventDefault();
-                  playClick();
-                  const el = document.getElementById("laboratory");
-                  if (el) {
-                    window.scrollTo({
-                      top: el.offsetTop + window.innerHeight * 0.55,
-                      behavior: "smooth",
-                    });
-                  }
-                }}
-                className="sentient-primary-pill"
-              >
-                Inspect Separating Modules <ArrowRight size={14} />
-              </a>
-
-              <a
                 href="#models"
                 onClick={(e) => {
                   e.preventDefault();
                   playClick();
-                  document.getElementById("models")?.scrollIntoView({ behavior: "smooth" });
+                  const target = document.getElementById("models");
+                  if (target) {
+                    const top = target.getBoundingClientRect().top + window.scrollY;
+                    window.scrollTo({
+                      top,
+                      behavior: "smooth",
+                    });
+                  } else {
+                    window.location.hash = "models";
+                  }
                 }}
-                className="sentient-outline-pill"
+                className="sentient-primary-pill"
               >
                 Vertical Models <ArrowDownRight size={14} />
               </a>
+
+              <Link
+                href="/research"
+                onClick={() => playClick()}
+                className="sentient-outline-pill"
+              >
+                Research Papers <ArrowUpRight size={14} />
+              </Link>
             </div>
 
             <div className="lab-hero-scroll-indicator">
