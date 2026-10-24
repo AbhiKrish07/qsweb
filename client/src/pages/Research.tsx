@@ -65,6 +65,23 @@ export const researchArticles: ResearchArticleData[] = [
       "Software notifications are designed for notification velocity, not human clarity. Every red badge and pop-up toast demands a context switch that takes up to 23 minutes to recover from.",
       "Quiet software respects cognitive dignity. It operates asynchronously, batching signals and surfacing actionable intelligence only when the user explicitly requests momentum."
     ]
+  },
+  {
+    slug: "discrete-authority-gating",
+    index: "04",
+    title: "Discrete Authority Gating: Zero-Trust Action Validation for Proactive Agents.",
+    date: "28.09.26",
+    readTime: "9 MIN READ",
+    category: "Systems",
+    excerpt: "Cryptographic capability validation prior to autonomous workspace execution. Enforces discrete tokens and zero-trust proofs before ambient intents mutate user environments.",
+    tags: ["Authority Gating", "Zero-Trust Agent", "Cryptographic Bounds", "Formal Safety", "C++ Runtime"],
+    callout: "An autonomous agent without formal capability gating is an unconstrained side-effect engine. Safety must be provable at compile time, not negotiated at runtime.",
+    content: [
+      "As artificial intelligence shifts from passive text completion to proactive workspace execution, safety architectures must undergo a fundamental paradigm change.",
+      "Traditional guardrails rely on post-generation prompt filters or LLM-as-a-judge classifiers. Both approaches are fundamentally probabilistic and subject to adversarial jailbreaking.",
+      "Discrete Authority Gating introduces a deterministic capability-token runtime. Before any ambient agent intent can issue filesystem writes, shell commands, or network requests, it must generate a mathematically verifiable capability proof.",
+      "By isolating the reasoning head from the execution sandbox using sub-millisecond local cryptographic proofs, proactive agents can execute useful automations with zero-trust safety guarantees."
+    ]
   }
 ];
 

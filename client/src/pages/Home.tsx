@@ -115,9 +115,25 @@ function CategoryTab({
 
 function ProductCard({ product, featured = false }: { product: Product; featured?: boolean }) {
   const projectHref = `/products/${product.slug}`;
-  const codeHref = product.github || "https://github.com/AbhiKrish07";
-  const blogHref = product.slug === "aethel" ? "/research/cognitive-resonance" : "/thesis";
-  const docsHref = product.github || "/thesis";
+  const codeHref = product.github || `https://github.com/AbhiKrish07/${product.slug}`;
+  
+  // Distinct rationale/essay link per product
+  const rationaleHref =
+    product.slug === "zen-ai"
+      ? "/blog/ai-as-a-proactive-life-partner"
+      : product.slug === "learnloop"
+      ? "/blog/why-vertical-models-beat-general-ai"
+      : product.slug === "aethel"
+      ? "/research/interface-as-reflex"
+      : "/thesis";
+
+  // Distinct system/specs link per product
+  const specsHref =
+    product.slug === "zen-ai"
+      ? "/system"
+      : product.slug === "learnloop"
+      ? "/templates"
+      : "/research";
 
   return (
     <div className={`product-card ${featured ? "featured" : ""}`}>
@@ -151,21 +167,21 @@ function ProductCard({ product, featured = false }: { product: Product; featured
       </div>
 
       <div className="project-card-interactive-links">
-        <Link href={projectHref} className="project-quick-link" title="Open Project App">
+        <Link href={projectHref} className="project-quick-link" title="Open Interactive App & Demo">
           <Globe size={12} />
-          <span>Project App</span>
+          <span>Interactive App</span>
         </Link>
-        <a href={codeHref} target="_blank" rel="noreferrer" className="project-quick-link" title="Open Source Code">
+        <a href={codeHref} target="_blank" rel="noreferrer" className="project-quick-link" title="View Source Code on GitHub">
           <Github size={12} />
           <span>Source Code</span>
         </a>
-        <Link href={blogHref} className="project-quick-link" title="Blog / Why Needed">
+        <Link href={rationaleHref} className="project-quick-link" title="Read Architectural Rationale">
           <FileCode size={12} />
           <span>Why Needed</span>
         </Link>
-        <Link href={docsHref} className="project-quick-link" title="Documentation & Specs">
-          <Command size={12} />
-          <span>Docs & Specs</span>
+        <Link href={specsHref} className="project-quick-link" title="View System Architecture & Specs">
+          <Layers size={12} />
+          <span>System Specs</span>
         </Link>
       </div>
     </div>
@@ -745,18 +761,14 @@ export default function Home({
                 <span>Explore Open Core Apps</span>
                 <ArrowRight size={14} />
               </a>
-              <a
-                href="#notes"
+              <Link
+                href="/thesis"
                 className="human-hero-secondary-btn"
-                onClick={(e) => {
-                  e.preventDefault();
-                  playClick();
-                  document.getElementById("notes")?.scrollIntoView({ behavior: "smooth" });
-                }}
+                onClick={() => playClick()}
               >
-                <span>Read Notes &amp; Blog</span>
-                <ArrowDownRight size={13} />
-              </a>
+                <span>Read Studio Thesis</span>
+                <ArrowUpRight size={13} />
+              </Link>
               {onModeChange && (
                 <button
                   type="button"
@@ -1158,15 +1170,14 @@ export default function Home({
             </div>
 
             <div className="research-preview-card" style={{ marginTop: "4vw" }}>
-              <div className="research-preview-index">01 / SCTM</div>
+              <div className="research-preview-index">04 / GATING</div>
               <div className="research-preview-copy">
-                <span className="meta-label">ARCHITECTURE WHITEPAPER</span>
-                <h3>Sparse Confident Tensor Memory with Isotropic Whitening</h3>
+                <span className="meta-label">ZERO-TRUST SYSTEMS WHITEPAPER</span>
+                <h3>Discrete Authority Gating for Proactive Agents</h3>
                 <p>
-                  A mathematical formulation for attention gating that suppresses distractor tokens prior to KV-cache retention,
-                  enabling 128k context recall with under 12ms latency.
+                  A deterministic capability-token runtime enforcing sub-millisecond local cryptographic proofs before ambient agent intents can mutate user environments.
                 </p>
-                <Link href="/research/sctm-memory-architecture" className="note-read">
+                <Link href="/research/discrete-authority-gating" className="note-read">
                   Read Full Paper <ArrowRight size={14} />
                 </Link>
               </div>
@@ -1174,7 +1185,7 @@ export default function Home({
                 <div className="research-orbit" />
                 <div className="research-orbit orbit-b" />
                 <span>
-                  SCTM<span>.</span>
+                  GATE<span>.</span>
                 </span>
               </div>
             </div>
@@ -1196,15 +1207,15 @@ export default function Home({
         <div style={{ maxWidth: "480px", width: "100%", margin: "0 auto 32px" }}>
           <StudioWaitlistForm />
         </div>
-        <button
+        <a
+          href="mailto:glexionstriker@gmail.com"
           className="primary-button"
           onClick={() => {
             playClick();
-            toast("Message the studio at glexionstriker@gmail.com");
           }}
         >
-          glexionstriker@gmail.com <ArrowUpRight size={16} />
-        </button>
+          Message the studio <ArrowUpRight size={16} />
+        </a>
       </section>
     </div>
   );
