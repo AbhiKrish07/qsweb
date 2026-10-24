@@ -717,7 +717,7 @@ export default function ElectricLogo({
     if (!container) return undefined;
 
     const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio || 1, 2),
+      dpr: 1, // Cap DPR to 1 to reduce fragment shader GPU fill rate by 4x
       alpha: true,
       premultipliedAlpha: true,
       antialias: false,
@@ -854,13 +854,25 @@ export default function ElectricLogo({
     const resize = () => {
       width = Math.max(1, container.clientWidth);
       height = Math.max(1, container.clientHeight);
-      renderer.dpr = Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(PIXEL_BUDGET / (width * height)));
+      renderer.dpr = 1; // Cap to 1 for lightweight performance
       renderer.setSize(width, height);
       uniforms.uResolution.value = [width, height];
+      updateRect();
     };
 
+    let cachedRect: DOMRect | null = null;
+    const updateRect = () => {
+      if (container) cachedRect = container.getBoundingClientRect();
+    };
+
+    const targetDelta = 1000 / 45;
     const frame = (now: number) => {
       raf = 0;
+      if (!visible) return;
+      if (last && now - last < targetDelta) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       const s = settingsRef.current;
       const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
       last = now;
@@ -1020,9 +1032,10 @@ export default function ElectricLogo({
     };
 
     const onMove = (e: PointerEvent) => {
-      const rect = container.getBoundingClientRect();
-      pointer.x = e.clientX - rect.left;
-      pointer.y = e.clientY - rect.top;
+      if (!cachedRect) updateRect();
+      if (!cachedRect) return;
+      pointer.x = e.clientX - cachedRect.left;
+      pointer.y = e.clientY - cachedRect.top;
       pointer.over = true;
     };
     const onDown = (e: PointerEvent) => {
@@ -1044,7 +1057,13 @@ export default function ElectricLogo({
     resizeObserver.observe(container);
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
-      start();
+      if (visible) {
+        updateRect();
+        start();
+      } else {
+        if (raf) cancelAnimationFrame(raf);
+        raf = 0;
+      }
     });
     intersectionObserver.observe(container);
 

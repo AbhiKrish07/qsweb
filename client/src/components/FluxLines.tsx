@@ -371,11 +371,22 @@ export default function FluxLines({
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
+    let cachedRect: DOMRect | null = null;
+    const updateRect = () => {
+      if (container) cachedRect = container.getBoundingClientRect();
+    };
+
+    const targetDelta = 1000 / 45; // 45 FPS cap to prevent GPU saturation and 120Hz overheating
+
     const frame = (now: number) => {
       raf = 0;
       if (!visible || document.hidden) return;
+      if (last && now - last < targetDelta) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       const s = settingsRef.current;
-      const dt = last ? clamp((now - last) / 1000, 0.0005, 0.05) : 1 / 60;
+      const dt = last ? clamp((now - last) / 1000, 0.0005, 0.05) : 1 / 45;
       last = now;
       const motion = s.paused || reduce ? 0 : 1;
       time += dt * motion;
@@ -395,7 +406,7 @@ export default function FluxLines({
 
       render();
       const busy = motion > 0 || magnet.active !== target || reveal < 1 || swirl.age < 6;
-      if (busy) raf = requestAnimationFrame(frame);
+      if (busy && visible && !document.hidden) raf = requestAnimationFrame(frame);
       else last = 0;
     };
 
@@ -407,21 +418,24 @@ export default function FluxLines({
       const s = settingsRef.current;
       const width = Math.max(1, container.clientWidth);
       const height = Math.max(1, container.clientHeight);
-      const ratio = Math.min(s.dpr || window.devicePixelRatio || 1, 2);
+      // Cap DPR to 1 (or explicit prop) to avoid 4x-9x fill-rate penalty on Retina screens
+      const ratio = Math.min(s.dpr || 1, 1.25);
       canvas.width = Math.max(1, Math.round(width * ratio));
       canvas.height = Math.max(1, Math.round(height * ratio));
+      updateRect();
       render();
       wake();
     };
 
     const locate = (event: PointerEvent) => {
-      const rect = container.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      const ratio = canvas.width / Math.max(1, rect.width);
-      pointer.inside = x >= 0 && y >= 0 && x <= rect.width && y <= rect.height;
+      if (!cachedRect) updateRect();
+      if (!cachedRect) return;
+      const x = event.clientX - cachedRect.left;
+      const y = event.clientY - cachedRect.top;
+      const ratio = canvas.width / Math.max(1, cachedRect.width);
+      pointer.inside = x >= 0 && y >= 0 && x <= cachedRect.width && y <= cachedRect.height;
       pointer.x = x * ratio;
-      pointer.y = (rect.height - y) * ratio;
+      pointer.y = (cachedRect.height - y) * ratio;
     };
 
     const onPointerMove = (event: PointerEvent) => {
@@ -462,16 +476,23 @@ export default function FluxLines({
       visible = entries.some((entry) => entry.isIntersecting);
       if (visible) {
         last = 0;
+        updateRect();
         wake();
+      } else {
+        if (raf) cancelAnimationFrame(raf);
+        raf = 0;
       }
     });
     intersection.observe(container);
-    window.addEventListener('pointermove', onPointerMove, { passive: true });
-    window.addEventListener('pointerdown', onPointerDown, { passive: true });
-    window.addEventListener('pointerup', onPointerUp, { passive: true });
-    window.addEventListener('pointercancel', onPointerUp, { passive: true });
-    document.documentElement.addEventListener('pointerleave', onPointerLeave);
+
+    // Bind pointer events to the container instead of window to prevent global forced layout thrashing
+    container.addEventListener('pointermove', onPointerMove, { passive: true });
+    container.addEventListener('pointerdown', onPointerDown, { passive: true });
+    container.addEventListener('pointerup', onPointerUp, { passive: true });
+    container.addEventListener('pointercancel', onPointerUp, { passive: true });
+    container.addEventListener('pointerleave', onPointerLeave, { passive: true });
     document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('scroll', updateRect, { passive: true });
     resize();
 
     let lastDpr = settingsRef.current.dpr;
@@ -491,12 +512,13 @@ export default function FluxLines({
       wakeRef.current = null;
       resizeObserver.disconnect();
       intersection.disconnect();
-      window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('pointerup', onPointerUp);
-      window.removeEventListener('pointercancel', onPointerUp);
-      document.documentElement.removeEventListener('pointerleave', onPointerLeave);
+      container.removeEventListener('pointermove', onPointerMove);
+      container.removeEventListener('pointerdown', onPointerDown);
+      container.removeEventListener('pointerup', onPointerUp);
+      container.removeEventListener('pointercancel', onPointerUp);
+      container.removeEventListener('pointerleave', onPointerLeave);
       document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('scroll', updateRect);
       gl.deleteProgram(program.program);
       gl.deleteBuffer(buffer);
       gl.deleteVertexArray(vao);
@@ -506,7 +528,7 @@ export default function FluxLines({
 
   useEffect(() => {
     wakeRef.current?.();
-  });
+  }, [colors, speed, scale, turbulence, fluidity, glow, lightMode, opacity]);
 
   return (
     <div

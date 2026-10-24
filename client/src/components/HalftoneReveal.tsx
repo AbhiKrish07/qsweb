@@ -600,10 +600,15 @@ export default function HalftoneReveal({
       return [(width - w) / 2, (height - h) / 2, w, h];
     };
 
+    let cachedRect: DOMRect | null = null;
+    const updateRect = () => {
+      if (container) cachedRect = container.getBoundingClientRect();
+    };
+
     const resize = () => {
       const width = Math.max(1, container.clientWidth);
       const height = Math.max(1, container.clientHeight);
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = 1; // Cap to 1 to reduce fragment shader GPU fill rate
       state.width = width;
       state.height = height;
       state.dpr = dpr;
@@ -619,6 +624,7 @@ export default function HalftoneReveal({
         pointer.x = width / 2;
         pointer.y = height / 2;
       }
+      updateRect();
       wake();
     };
 
@@ -686,11 +692,17 @@ export default function HalftoneReveal({
       return intro;
     };
 
+    const targetDelta = 1000 / 45;
+
     const frame = (now: number) => {
       raf = 0;
       if (!alive || !visible || document.hidden) return;
+      if (last && now - last < targetDelta) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
       const s = settingsRef.current;
-      const dt = last ? Math.min(0.05, Math.max(0, (now - last) / 1000)) : 1 / 60;
+      const dt = last ? Math.min(0.05, Math.max(0, (now - last) / 1000)) : 1 / 45;
       last = now;
 
       const wandering = s.wander && !reduce;
@@ -778,9 +790,10 @@ export default function HalftoneReveal({
     image.src = src;
 
     const locatePointer = (event: PointerEvent) => {
-      const rect = container.getBoundingClientRect();
-      pointer.x = event.clientX - rect.left;
-      pointer.y = event.clientY - rect.top;
+      if (!cachedRect) updateRect();
+      if (!cachedRect) return;
+      pointer.x = event.clientX - cachedRect.left;
+      pointer.y = event.clientY - cachedRect.top;
       pointer.placed = true;
     };
     const onMove = (event: PointerEvent) => {
@@ -818,7 +831,11 @@ export default function HalftoneReveal({
       visible = entries.some((entry) => entry.isIntersecting);
       if (visible) {
         last = 0;
+        updateRect();
         wake();
+      } else {
+        if (raf) cancelAnimationFrame(raf);
+        raf = 0;
       }
     });
     intersection.observe(container);
@@ -855,7 +872,7 @@ export default function HalftoneReveal({
 
   useEffect(() => {
     wakeRef.current?.();
-  });
+  }, [mode, shape, cellSize, angle, dotScale, inkColor, paperColor, contrast, brightness, roughness]);
 
   return (
     <div ref={containerRef} className={`halftone-reveal${className ? ` ${className}` : ''}`} style={style}>

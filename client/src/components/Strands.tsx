@@ -381,7 +381,7 @@ export default function Strands({
   clickPulse = true,
   intro = true,
   lightMode = false,
-  maxDevicePixelRatio = 2,
+  maxDevicePixelRatio = 1,
   className = '',
   style,
 }: StrandsProps) {
@@ -579,8 +579,20 @@ export default function Strands({
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
+    let cachedRect: DOMRect | null = null;
+    const updateRect = () => {
+      if (container) cachedRect = container.getBoundingClientRect();
+    };
+
+    const targetDelta = 1000 / 45;
+
     const frame = (now: number) => {
       st.raf = 0;
+      if (!st.visible || document.hidden || st.lost) return;
+      if (st.last && now - st.last < targetDelta) {
+        st.raf = requestAnimationFrame(frame);
+        return;
+      }
       const p = propsRef.current;
       const dt = st.last ? clamp((now - st.last) / 1000, 0, 0.05) : 0;
       st.last = now;
@@ -627,7 +639,8 @@ export default function Strands({
     };
 
     const local = (e: PointerEvent) => {
-      const r = container.getBoundingClientRect();
+      if (!cachedRect) updateRect();
+      const r = cachedRect || container.getBoundingClientRect();
       const m = Math.min(r.width, r.height) || 1;
       return [(e.clientX - r.left - r.width / 2) / (m / 2), (e.clientY - r.top - r.height / 2) / (m / 2)];
     };
@@ -673,16 +686,24 @@ export default function Strands({
 
     const resizeObserver = new ResizeObserver(() => {
       resize();
+      updateRect();
       draw();
     });
     resizeObserver.observe(container);
     resize();
+    updateRect();
 
     let intersection: IntersectionObserver | null = null;
     if (typeof IntersectionObserver !== 'undefined') {
       intersection = new IntersectionObserver((entries) => {
         st.visible = entries[entries.length - 1].isIntersecting;
-        if (st.visible) wake();
+        if (st.visible) {
+          updateRect();
+          wake();
+        } else {
+          if (st.raf) cancelAnimationFrame(st.raf);
+          st.raf = 0;
+        }
       });
       intersection.observe(container);
     }

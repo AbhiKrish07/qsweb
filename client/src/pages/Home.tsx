@@ -639,6 +639,7 @@ export default function Home({
                     ? ["#ff5a1f", "#ff844b", "#ffffff", "#fb923c"]
                     : ["#ff5a1f", "#3f3f46", "#ea580c", "#71717a"]
                 }
+                dpr={1}
                 glow={2}
                 rimWidth={0.2}
                 lineWidth={1}
@@ -670,6 +671,7 @@ export default function Home({
                 glass={true}
                 glassSize={1.05}
                 energy={0.7}
+                maxDevicePixelRatio={1}
                 interactive
                 clickPulse
                 lightMode={!isDark}
