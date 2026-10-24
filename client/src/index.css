@@ -4027,46 +4027,118 @@
   position: absolute;
   bottom: 8%;
   right: 3.5%;
-  width: 275px;
+  width: 280px;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 20px;
-  padding: 18px 20px;
+  padding: 14px 16px;
   text-align: left;
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.14);
-  z-index: 3;
+  z-index: 4;
   transform: rotate(3deg);
   animation: floatSync 8.5s ease-in-out infinite 0.3s;
-}
-
-.sync-header {
-  font: 600 13px/1 "DM Sans", sans-serif;
-  color: var(--foreground);
-  margin-bottom: 14px;
-}
-
-.sync-icon-row {
+  backdrop-filter: blur(12px);
   display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
-.sync-app-box {
-  flex: 1;
-  aspect-ratio: 1;
-  border-radius: 12px;
-  background: var(--background);
-  border: 1px solid var(--line);
+.sync-header {
+  font: 600 12.5px/1 "DM Sans", sans-serif;
+  color: var(--foreground);
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: var(--foreground);
-  transition: transform 0.2s ease;
+  justify-content: space-between;
 }
 
-.sync-app-box:hover {
+.sync-live-badge {
+  font: 700 8.5px/1 "DM Mono", monospace;
+  padding: 3px 6px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, #10b981 14%, transparent);
+  color: #10b981;
+  letter-spacing: 0.05em;
+}
+
+.sync-loop-container {
+  width: 100%;
+  padding: 8px 6px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--background) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  overflow: hidden;
+}
+
+.sync-logo-node {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--foreground);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sync-logo-node:hover {
+  border-color: currentColor;
   transform: translateY(-2px);
-  border-color: var(--orange);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.ecosystem-logoloop-section {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding: 2.2vw 9.2vw;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ecosystem-loop-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ecosystem-tag-label {
+  font: 700 10.5px/1 "DM Mono", monospace;
   color: var(--orange);
+  letter-spacing: 0.06em;
+}
+
+.ecosystem-hint-label {
+  font: 600 10px/1 "DM Mono", monospace;
+  color: var(--muted-ink);
+  letter-spacing: 0.05em;
+}
+
+.ecosystem-logo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--background) 80%, transparent);
+  border: 1px solid var(--line);
+  color: var(--foreground);
+  font: 600 12px/1 "DM Mono", monospace;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.ecosystem-logo-chip:hover {
+  border-color: currentColor;
+  background: var(--background);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
 @keyframes floatNote {
@@ -4358,11 +4430,13 @@
     position: absolute;
     bottom: clamp(10px, 2.5vh, 22px);
     right: clamp(8px, 2.5vw, 20px);
-    width: clamp(110px, 30vw, 155px);
+    width: clamp(120px, 32vw, 175px);
     padding: clamp(7px, 1.8vw, 11px) clamp(8px, 2vw, 12px);
     border-radius: clamp(10px, 2.5vw, 14px);
     transform: rotate(3deg);
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
     text-align: left;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
     z-index: 3;
@@ -4370,22 +4444,47 @@
 
   .floating-widget-sync .sync-header {
     font-size: clamp(8px, 2.1vw, 9.5px);
-    margin-bottom: 5px;
+    margin-bottom: 0;
   }
 
-  .floating-widget-sync .sync-icon-row {
-    gap: 4px;
+  .floating-widget-sync .sync-live-badge {
+    font-size: 6.5px;
+    padding: 1.5px 4px;
   }
 
-  .floating-widget-sync .sync-app-box {
-    width: clamp(24px, 6.5vw, 32px);
-    height: clamp(24px, 6.5vw, 32px);
+  .floating-widget-sync .sync-loop-container {
+    padding: 4px;
+    border-radius: 8px;
+  }
+
+  .floating-widget-sync .sync-logo-node {
+    width: clamp(22px, 5.5vw, 28px);
+    height: clamp(22px, 5.5vw, 28px);
     border-radius: 6px;
   }
 
-  .floating-widget-sync .sync-app-box svg {
+  .floating-widget-sync .sync-logo-node svg {
     width: clamp(11px, 2.8vw, 14px);
     height: clamp(11px, 2.8vw, 14px);
+  }
+
+  .ecosystem-logoloop-section {
+    padding: 4vw 6vw;
+    gap: 12px;
+  }
+
+  .ecosystem-tag-label {
+    font-size: 9px;
+  }
+
+  .ecosystem-hint-label {
+    display: none;
+  }
+
+  .ecosystem-logo-chip {
+    padding: 4px 8px;
+    font-size: 10px;
+    gap: 6px;
   }
 }
 
