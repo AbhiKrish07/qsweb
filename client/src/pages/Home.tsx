@@ -9,7 +9,6 @@ import {
   Code,
   Command,
   Cpu,
-  Database,
   FileCode,
   Github,
   Globe,
@@ -19,7 +18,6 @@ import {
   Mail,
   MoveUpRight,
   Search,
-  Shield,
   Sparkles,
   Terminal,
   Zap,
@@ -33,7 +31,7 @@ import FluxLines from "@/components/FluxLines";
 import ElectricLogo from "@/components/ElectricLogo";
 import Strands from "@/components/Strands";
 import HalftoneReveal from "@/components/HalftoneReveal";
-import LogoLoop, { type LogoItem } from "@/components/LogoLoop";
+import TextLoop from "@/components/TextLoop";
 import { BLOG_POSTS } from "@/pages/Notes";
 
 if (typeof window !== "undefined") {
@@ -173,183 +171,6 @@ function ProductCard({ product, featured = false }: { product: Product; featured
     </div>
   );
 }
-
-const openCoreLogos: LogoItem[] = [
-  {
-    node: (
-      <div className="sync-logo-node" title="Rust Core Inference Engine">
-        <Terminal size={15} />
-      </div>
-    ),
-    title: "Rust",
-    hoverColor: "#ff5a1f",
-  },
-  {
-    node: (
-      <div className="sync-logo-node" title="TypeScript 5.8 Strict">
-        <FileCode size={15} />
-      </div>
-    ),
-    title: "TypeScript",
-    hoverColor: "#3178c6",
-  },
-  {
-    node: (
-      <div className="sync-logo-node" title="Local Offline Intelligence">
-        <Cpu size={15} />
-      </div>
-    ),
-    title: "Local AI",
-    hoverColor: "#10b981",
-  },
-  {
-    node: (
-      <div className="sync-logo-node" title="Zero Telemetry Local Security">
-        <Shield size={15} />
-      </div>
-    ),
-    title: "Private",
-    hoverColor: "#f59e0b",
-  },
-  {
-    node: (
-      <div className="sync-logo-node" title="Tauri Native OS Shell">
-        <Layers size={15} />
-      </div>
-    ),
-    title: "Tauri",
-    hoverColor: "#ffc131",
-  },
-  {
-    node: (
-      <div className="sync-logo-node" title="WebGPU Acceleration">
-        <Sparkles size={15} />
-      </div>
-    ),
-    title: "WebGPU",
-    hoverColor: "#60a5fa",
-  },
-  {
-    node: (
-      <div className="sync-logo-node" title="SQLite Local-First">
-        <Database size={15} />
-      </div>
-    ),
-    title: "SQLite",
-    hoverColor: "#0ea5e9",
-  },
-];
-
-const ecosystemLogos: LogoItem[] = [
-  {
-    node: (
-      <span className="ecosystem-logo-chip">
-        <Terminal size={14} style={{ color: "#ff5a1f" }} />
-        <span>Rust 1.85</span>
-      </span>
-    ),
-    title: "Rust Inference Engine",
-    href: "https://www.rust-lang.org",
-    hoverColor: "#ff5a1f",
-  },
-  {
-    node: (
-      <span className="ecosystem-logo-chip">
-        <FileCode size={14} style={{ color: "#3178c6" }} />
-        <span>TypeScript</span>
-      </span>
-    ),
-    title: "TypeScript 5.8 Strict",
-    href: "https://www.typescriptlang.org",
-    hoverColor: "#3178c6",
-  },
-  {
-    node: (
-      <span className="ecosystem-logo-chip">
-        <Globe size={14} style={{ color: "#61dafb" }} />
-        <span>React 19</span>
-      </span>
-    ),
-    title: "React 19 Core",
-    href: "https://react.dev",
-    hoverColor: "#61dafb",
-  },
-  {
-    node: (
-      <span className="ecosystem-logo-chip">
-        <Cpu size={14} style={{ color: "#10b981" }} />
-        <span>WebGPU</span>
-      </span>
-    ),
-    title: "WebGPU Compute Shaders",
-    href: "https://www.w3.org/TR/webgpu",
-    hoverColor: "#10b981",
-  },
-  {
-    node: (
-      <span className="ecosystem-logo-chip">
-        <Code size={14} style={{ color: "#4584b6" }} />
-        <span>Python 3.12</span>
-      </span>
-    ),
-    title: "Python Lab SDK",
-    href: "https://www.python.org",
-    hoverColor: "#4584b6",
-  },
-  {
-    node: (
-      <span className="ecosystem-logo-chip">
-        <Layers size={14} style={{ color: "#ffc131" }} />
-        <span>Tauri v2</span>
-      </span>
-    ),
-    title: "Tauri Cross-Platform",
-    href: "https://tauri.app",
-    hoverColor: "#ffc131",
-  },
-  {
-    node: (
-      <span className="ecosystem-logo-chip">
-        <Zap size={14} style={{ color: "#f59e0b" }} />
-        <span>ONNX Runtime</span>
-      </span>
-    ),
-    title: "ONNX Quantized Engine",
-    href: "https://onnxruntime.ai",
-    hoverColor: "#f59e0b",
-  },
-  {
-    node: (
-      <span className="ecosystem-logo-chip">
-        <Database size={14} style={{ color: "#003b57" }} />
-        <span>SQLite Local</span>
-      </span>
-    ),
-    title: "Local-First Storage",
-    href: "https://sqlite.org",
-    hoverColor: "#0ea5e9",
-  },
-  {
-    node: (
-      <span className="ecosystem-logo-chip">
-        <Shield size={14} style={{ color: "#ef4444" }} />
-        <span>Zero Telemetry</span>
-      </span>
-    ),
-    title: "Zero-Knowledge Local Privacy",
-    hoverColor: "#ef4444",
-  },
-  {
-    node: (
-      <span className="ecosystem-logo-chip">
-        <Command size={14} style={{ color: "#facc15" }} />
-        <span>POSIX Core</span>
-      </span>
-    ),
-    title: "UNIX / POSIX Primitives",
-    hoverColor: "#facc15",
-  },
-];
 
 const noteContent = [
   {
@@ -961,49 +782,51 @@ export default function Home({
               </div>
             </div>
 
-            {/* Bottom-Right Floating Sync Widget: Interactive LogoLoop from React Bits */}
-            <div className="floating-widget-sync" aria-label="Open Core Stack Live Loop">
-              <div className="sync-header">
-                <span>Open Core Stack</span>
-                <span className="sync-live-badge">ONLINE</span>
-              </div>
-              <div className="sync-loop-container">
-                <LogoLoop
-                  logos={openCoreLogos}
-                  speed={36}
-                  direction="left"
-                  logoHeight={34}
-                  gap={12}
-                  scaleOnHover
-                  fadeOut={false}
-                  pauseOnHover
-                  ariaLabel="Open core stack technologies"
-                />
+            {/* Bottom-Right Floating Sync Widget */}
+            <div className="floating-widget-sync" aria-hidden="true">
+              <div className="sync-header">Open Core Stack</div>
+              <div className="sync-icon-row">
+                <div className="sync-app-box" title="Rust Inference">
+                  <Terminal size={18} />
+                </div>
+                <div className="sync-app-box" title="Local Intelligence">
+                  <Cpu size={18} />
+                </div>
+                <div className="sync-app-box" title="Zero Telemetry">
+                  <Zap size={18} />
+                </div>
               </div>
             </div>
           </section>
 
-          {/* Section 00: Open Architecture & Ecosystem LogoLoop from React Bits */}
-          <section className="ecosystem-logoloop-section" aria-label="Open Source & Architecture Partners">
-            <div className="ecosystem-loop-meta">
-              <span className="ecosystem-tag-label">[ 00 — OPEN CORE FOUNDATION &amp; PROTOCOLS ]</span>
-              <span className="ecosystem-hint-label">DRAGGABLE &bull; HOVER TO EXPLORE</span>
-            </div>
-            <LogoLoop
-              logos={ecosystemLogos}
-              speed={52}
-              direction="left"
-              logoHeight={30}
-              gap={36}
-              fadeOut={true}
-              fadeOutWidth={0.14}
-              scaleOnHover={true}
-              labels="hover"
-              scrollBoost={0.3}
-              muted={0.3}
-              ariaLabel="Open core technologies and frameworks"
+          {/* Seamless Overlapping Ribbon: Interactive TextLoop from React Bits */}
+          <div className="hero-textloop-bridge" aria-label="QuietStudio Labs Ribbon">
+            <TextLoop
+              text="QuietStudio ✦ Labs"
+              shape="line"
+              speed={120}
+              direction="forward"
+              separator="✦"
+              curviness={90}
+              tilt={0}
+              fontSize={40}
+              fontWeight={800}
+              letterSpacing={1}
+              uppercase
+              ribbon
+              ribbonColor="#ff5a36"
+              ribbonWidth={76}
+              edgeFade={0}
+              cross
+              crossAngle={14}
+              draggable
+              scrollBoost={0}
+              outline={false}
+              pauseOnHover
+              color="#120f17"
+              crossColor={isDark ? "#222220" : "#000000"}
             />
-          </section>
+          </div>
 
           {/* Section 1: Open Source Applications & Software */}
           <section
