@@ -1,6 +1,12 @@
 // Web Audio API Synthesizer for Quiet Studio Tactile Feedback
 let audioCtx: AudioContext | null = null;
-let soundEnabled = true;
+let soundEnabled = (() => {
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem("quiet-studio-sound");
+    if (saved !== null) return saved === "true";
+  }
+  return true;
+})();
 
 function getAudioContext(): AudioContext | null {
   if (typeof window === "undefined") return null;
@@ -18,6 +24,9 @@ function getAudioContext(): AudioContext | null {
 
 export function toggleSound(): boolean {
   soundEnabled = !soundEnabled;
+  if (typeof window !== "undefined") {
+    localStorage.setItem("quiet-studio-sound", String(soundEnabled));
+  }
   if (soundEnabled) {
     playTone(880, 0.04, "sine", 0.05);
   }

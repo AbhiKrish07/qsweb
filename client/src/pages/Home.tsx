@@ -435,7 +435,7 @@ export default function Home({
       const target = document.getElementById(defaultSection);
       if (target) {
         const top = target.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top, behavior: "smooth" });
+        window.scrollTo({ top: top - 80, behavior: "smooth" });
       }
     }, 250);
     return () => clearTimeout(timer);

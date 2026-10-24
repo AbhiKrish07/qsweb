@@ -805,7 +805,9 @@ const GooeyNav = ({
         className: 'gooey-nav__link',
         'aria-current': (index === current ? 'page' : undefined) as any,
         onClick: (event: React.MouseEvent) => {
-          if (!item.href || item.href === '#') event.preventDefault();
+          if (item.onClick || !item.href || item.href === '#') {
+            event.preventDefault();
+          }
           select(index);
           item.onClick?.();
         }

@@ -63,7 +63,7 @@ function Header({
         ]
       : [
           { label: "AI Lab", href: "/#overview" },
-          { label: "Models", href: "/#models" },
+          { label: "Models", href: "/models" },
           { label: "Research", href: "/research" },
           { label: "Thesis", href: "/thesis" },
           { label: "About", href: "/about" },
@@ -72,20 +72,52 @@ function Header({
   const handleNavClick = (href: string) => {
     playClick();
     setMobileNavOpen(false);
+
+    if (href === "/models" || href === "/#models") {
+      if (location === "/" || location === "/models") {
+        const target = document.getElementById("models");
+        if (target) {
+          const top = target.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({ top: top - 80, behavior: "smooth" });
+        } else {
+          window.location.hash = "models";
+        }
+      } else {
+        setLocation("/models");
+      }
+      return;
+    }
+
     if (href.startsWith("/#")) {
+      const targetId = href.replace("/#", "");
       if (location !== "/") {
         setLocation("/");
         setTimeout(() => {
-          const el = document.getElementById(href.replace("/#", ""));
-          if (el) el.scrollIntoView({ behavior: "smooth" });
-        }, 100);
+          if (targetId === "overview") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          } else {
+            const target = document.getElementById(targetId);
+            if (target) {
+              const top = target.getBoundingClientRect().top + window.scrollY;
+              window.scrollTo({ top: top - 80, behavior: "smooth" });
+            }
+          }
+        }, 150);
       } else {
-        const el = document.getElementById(href.replace("/#", ""));
-        if (el) el.scrollIntoView({ behavior: "smooth" });
+        if (targetId === "overview") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          const target = document.getElementById(targetId);
+          if (target) {
+            const top = target.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({ top: top - 80, behavior: "smooth" });
+          }
+        }
       }
-    } else {
-      setLocation(href);
+      return;
     }
+
+    setLocation(href);
   };
 
   const gooeyItems = useMemo(() => {
@@ -102,7 +134,11 @@ function Header({
     if (location === "/" || location === "") {
       return 0;
     }
-    const idx = navLinks.findIndex((l) => !l.href.startsWith("/#") && location.startsWith(l.href));
+    const idx = navLinks.findIndex((l) => {
+      if (l.href === location) return true;
+      if (!l.href.startsWith("/#") && location.startsWith(l.href)) return true;
+      return false;
+    });
     return idx >= 0 ? idx : 0;
   }, [location, navLinks]);
 
@@ -272,14 +308,14 @@ function Footer({ onOpenContact }: { onOpenContact: () => void }) {
         <div className="footer-links">
           <div>
             <span className="meta-label">Explore</span>
-            <a href="/#products">Products</a>
-            <a href="/thesis">Thesis</a>
-            <a href="/research">Research</a>
-            <a href="/templates">Templates</a>
-            <a href="/changelog">Changelog</a>
-            <a href="/system">Design System</a>
-            <a href="/notes">Notes</a>
-            <a href="/about">About Abhinav</a>
+            <Link href="/" onClick={() => playClick()}>Products</Link>
+            <Link href="/thesis" onClick={() => playClick()}>Thesis</Link>
+            <Link href="/research" onClick={() => playClick()}>Research</Link>
+            <Link href="/templates" onClick={() => playClick()}>Templates</Link>
+            <Link href="/changelog" onClick={() => playClick()}>Changelog</Link>
+            <Link href="/system" onClick={() => playClick()}>Design System</Link>
+            <Link href="/notes" onClick={() => playClick()}>Notes</Link>
+            <Link href="/about" onClick={() => playClick()}>About Abhinav</Link>
           </div>
           <div>
             <span className="meta-label">Elsewhere</span>
@@ -296,7 +332,15 @@ function Footer({ onOpenContact }: { onOpenContact: () => void }) {
 }
 
 function AppShell() {
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("quiet-studio-theme");
+      if (saved === "dark") return true;
+      if (saved === "light") return false;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    return true;
+  });
   const [commandOpen, setCommandOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [studioMode, setStudioMode] = useState<"human" | "agent">(() => {
@@ -319,6 +363,9 @@ function AppShell() {
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
     document.documentElement.style.colorScheme = dark ? "dark" : "light";
+    if (typeof window !== "undefined") {
+      localStorage.setItem("quiet-studio-theme", dark ? "dark" : "light");
+    }
   }, [dark]);
 
   useEffect(() => {
