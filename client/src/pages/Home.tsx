@@ -27,6 +27,7 @@ import { categories, getCategoryLabel, products, type Product, type ProductCateg
 import { toast } from "sonner";
 import { playClick } from "@/lib/sound";
 import QuietStudioLab3D from "@/components/QuietStudioLab3D";
+import QuietStudioPhysicsCanvas from "@/components/QuietStudioPhysicsCanvas";
 import { BLOG_POSTS } from "@/pages/Notes";
 
 if (typeof window !== "undefined") {
@@ -605,506 +606,275 @@ export default function Home({
   }, [mode]);
 
   return (
-    <div className="home-page" ref={homeRef}>
-      {mode === "human" ? (
-        /* =========================================================================
-           HUMAN MODE: SPATIAL HERO (STUDIO MANIFESTO), OPEN CORE APPS & ESSAYS
-           Tactile floating widgets, QuietStudio manifesto content, and local-first software
-           ========================================================================= */
-        <>
-          {/* Spatial Prioritize-Inspired Hero with Studio Manifesto Content */}
-          <section className="human-spatial-canvas" id="overview">
-            {/* Top-Left Floating Post-It Sticky Note */}
-            <div className="floating-widget-note" aria-hidden="true">
-              <div className="pin-dot" />
-              <p>
-                The best technology doesn’t ask to be noticed. It becomes a quiet extension of what you were already trying to do.
-              </p>
-            </div>
+    <div className="quiet-physics-site" ref={homeRef}>
+      {/* Three.js 3D Sphere Physics Interactive Simulation */}
+      <QuietStudioPhysicsCanvas />
 
-            {/* Floating Checkmark Badge */}
-            <div className="floating-check-badge" aria-hidden="true">
-              <Check size={24} strokeWidth={2.8} />
-            </div>
-
-            {/* Top-Right Floating Deadlines Widget */}
-            <div className="floating-widget-deadlines" aria-hidden="true">
-              <div className="widget-stopwatch-circle">
-                <Sparkles size={16} />
-              </div>
-              <div className="widget-deadlines-head">Zen AI Runtime</div>
-              <div className="widget-deadlines-sub">Local Quantized Inference Engine</div>
-              <div className="widget-deadlines-time-pill">
-                <span>0.2ms Latency / Zero Telemetry</span>
-              </div>
-            </div>
-
-            {/* Center Hero Content (Quiet Studio Manifesto Content) */}
-            <div className="human-hero-brand-badge">
-              <span className="brand-dot" />
-            </div>
-
-            <h1 className="human-hero-headline-prioritize">
-              Technology should
-              <span className="headline-light-line">get out of your way</span>
-            </h1>
-
-            <p className="human-hero-sub-prioritize">
-              Quiet Studio is a one-person product studio exploring open-core apps, local-first computing, and tools
-              that make the complex feel calm—without dashboards or productivity theatre.
-            </p>
-
-            <div className="human-hero-cta-group">
-              <a
-                href="#apps"
-                className="human-hero-cta-btn"
-                onClick={(e) => {
-                  e.preventDefault();
-                  playClick();
-                  document.getElementById("apps")?.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                <span>Explore Open Core Apps</span>
-                <ArrowRight size={14} />
-              </a>
-              <a
-                href="#notes"
-                className="human-hero-secondary-btn"
-                onClick={(e) => {
-                  e.preventDefault();
-                  playClick();
-                  document.getElementById("notes")?.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                <span>Read Notes &amp; Blog</span>
-                <ArrowDownRight size={13} />
-              </a>
-              {onModeChange && (
-                <button
-                  type="button"
-                  className="human-hero-secondary-btn"
-                  onClick={() => {
-                    playClick();
-                    onModeChange("agent");
-                  }}
-                  title="Switch to AI Laboratory: Models & Research"
-                >
-                  <Sparkles size={13} />
-                  <span>AI Lab ↗</span>
-                </button>
-              )}
-            </div>
-
-            {/* Bottom-Left Floating Sprints Widget */}
-            <div className="floating-widget-sprints" aria-hidden="true">
-              <div className="sprint-header">
-                <span>Active Open Core Apps</span>
-                <span className="resource-version">ONLINE</span>
-              </div>
-              <div className="sprint-row">
-                <div className="sprint-meta-line">
-                  <span>
-                    <span className="sprint-badge-num orange">01</span> Zen AI Local Runtime
-                  </span>
-                  <span style={{ color: "var(--muted-ink)", fontSize: "10.5px" }}>SHIPPED</span>
-                </div>
-                <div className="sprint-progress-track">
-                  <div className="sprint-progress-fill cyan" />
-                </div>
-              </div>
-              <div className="sprint-row">
-                <div className="sprint-meta-line">
-                  <span>
-                    <span className="sprint-badge-num green">02</span> LearnLoop Engine
-                  </span>
-                  <span style={{ color: "var(--muted-ink)", fontSize: "10.5px" }}>IN LAB</span>
-                </div>
-                <div className="sprint-progress-track">
-                  <div className="sprint-progress-fill blue" />
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom-Right Floating Sync Widget */}
-            <div className="floating-widget-sync" aria-hidden="true">
-              <div className="sync-header">Open Core Stack</div>
-              <div className="sync-icon-row">
-                <div className="sync-app-box" title="Rust Inference">
-                  <Terminal size={18} />
-                </div>
-                <div className="sync-app-box" title="Local Intelligence">
-                  <Cpu size={18} />
-                </div>
-                <div className="sync-app-box" title="Zero Telemetry">
-                  <Zap size={18} />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Section 1: Open Source Applications & Software */}
-          <section
-            className="products-section"
-            id="apps"
-            style={{ padding: "7vw 9.2vw", background: "var(--background)" }}
+      {/* Top Fixed Frosted Header */}
+      <header className="physics-header">
+        <a className="wm" href="#">
+          QUIET STUDIO
+        </a>
+        <nav className="physics-nav">
+          <a href="#work" onClick={() => playClick()}>
+            Work
+          </a>
+          <a href="#research" onClick={() => playClick()}>
+            Research
+          </a>
+          <a href="/notes" onClick={() => playClick()}>
+            Notes
+          </a>
+          <a href="#now" onClick={() => playClick()}>
+            Now
+          </a>
+          <a href="#about" onClick={() => playClick()}>
+            About
+          </a>
+        </nav>
+        <div className="rt">
+          <a
+            className="physics-see-code"
+            href="https://github.com/AbhiKrish07"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => playClick()}
           >
-            <div className="section-heading compact-heading">
+            <span>See the code</span>
+            <span className="orb">
+              <ArrowRight size={16} />
+            </span>
+          </a>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="s hero-physics" id="overview">
+        <div className="hr">
+          <div className="pa">
+            <div className="eb">[ One-person studio ]</div>
+            <h1>Build quiet. Ship open.</h1>
+          </div>
+          <div className="hs pa">
+            <p>
+              One person building open-source tools, research and a flagship that get out of your way.
+            </p>
+            <div className="cr">© 2026 — Building in public, Bengaluru</div>
+            <div className="cue">
+              <ArrowRight size={14} style={{ transform: "rotate(90deg)" }} />
+              <span>Scroll</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 02 Work / Open Source Section */}
+      <section className="s drop" id="work">
+        <div className="physics-grid">
+          <div className="pa">
+            <div className="lb">[ 02 — Open source ]</div>
+            <h2 className="big" style={{ marginTop: "24px" }}>
+              Small tools,
+              <br />
+              shipped in the open.
+            </h2>
+            <p className="bd" style={{ marginTop: "32px", maxWidth: "34rem" }}>
+              Keep scrolling and the field lets go. Every project here solves one small problem, lives in its own repo,
+              and gets its own page — a growing ecosystem of modules that quietly make the bigger things better.
+            </p>
+          </div>
+          <div className="physics-cards pa">
+            <Link href="/products/learnloop" className="physics-card">
               <div>
-                <div className="section-marker" style={{ color: "var(--orange)" }}>
-                  [ 01 — OPEN CORE APPLICATIONS &amp; SOFTWARE ]
+                <div className="ch">
+                  <b>01</b>Work<i />
                 </div>
-                <h2>
-                  Things in
-                  <br />
-                  <em>motion.</em>
-                </h2>
-                <p className="section-description" style={{ marginTop: "12px", color: "var(--muted-ink)", maxWidth: "440px" }}>
-                  Open-core, local-first applications built for zero friction, complete privacy, and continuous flow.
-                </p>
+                <strong>LearnLoop — Local AI Audio Memory</strong>
+                <span>Continuous cognitive flow without conversational friction.</span>
               </div>
+            </Link>
+            <Link href="/research/sctm-memory-architecture" className="physics-card">
+              <div>
+                <div className="ch">
+                  <b>02</b>Research<i />
+                </div>
+                <strong>SCTM — Full Paper Written</strong>
+                <span>Sparse Confident Tensor Memory with Isotropic Whitening.</span>
+              </div>
+            </Link>
+            <Link href="/products/whitespace" className="physics-card">
+              <div>
+                <div className="ch">
+                  <b>03</b>Flagship<i />
+                </div>
+                <strong>Capture — In Progress</strong>
+                <span>The local-first AI second brain everything points toward.</span>
+              </div>
+            </Link>
+            <Link href="/products/aethel" className="physics-card">
+              <div>
+                <div className="ch">
+                  <b>04</b>Intent Engine<i />
+                </div>
+                <strong>Aethel — Discrete Authority Gating</strong>
+                <span>Zero telemetry air-gapped intent parser.</span>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 03 Research Section */}
+      <section className="s shape" id="research">
+        <div className="pa">
+          <div className="lb">[ 03 — Research ]</div>
+          <h2 className="big" style={{ marginTop: "24px", maxWidth: "42rem" }}>
+            Scattered, then simple.
+          </h2>
+        </div>
+        <div className="sb pa">
+          <p className="bd">
+            Out of many projects, one philosophy: minimal, effortless design. Research pushes the frontier; open
+            source turns it into something you can actually use. Move your cursor through it and watch the order
+            recover.
+          </p>
+          <div className="pl">
+            <Sparkles size={14} />
+            <span>Move through it</span>
+          </div>
+        </div>
+      </section>
+
+      {/* 04 Now Section */}
+      <section className="s rel" id="now">
+        <div className="pa">
+          <div className="lb">[ 04 — Now ]</div>
+          <h2 className="big" style={{ marginTop: "28px" }}>
+            And then,
+            <br />
+            effortless.
+          </h2>
+          <p className="bd" style={{ margin: "32px auto 0", maxWidth: "30rem" }}>
+            The goal is simple: technology that lifts off your screen and out of your way. Right now: LearnLoop first,
+            then open-source work and research, then the Capture beta. Less noise.
+          </p>
+        </div>
+      </section>
+
+      {/* Footer / About Section */}
+      <footer className="physics-footer" id="about">
+        <div className="mq">
+          <div className="mt">
+            <span>Build quiet</span>
+            <span>Ship open</span>
+            <span>Make life effortless</span>
+            <span>Let’s build</span>
+            <span>Build quiet</span>
+            <span>Ship open</span>
+            <span>Make life effortless</span>
+            <span>Let’s build</span>
+          </div>
+        </div>
+        <div className="fb">
+          <div className="fg">
+            <div>
+              <div className="fl">[ Let’s collaborate ]</div>
+              <h2>
+                Building something
+                <br />
+                useful? Come build with me.
+              </h2>
+              <a
+                className="em"
+                href="https://github.com/AbhiKrish07"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => playClick()}
+              >
+                <span>github.com/AbhiKrish07</span>
+                <span className="orb">
+                  <ArrowUpRight size={18} />
+                </span>
+              </a>
+            </div>
+            <div className="cols">
+              <div>
+                <h4>Studio</h4>
+                <a href="#work" onClick={() => playClick()}>
+                  Work
+                </a>
+                <a href="#research" onClick={() => playClick()}>
+                  Research
+                </a>
+                <a href="/notes" onClick={() => playClick()}>
+                  Notes
+                </a>
+                <a href="#now" onClick={() => playClick()}>
+                  Now
+                </a>
+              </div>
+              <div>
+                <h4>Products</h4>
+                <Link href="/products/whitespace" onClick={() => playClick()}>
+                  Capture
+                </Link>
+                <Link href="/products/learnloop" onClick={() => playClick()}>
+                  LearnLoop
+                </Link>
+                <Link href="/products/aethel" onClick={() => playClick()}>
+                  Aethel
+                </Link>
+                <a href="#work" onClick={() => playClick()}>
+                  Open-source modules
+                </a>
+              </div>
+              <div id="notes">
+                <h4>Elsewhere</h4>
+                <a href="https://github.com/AbhiKrish07" target="_blank" rel="noopener noreferrer">
+                  GitHub
+                </a>
+                <Link href="/thesis" onClick={() => playClick()}>
+                  Studio Thesis
+                </Link>
+                <Link href="/changelog" onClick={() => playClick()}>
+                  Build Log
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Studio Waitlist Form */}
+          <div style={{ maxWidth: "480px", margin: "48px 0 0" }}>
+            <StudioWaitlistForm />
+          </div>
+
+          <div className="bt">
+            <div>
+              <span className="wm">QUIET STUDIO</span>
+              <small>© 2026 — One person, building in public.</small>
+            </div>
+            <div style={{ display: "flex", gap: "10px" }}>
               <a
                 href="https://github.com/AbhiKrish07"
                 target="_blank"
-                rel="noreferrer"
-                className="outline-button"
+                rel="noopener noreferrer"
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  display: "grid",
+                  placeItems: "center",
+                  color: "rgba(255,255,255,0.75)",
+                }}
+                aria-label="GitHub"
               >
-                Browse All on GitHub <Github size={14} />
+                <Github size={18} />
               </a>
             </div>
-
-            <div className="product-grid" style={{ marginTop: "4vw" }}>
-              {products.slice(0, 2).map((product, index) => (
-                <ProductCard
-                  key={product.slug}
-                  product={product}
-                  featured={index === 0}
-                />
-              ))}
-            </div>
-          </section>
-
-          {/* Section 2: Blog & Research Journal */}
-          <section className="notes-section" id="notes" style={{ padding: "7vw 9.2vw", background: "var(--card)", borderTop: "1px solid var(--line)" }}>
-            <div className="section-heading compact-heading">
-              <div>
-                <div className="section-marker">[ 02 — THE RESEARCH JOURNAL &amp; BLOG ]</div>
-                <h2>
-                  Thinking
-                  <br />
-                  <em>out loud.</em>
-                </h2>
-                <p className="section-description">
-                  In-depth essays and working notes on making AI a proactive life partner, building domain-vertical models, and the craft of calm software.
-                </p>
-                <div style={{ marginTop: "18px" }}>
-                  <Link href="/blog" className="primary-button" style={{ padding: "10px 18px", fontSize: "11px" }}>
-                    <span>Browse All Blog Essays</span> <ArrowRight size={13} />
-                  </Link>
-                </div>
-              </div>
-              <div className="newsletter-box">
-                <span>Subscribe to Essays</span>
-                <NewsletterForm />
-              </div>
-            </div>
-
-            <div className="notes-grid" style={{ marginTop: "4vw" }}>
-              {BLOG_POSTS.slice(0, 3).map((post, index) => (
-                <article
-                  className={`note-card ${index === 0 ? "note-featured" : ""} ${index === 2 ? "note-dark" : ""}`}
-                  key={post.slug}
-                >
-                  <span className="note-type">{post.category} — {post.date}</span>
-                  <h3>{post.title}</h3>
-                  <p>{post.excerpt}</p>
-                  <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "16px" }}>
-                    <span style={{ font: "500 10px 'DM Mono', monospace", color: "var(--muted-ink)", textTransform: "uppercase" }}>
-                      {post.readTime}
-                    </span>
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="note-read"
-                    >
-                      Read full essay <ArrowRight size={14} />
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        </>
-      ) : (
-        /* =========================================================================
-           AGENT MODE: AI LABORATORY HEADER, RESEARCH MANIFESTO, MODELS & WHITEPAPERS
-           Cinematic dark header, theoretical foundations, sparse tensor memory & intent models
-           ========================================================================= */
-        <>
-          {/* Section 1: The 3D Interactive AI Laboratory */}
-          <div id="overview">
-            <QuietStudioLab3D />
           </div>
-
-          {/* Section 2: AI Lab Manifesto (In Terms of Models and Research Papers) */}
-          <section className="manifesto-section" id="manifesto">
-            <div className="section-marker">[ 01 — THE AI LAB MANIFESTO: RESEARCH &amp; MODELS ]</div>
-
-            <div
-              className="old-hero-text-block"
-              style={{
-                margin: "1rem 0 1.5rem",
-                paddingBottom: "1.5rem",
-                borderBottom: "1px solid color-mix(in srgb, var(--background) 18%, transparent)",
-              }}
-            >
-              <p
-                className="eyebrow"
-                style={{
-                  color: "var(--orange)",
-                  font: "600 11px/1.4 'DM Mono', monospace",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  flexWrap: "wrap",
-                  marginBottom: "12px",
-                }}
-              >
-                <span className="pulse-dot" /> independent AI research &amp; distilled tensor architectures — 2026
-              </p>
-              <h2
-                style={{
-                  font: "700 clamp(2rem, 4vw, 4.2rem)/0.92 'Space Grotesk', sans-serif",
-                  letterSpacing: "-0.06em",
-                  color: "var(--background)",
-                  textTransform: "uppercase",
-                  margin: "0 0 14px",
-                }}
-              >
-                A proactive partner in your life
-                <span style={{ color: "var(--orange)" }}>,</span>
-                <br />
-                <em style={{ fontStyle: "italic", fontFamily: "serif", textTransform: "none" }}>
-                  vertical for the tasks you need.
-                </em>
-              </h2>
-              <p
-                style={{
-                  font: "400 15px/1.55 'DM Sans', sans-serif",
-                  color: "color-mix(in srgb, var(--background) 70%, transparent)",
-                  maxWidth: "680px",
-                  margin: 0,
-                }}
-              >
-                The AI Laboratory at Quiet Studio isn’t just working on isolated memory mathematics. Our central goal
-                is making artificial intelligence a proactive companion in your daily life: deeply vertical, task-specialized,
-                and aware of your context so it executes what you need without syntax gymnastics.
-              </p>
-            </div>
-
-            <div className="manifesto-layout">
-              <p className="manifesto-lead">
-                Proactive intelligence <span>tailored to your tasks:</span>
-              </p>
-              <div className="manifesto-statement">
-                <p>from ambient intent detection to deep vertical execution.</p>
-                <div className="manifesto-rule" />
-                <p className="manifesto-fine">
-                  Instead of generalist chatbots that know everything superficially, our laboratory engineers vertical models and long-horizon context architectures (SCTM) that master specific workflows with zero friction and absolute privacy.
-                </p>
-              </div>
-            </div>
-
-            <div className="manifesto-bottom">
-              <div className="signal-card">
-                <Command size={18} />
-                <span>
-                  CORE ROLE: PROACTIVE LIFE &amp; WORK PARTNER
-                  <br />
-                  <b>MODEL ARCHITECTURE: VERTICAL TASK ENGINES</b>
-                </span>
-              </div>
-              <p>
-                Proactive instead of reactive.
-                <br />
-                Vertical models for actual work.
-                <br />
-                Calm intelligence that gets out of your way.
-              </p>
-            </div>
-          </section>
-
-          {/* Section 3: Vertical AI Models & Intent Engines */}
-          <section className="models-showcase-section" id="models" style={{ padding: "7vw 9.2vw", background: "var(--background)" }}>
-            <div className="section-heading compact-heading">
-              <div>
-                <div className="section-marker" style={{ color: "var(--orange)" }}>
-                  [ 02 — DOMAIN-VERTICAL AI MODELS &amp; INTENT ENGINES ]
-                </div>
-                <h2>
-                  Vertical models &amp;
-                  <br />
-                  <em>task execution.</em>
-                </h2>
-                <p
-                  className="section-description"
-                  style={{ marginTop: "12px", color: "var(--muted-ink)", maxWidth: "520px" }}
-                >
-                  Moving past generalist chatbots to specialized vertical models tailored for the exact tasks, routines, and decisions you face.
-                </p>
-              </div>
-              <Link href="/blog/why-vertical-models-beat-general-ai" className="outline-button">
-                Read Vertical AI Thesis <ArrowUpRight size={14} />
-              </Link>
-            </div>
-
-            <div className="models-grid" style={{ marginTop: "4vw" }}>
-              {/* Model 1: Aethel Intent Engine */}
-              <div className="model-showcase-card">
-                <div className="model-head">
-                  <span className="model-badge" style={{ color: "#fbbf24" }}>VERTICAL MODEL</span>
-                  <span className="model-latency">AMBIENT PARSER</span>
-                </div>
-                <h3>Aethel Intent Engine</h3>
-                <p className="model-tagline">Anticipates user workflow goals before explicit verbal prompts.</p>
-                <p style={{ fontSize: "13px", color: "var(--muted-ink)", lineHeight: 1.5, margin: 0 }}>
-                  Synthesizes peripheral desktop telemetry, active workspace context, and recent micro-gestures into direct executable intents.
-                </p>
-                <div className="model-specs-box">
-                  <div className="model-spec-pair">
-                    <span>Target</span>
-                    <span>Zero Prompt UI</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Match Rate</span>
-                    <span>99.1% F1</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Deployment</span>
-                    <span>Hybrid Local/Edge</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Module</span>
-                    <span>Aethel Core v2</span>
-                  </div>
-                </div>
-                <div className="model-actions">
-                  <Link href="/products/aethel" className="outline-button" style={{ width: "100%", justifyContent: "center" }}>
-                    Examine Aethel Protocol <ArrowRight size={13} />
-                  </Link>
-                </div>
-              </div>
-
-              {/* Model 2: SCTM Tensor Memory */}
-              <div className="model-showcase-card">
-                <div className="model-head">
-                  <span className="model-badge">AI MEMORY SYSTEM</span>
-                  <span className="model-latency">&lt; 12ms RETRIEVAL</span>
-                </div>
-                <h3>SCTM Tensor Memory</h3>
-                <p className="model-tagline">Sparse Confident Tensor Memory with Isotropic Whitening.</p>
-                <p style={{ fontSize: "13px", color: "var(--muted-ink)", lineHeight: 1.5, margin: 0 }}>
-                  Maintains 94.2% retrieval precision over 128k context windows by filtering attention distractor pollution
-                  before key-value caching.
-                </p>
-                <div className="model-specs-box">
-                  <div className="model-spec-pair">
-                    <span>Window</span>
-                    <span>128,000 Tokens</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Precision</span>
-                    <span>94.2% Signal</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Framework</span>
-                    <span>PyTorch / CUDA</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Status</span>
-                    <span>Whitepaper Open</span>
-                  </div>
-                </div>
-                <div className="model-actions">
-                  <Link href="/research/sctm-memory-architecture" className="outline-button" style={{ width: "100%", justifyContent: "center" }}>
-                    Read Architecture Whitepaper <ArrowRight size={13} />
-                  </Link>
-                </div>
-              </div>
-
-
-            </div>
-          </section>
-
-          {/* Section 4: AI Research & Architecture Whitepapers */}
-          <section className="research-preview-section" id="research" style={{ padding: "7vw 9.2vw", background: "var(--card)", borderTop: "1px solid var(--line)" }}>
-            <div className="section-heading compact-heading">
-              <div>
-                <div className="section-marker">[ 03 — RESEARCH &amp; WHITEPAPERS ]</div>
-                <h2>
-                  Theoretical
-                  <br />
-                  <em>foundations.</em>
-                </h2>
-                <p className="section-description">
-                  Peer-reviewed whitepapers on Sparse Confident Tensor Memory and discrete authority gating.
-                </p>
-              </div>
-              <Link href="/research" className="outline-button">
-                View All Research <ArrowUpRight size={14} />
-              </Link>
-            </div>
-
-            <div className="research-preview-card" style={{ marginTop: "4vw" }}>
-              <div className="research-preview-index">01 / SCTM</div>
-              <div className="research-preview-copy">
-                <span className="meta-label">ARCHITECTURE WHITEPAPER</span>
-                <h3>Sparse Confident Tensor Memory with Isotropic Whitening</h3>
-                <p>
-                  A mathematical formulation for attention gating that suppresses distractor tokens prior to KV-cache retention,
-                  enabling 128k context recall with under 12ms latency.
-                </p>
-                <Link href="/research/sctm-memory-architecture" className="note-read">
-                  Read Full Paper <ArrowRight size={14} />
-                </Link>
-              </div>
-              <div className="research-preview-art">
-                <div className="research-orbit" />
-                <div className="research-orbit orbit-b" />
-                <span>
-                  SCTM<span>.</span>
-                </span>
-              </div>
-            </div>
-          </section>
-        </>
-      )}
-
-      {/* =========================================================================
-          CLOSING STUDIO FOOTER (UNIFIED ACROSS MODES)
-          ========================================================================= */}
-      <section className="closing-section">
-        <div className="closing-ring" />
-        <p className="eyebrow">If this sounds like your kind of quiet</p>
-        <h2>
-          Let’s make
-          <br />
-          <em>something useful.</em>
-        </h2>
-        <div style={{ maxWidth: "480px", width: "100%", margin: "0 auto 32px" }}>
-          <StudioWaitlistForm />
         </div>
-        <button
-          className="primary-button"
-          onClick={() => {
-            playClick();
-            toast("Message the studio at glexionstriker@gmail.com");
-          }}
-        >
-          glexionstriker@gmail.com <ArrowUpRight size={16} />
-        </button>
-      </section>
-    </div>
+      </footer>    </div>
   );
 }
 

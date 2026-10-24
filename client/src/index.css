@@ -4699,3 +4699,591 @@
   text-transform: uppercase;
   color: var(--orange);
 }
+
+/* =========================================================================
+   QUIET STUDIO: THREE.JS SPHERE PHYSICS EXPERIENTIAL LAYOUT
+   Interactive Verlet dynamics, scroll-driven drop, shape assembling & dispersal
+   ========================================================================= */
+.quiet-physics-site {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  color: #1a1a1a;
+  font-family: var(--rw, "Raleway", sans-serif);
+}
+
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+}
+
+.bg i {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.bg i.on {
+  opacity: 1;
+}
+
+#b0 {
+  background: radial-gradient(circle at center, #ffffff 0%, #ecefff 35%, #c2d1ff 100%);
+}
+
+#b1 {
+  background: radial-gradient(circle at center, #ffffff 0%, #fbffe5 38%, #e8ff9c 100%);
+}
+
+#b2 {
+  background: radial-gradient(circle at center, #ffffff 0%, #fff0f1 38%, #ffd1d5 100%);
+}
+
+.quiet-physics-canvas, #cv {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+.s {
+  position: relative;
+  z-index: 10;
+  min-height: 100svh;
+  pointer-events: none;
+  padding: 0 24px;
+}
+
+.pa {
+  pointer-events: auto;
+}
+
+.lb {
+  font: 500 11px "JetBrains Mono", monospace;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(14, 42, 197, 0.85);
+}
+
+.big {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(2.5rem, 5.5vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.bd {
+  font-size: clamp(15px, 1.2vw, 18px);
+  line-height: 1.6;
+  color: #404040;
+}
+
+/* Header */
+.physics-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 80px;
+  padding: env(safe-area-inset-top, 0px) 32px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.physics-header > * {
+  pointer-events: auto;
+}
+
+.physics-header .wm {
+  font: 900 19px "Space Grotesk", sans-serif;
+  letter-spacing: 0.25em;
+  color: #0a0a0a;
+}
+
+.physics-nav {
+  display: none;
+  gap: 40px;
+  font: 600 13px "Raleway", sans-serif;
+}
+
+@media (min-width: 768px) {
+  .physics-nav {
+    display: flex;
+  }
+}
+
+.physics-nav a {
+  color: #333;
+  transition: opacity 0.2s ease;
+}
+
+.physics-nav a:hover {
+  opacity: 0.6;
+}
+
+.physics-see-code {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 6px 6px 20px;
+  border-radius: 99px;
+  font: 600 13px "Raleway", sans-serif;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  color: #0a0a0a;
+  transition: transform 0.2s ease;
+}
+
+.physics-see-code:hover {
+  transform: translateY(-1px);
+}
+
+.physics-see-code .orb {
+  width: 32px;
+  height: 32px;
+  border-radius: 99px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: radial-gradient(circle at 50% 30%, #5175ff 0%, #0e2ac5 55%, #020b40 100%);
+  transition: transform 0.3s ease;
+}
+
+.physics-see-code:hover .orb {
+  transform: scale(1.08);
+}
+
+/* Hero Section */
+.hero-physics {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 56px;
+}
+
+.hr {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .hr {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.eb {
+  font: 600 12px "Raleway", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0e2ac5;
+  margin-bottom: 16px;
+}
+
+.hr h1 {
+  font-family: "Raleway", sans-serif;
+  font-size: clamp(2.8rem, 6.5vw, 5.6rem);
+  font-weight: 600;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.hs {
+  max-width: 300px;
+}
+
+.hs p {
+  font: 500 15px/1.45 "Raleway", sans-serif;
+  color: #333;
+}
+
+.cr {
+  font: 400 10.5px "JetBrains Mono", monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #737373;
+  margin-top: 18px;
+}
+
+.cue {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  color: #737373;
+  font: 500 10.5px "JetBrains Mono", monospace;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  animation: cuePulse 2s infinite;
+}
+
+@keyframes cuePulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* Section: Drop / Open Source */
+.drop {
+  display: flex;
+  align-items: center;
+  padding-top: 128px;
+  padding-bottom: 160px;
+}
+
+.physics-grid {
+  display: grid;
+  gap: 48px;
+  width: 100%;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .physics-grid {
+    grid-template-columns: repeat(12, 1fr);
+    gap: 64px;
+  }
+  .physics-grid > :first-child {
+    grid-column: span 7;
+  }
+  .physics-grid > :last-child {
+    grid-column: span 5;
+    padding-top: 16px;
+  }
+}
+
+.physics-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.physics-card {
+  border-radius: 1.4rem;
+  padding: 1px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.1));
+  box-shadow: 0 14px 40px -12px rgba(14, 42, 197, 0.16);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: block;
+}
+
+.physics-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 48px -12px rgba(14, 42, 197, 0.24);
+}
+
+.physics-card > div {
+  position: relative;
+  border-radius: 1.35rem;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 22px 26px;
+}
+
+.physics-card > div::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+}
+
+.physics-card .ch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 10.5px "JetBrains Mono", monospace;
+  color: #737373;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+
+.physics-card .ch b {
+  font-weight: 600;
+  color: #0e2ac5;
+}
+
+.physics-card .ch i {
+  margin-left: auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  background: radial-gradient(circle at 35% 30%, #5175ff, #0e2ac5);
+  box-shadow: 0 0 8px rgba(47, 105, 255, 0.6);
+}
+
+.physics-card strong {
+  display: block;
+  font: 600 18px "Raleway", sans-serif;
+  color: #0a0a0a;
+}
+
+.physics-card span {
+  display: block;
+  font-size: 13.5px;
+  color: #555;
+  margin-top: 4px;
+  line-height: 1.45;
+}
+
+/* Section: Shape / Research */
+.shape {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 144px;
+  padding-bottom: 144px;
+}
+
+.sb {
+  align-self: flex-end;
+  max-width: 26rem;
+}
+
+@media (min-width: 768px) {
+  .sb {
+    text-align: right;
+  }
+}
+
+.sb .pl {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  padding: 10px 18px;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #222;
+  font: 500 10.5px "JetBrains Mono", monospace;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Section: Rel / Now */
+.rel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 144px;
+  padding-bottom: 144px;
+}
+
+.rel > div {
+  max-width: 48rem;
+}
+
+.rel h2 {
+  margin-top: 28px;
+  font-size: clamp(2.5rem, 5vw, 4.8rem);
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  color: #0a0a0a;
+}
+
+.rel .bd {
+  margin: 32px auto 0;
+  max-width: 32rem;
+}
+
+/* Footer */
+.physics-footer {
+  position: relative;
+  z-index: 10;
+  background: #0a0a0a;
+  color: #fff;
+  border-radius: 3rem 3rem 0 0;
+  overflow: hidden;
+}
+
+.mq {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 22px 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.mt {
+  display: inline-flex;
+  white-space: nowrap;
+  font: 500 clamp(24px, 5vw, 54px) "Raleway", sans-serif;
+  color: rgba(255, 255, 255, 0.9);
+  animation: physicsMarquee 26s linear infinite;
+}
+
+.mt span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 32px;
+  gap: 32px;
+}
+
+.mt span::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #2f69ff;
+}
+
+@keyframes physicsMarquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.fb {
+  position: relative;
+  padding: 72px 32px 44px;
+}
+
+@media (min-width: 768px) {
+  .fb {
+    padding: 96px 48px 48px;
+  }
+}
+
+.fg {
+  display: grid;
+  gap: 48px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .fg {
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .fg > :first-child {
+    grid-column: span 5;
+  }
+  .fg > :last-child {
+    grid-column: span 7;
+  }
+}
+
+.fl {
+  font: 500 11px "JetBrains Mono", monospace;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.fb h2 {
+  color: #fff;
+  font-family: "Raleway", sans-serif;
+  font-size: clamp(2rem, 3.8vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.05;
+  margin: 20px 0 28px;
+}
+
+.em {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 8px 8px 8px 26px;
+  border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  font: 500 15px "Raleway", sans-serif;
+  color: #fff;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.em:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.em .orb {
+  width: 38px;
+  height: 38px;
+  border-radius: 99px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 30%, #5175ff 0%, #0e2ac5 65%);
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+@media (min-width: 640px) {
+  .cols {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.cols h4 {
+  margin: 0 0 18px;
+  font: 500 10.5px "JetBrains Mono", monospace;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.cols a {
+  display: block;
+  margin-bottom: 12px;
+  font: 400 14.5px "Raleway", sans-serif;
+  color: rgba(255, 255, 255, 0.75);
+  transition: color 0.2s ease;
+}
+
+.cols a:hover {
+  color: #fff;
+}
+
+.bt {
+  margin-top: 72px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bt .wm {
+  color: #fff;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.22em;
+}
+
+.bt small {
+  font: 400 11px "JetBrains Mono", monospace;
+  color: rgba(255, 255, 255, 0.4);
+  margin-left: 12px;
+}
+
