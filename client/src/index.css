@@ -2289,13 +2289,15 @@
 }
 
 .dark-outline {
-  border-color: color-mix(in srgb, var(--background) 30%, transparent) !important;
-  color: var(--background) !important;
+  border: 1px solid var(--line) !important;
+  color: var(--foreground) !important;
+  background: transparent !important;
 }
 
 .dark-outline:hover {
   border-color: var(--orange) !important;
   color: var(--orange) !important;
+  background: color-mix(in srgb, var(--orange) 8%, transparent) !important;
 }
 
 .variables-chips-row {
@@ -2315,33 +2317,240 @@
   color: var(--foreground);
 }
 
-.code-snippet-box {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid color-mix(in srgb, var(--background) 15%, transparent);
-  border-radius: 6px;
-  padding: 10px 12px;
-  margin: 12px 0;
-  font: 400 11px/1.4 "DM Mono", monospace;
+/* =============================================================================
+   ENHANCED CODE CARDS & ASSET FORMATTING (ANTISLOP & HIGH-CONTRAST)
+   ============================================================================= */
+
+.code-assets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+  .code-assets-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.resource-card.code-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.resource-card.code-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--orange);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.code-card-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.code-lang-badge {
+  font: 500 10px/1 "DM Mono", monospace;
+  text-transform: uppercase;
+  color: var(--muted-ink);
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+  border: 1px solid var(--line);
+  padding: 3px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+
+.code-card-title {
+  font: 700 20px/1.25 "Space Grotesk", sans-serif !important;
+  letter-spacing: -0.03em !important;
+  text-transform: none !important;
+  margin: 0 0 8px !important;
+  color: var(--foreground);
+}
+
+.code-card .card-tagline {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--muted-ink);
+  margin: 0 0 16px;
+  min-height: 40px;
+}
+
+/* Terminal Install Bar */
+.code-card .code-install-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #090a0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 9px 12px;
+  border-radius: 7px;
+  margin-bottom: 14px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.terminal-prompt {
+  color: var(--orange);
+  font: 600 12px "DM Mono", monospace;
+  user-select: none;
+}
+
+.code-card .code-install-bar code {
+  flex: 1;
+  font: 500 11px/1.3 "DM Mono", monospace;
+  color: #ffb692;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.code-card .code-install-bar .copy-mini-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f0efe9;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font: 500 10px "DM Mono", monospace;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: auto;
+}
+
+.code-card .code-install-bar .copy-mini-btn:hover {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+
+.copied-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #34d399;
+}
+
+/* Code Snippet Box */
+.code-card .code-snippet-box {
+  background: #090a0d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 0 16px;
+}
+
+.snippet-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .snippet-filename {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--orange);
-  font-size: 10px;
-  margin-bottom: 6px;
-  text-transform: uppercase;
+  font: 600 10px/1 "DM Mono", monospace;
+  letter-spacing: 0.03em;
 }
 
-.code-install-bar .copy-mini-btn {
-  border: 0;
+.snippet-filename .file-icon {
+  color: var(--muted-ink);
+}
+
+.snippet-copy-btn {
   background: transparent;
-  color: color-mix(in srgb, var(--background) 60%, transparent);
+  border: 0;
+  color: rgba(240, 239, 233, 0.6);
+  font: 500 10px/1 "DM Mono", monospace;
   cursor: pointer;
-  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 5px;
+  border-radius: 3px;
   transition: color 0.15s ease;
 }
 
-.code-install-bar .copy-mini-btn:hover {
+.snippet-copy-btn:hover {
   color: var(--orange);
+}
+
+.snippet-code-wrap {
+  padding: 12px;
+  max-height: 125px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.snippet-pre {
+  margin: 0;
+  font: 400 11px/1.55 "DM Mono", monospace;
+  color: #e5e4de;
+  white-space: pre;
+  tab-size: 2;
+}
+
+/* Action Buttons Row */
+.code-actions-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.code-actions-row .code-view-btn,
+.code-actions-row .code-github-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font: 600 11px/1 "DM Mono", monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.code-actions-row .code-view-btn {
+  background: transparent;
+  color: var(--foreground) !important;
+  border: 1px solid var(--line) !important;
+}
+
+.code-actions-row .code-view-btn:hover {
+  border-color: var(--orange) !important;
+  color: var(--orange) !important;
+  background: color-mix(in srgb, var(--orange) 8%, transparent) !important;
+}
+
+.code-actions-row .code-github-btn {
+  background: var(--foreground) !important;
+  color: var(--background) !important;
+  border: 1px solid transparent !important;
+}
+
+.code-actions-row .code-github-btn:hover {
+  background: var(--orange) !important;
+  color: #fff !important;
 }
 
 .templates-empty-state {

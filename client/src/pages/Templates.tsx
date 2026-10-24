@@ -11,7 +11,9 @@ import {
   LayoutGrid,
   Search,
   Sparkles,
+  Star,
   Terminal,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -26,10 +28,17 @@ import { playClick, playSuccess } from "@/lib/sound";
 
 type ResourceType = "all" | "notion" | "prompt" | "code";
 
+function getCodePreview(snippet: string, maxLines = 5): string {
+  const lines = snippet.split("\n");
+  return lines.slice(0, maxLines).join("\n");
+}
+
 export default function Templates() {
   const [activeTab, setActiveTab] = useState<ResourceType>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
+  const [selectedCodeAsset, setSelectedCodeAsset] = useState<CodingAsset | null>(null);
 
   const handleCopyPrompt = (id: string, text: string) => {
     playClick();
@@ -47,6 +56,15 @@ export default function Templates() {
     playSuccess();
     toast("Install command copied!");
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const handleCopyCode = (id: string, code: string) => {
+    playClick();
+    navigator.clipboard.writeText(code);
+    setCopiedCodeId(id);
+    playSuccess();
+    toast("Code snippet copied!");
+    setTimeout(() => setCopiedCodeId(null), 2000);
   };
 
   const filteredNotion = useMemo(() => {
@@ -279,47 +297,99 @@ export default function Templates() {
               <h2>Proof in the code.</h2>
             </div>
 
-            <div className="templates-cards-grid">
+            <div className="templates-cards-grid code-assets-grid">
               {filteredCode.map((item) => (
-                <article key={item.id} className="resource-card code-card dark-code-card">
+                <article key={item.id} className="resource-card code-card">
                   <div className="resource-card-head">
-                    <span className="resource-category-tag" style={{ color: "var(--orange)" }}>
-                      {item.category}
-                    </span>
-                    <span className="resource-lang-tag">{item.language}</span>
-                  </div>
-
-                  <div className="code-install-bar">
-                    <Terminal size={13} className="terminal-icon" />
-                    <code>{item.installCommand}</code>
-                    <button
-                      className="copy-mini-btn"
-                      onClick={() => handleCopyInstall(item.id, item.installCommand)}
-                      title="Copy install command"
-                    >
-                      <Copy size={11} />
-                    </button>
+                    <div className="code-card-tags">
+                      <span className="resource-category-tag">{item.category}</span>
+                      <span className="code-lang-badge">{item.language}</span>
+                    </div>
+                    <div className="star-badge" title={`${item.stars} GitHub stars`}>
+                      <Star size={11} fill="currentColor" /> {item.stars}
+                    </div>
                   </div>
 
                   <div className="resource-card-body">
-                    <h3>{item.title}</h3>
+                    <h3 className="code-card-title">{item.title}</h3>
                     <p className="card-tagline">{item.tagline}</p>
-                    <p className="card-desc">{item.description}</p>
 
-                    <div className="code-snippet-box">
-                      <div className="snippet-filename">{item.filename}</div>
-                      <pre>{item.codeSnippet.slice(0, 150)}...</pre>
+                    <div className="code-install-bar">
+                      <span className="terminal-prompt">$</span>
+                      <code>{item.installCommand}</code>
+                      <button
+                        className="copy-mini-btn"
+                        onClick={() => handleCopyInstall(item.id, item.installCommand)}
+                        title="Copy install command"
+                        aria-label="Copy install command"
+                      >
+                        {copiedId === item.id ? (
+                          <span className="copied-tag">
+                            <Check size={11} /> Copied
+                          </span>
+                        ) : (
+                          <>
+                            <Copy size={11} /> Copy
+                          </>
+                        )}
+                      </button>
                     </div>
 
-                    <div className="resource-card-actions">
+                    <div className="code-snippet-box">
+                      <div className="snippet-head">
+                        <span className="snippet-filename">
+                          <Code size={11} className="file-icon" />
+                          {item.filename}
+                        </span>
+                        <button
+                          type="button"
+                          className="snippet-copy-btn"
+                          onClick={() => handleCopyCode(`snip-${item.id}`, item.codeSnippet)}
+                          title="Copy snippet"
+                        >
+                          {copiedCodeId === `snip-${item.id}` ? (
+                            <span className="copied-tag">
+                              <Check size={10} /> Copied
+                            </span>
+                          ) : (
+                            <>
+                              <Copy size={10} /> Copy snippet
+                            </>
+                          )}
+                        </button>
+                      </div>
+                      <div className="snippet-code-wrap">
+                        <pre className="snippet-pre">{getCodePreview(item.codeSnippet)}</pre>
+                      </div>
+                    </div>
+
+                    <div className="card-tags-row">
+                      {item.tags.map((t) => (
+                        <span key={t} className="tag-chip">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="resource-card-actions code-actions-row">
+                      <button
+                        type="button"
+                        className="code-view-btn"
+                        onClick={() => {
+                          playClick();
+                          setSelectedCodeAsset(item);
+                        }}
+                      >
+                        Inspect Source <Code size={13} />
+                      </button>
                       <a
                         href={item.githubUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="outline-button full-width-btn dark-outline"
+                        className="code-github-btn"
                         onClick={() => playClick()}
                       >
-                        View Code on GitHub <Github size={13} />
+                        GitHub <ExternalLink size={13} />
                       </a>
                     </div>
                   </div>
@@ -339,6 +409,98 @@ export default function Templates() {
           </div>
         )}
       </div>
+
+      {/* Code Inspector Modal */}
+      {selectedCodeAsset && (
+        <div className="resource-modal-overlay" onClick={() => setSelectedCodeAsset(null)}>
+          <div className="resource-modal code-inspector-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-head">
+              <div>
+                <span className="resource-category-tag" style={{ color: "var(--orange)" }}>
+                  {selectedCodeAsset.language} // {selectedCodeAsset.category}
+                </span>
+                <h2>{selectedCodeAsset.title}</h2>
+              </div>
+              <button className="modal-close" onClick={() => setSelectedCodeAsset(null)} aria-label="Close modal">
+                <X size={18} />
+              </button>
+            </div>
+
+            <p className="modal-description">{selectedCodeAsset.description}</p>
+
+            <div className="code-install-bar" style={{ margin: "0 0 16px" }}>
+              <span className="terminal-prompt">$</span>
+              <code>{selectedCodeAsset.installCommand}</code>
+              <button
+                className="copy-mini-btn"
+                onClick={() => handleCopyInstall(`modal-${selectedCodeAsset.id}`, selectedCodeAsset.installCommand)}
+              >
+                {copiedId === `modal-${selectedCodeAsset.id}` ? (
+                  <span className="copied-tag">
+                    <Check size={11} /> Copied
+                  </span>
+                ) : (
+                  <>
+                    <Copy size={11} /> Copy command
+                  </>
+                )}
+              </button>
+            </div>
+
+            <div className="modal-body">
+              <div className="snippet-head" style={{ borderRadius: "8px 8px 0 0" }}>
+                <span className="snippet-filename">
+                  <Code size={12} className="file-icon" />
+                  {selectedCodeAsset.filename}
+                </span>
+                <button
+                  type="button"
+                  className="snippet-copy-btn"
+                  onClick={() => handleCopyCode(`modal-code-${selectedCodeAsset.id}`, selectedCodeAsset.codeSnippet)}
+                >
+                  {copiedCodeId === `modal-code-${selectedCodeAsset.id}` ? (
+                    <span className="copied-tag">
+                      <Check size={11} /> Copied full file
+                    </span>
+                  ) : (
+                    <>
+                      <Copy size={11} /> Copy full file
+                    </>
+                  )}
+                </button>
+              </div>
+              <div
+                className="snippet-code-wrap"
+                style={{
+                  maxHeight: "380px",
+                  borderRadius: "0 0 8px 8px",
+                  background: "#090a0d",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                }}
+              >
+                <pre className="snippet-pre" style={{ fontSize: "12px", lineHeight: "1.6" }}>
+                  {selectedCodeAsset.codeSnippet}
+                </pre>
+              </div>
+            </div>
+
+            <div className="modal-foot" style={{ display: "flex", gap: "12px", marginTop: "16px" }}>
+              <a
+                href={selectedCodeAsset.githubUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="primary-button"
+                style={{ flex: 1, justifyContent: "center" }}
+              >
+                View Repository on GitHub <ExternalLink size={14} />
+              </a>
+              <button className="outline-button" onClick={() => setSelectedCodeAsset(null)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
