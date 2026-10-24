@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, Route, Switch, useLocation } from "wouter";
 import { ArrowRight, ArrowUpRight, Github, Menu, Moon, Search, Sun, Volume2, VolumeX, X } from "lucide-react";
 import { Toaster } from "sonner";
@@ -17,6 +17,7 @@ import Changelog from "./pages/Changelog";
 import System from "./pages/System";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
+import GooeyNav from "./components/GooeyNav";
 import { isSoundEnabled, toggleSound, playClick } from "./lib/sound";
 
 function ScrollToTop() {
@@ -86,9 +87,27 @@ function Header({
     }
   };
 
+  const gooeyItems = useMemo(() => {
+    return navLinks.map((link) => ({
+      label: link.label,
+      href: link.href,
+      onClick: () => {
+        handleNavClick(link.href);
+      },
+    }));
+  }, [navLinks]);
+
+  const activeNavIndex = useMemo(() => {
+    if (location === "/" || location === "") {
+      return 0;
+    }
+    const idx = navLinks.findIndex((l) => !l.href.startsWith("/#") && location.startsWith(l.href));
+    return idx >= 0 ? idx : 0;
+  }, [location, navLinks]);
+
   return (
     <>
-      <header className="site-header">
+      <header className="site-header site-header--floating">
         {/* Three Line Collapsible Menu Icon (Mobile Left) */}
         <button
           className="mobile-menu-toggle"
@@ -99,79 +118,99 @@ function Header({
           aria-label={mobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
           title="Toggle Navigation Menu"
         >
-          {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
+          {mobileNavOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
 
-        <Link href="/" className="brand-mark" aria-label="Quiet Studio home">
-          <span className="brand-dot" />
-          <span>quiet studio</span>
-        </Link>
+        {/* Left Floating Pod: Brand Mark + Studio Mode Switcher */}
+        <div className="header-floating-pod header-floating-pod--brand">
+          <Link href="/" className="brand-mark" aria-label="Quiet Studio home" onClick={() => playClick()}>
+            <span className="brand-dot" />
+            <span>quiet studio</span>
+          </Link>
 
-        {/* Global Studio Mode Switcher: Human (Open Core Apps & Studio) vs AI Lab (Models & Research) */}
-        <div className="header-mode-toggle" role="group" aria-label="Studio Mode Switcher">
-          <button
-            type="button"
-            className={`mode-toggle-btn ${studioMode === "human" ? "active" : ""}`}
-            onClick={() => onStudioModeChange("human")}
-            title="Products: Open Core Apps & Software"
-          >
-            <span className="mode-btn-symbol">✦</span>
-            <span>Products</span>
-          </button>
-          <button
-            type="button"
-            className={`mode-toggle-btn ${studioMode === "agent" ? "active" : ""}`}
-            onClick={() => onStudioModeChange("agent")}
-            title="AI Lab: Vertical Models & Research Papers"
-          >
-            <span className="mode-btn-symbol">✱</span>
-            <span>AI Lab</span>
-          </button>
+          {/* Global Studio Mode Switcher: Products (Open Core Apps) vs AI Lab (Models & Research) */}
+          <div className="header-mode-toggle" role="group" aria-label="Studio Mode Switcher">
+            <button
+              type="button"
+              className={`mode-toggle-btn ${studioMode === "human" ? "active" : ""}`}
+              onClick={() => {
+                playClick();
+                onStudioModeChange("human");
+              }}
+              title="Products: Open Core Apps & Software"
+            >
+              <span className="mode-btn-symbol">✦</span>
+              <span>Products</span>
+            </button>
+            <button
+              type="button"
+              className={`mode-toggle-btn ${studioMode === "agent" ? "active" : ""}`}
+              onClick={() => {
+                playClick();
+                onStudioModeChange("agent");
+              }}
+              title="AI Lab: Vertical Models & Research Papers"
+            >
+              <span className="mode-btn-symbol">✱</span>
+              <span>AI Lab</span>
+            </button>
+          </div>
         </div>
 
-        {/* Contextual Desktop Navigation */}
-        <nav className="main-nav" aria-label="Main navigation">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavClick(link.href);
-              }}
-              className={location.startsWith(link.href) ? "active" : ""}
+        {/* Center Floating Pod: Interactive GooeyNav from React Bits */}
+        <div className="header-floating-pod header-floating-pod--nav">
+          <GooeyNav
+            items={gooeyItems}
+            activeIndex={activeNavIndex}
+            theme={dark ? "dark" : "light"}
+            color="#ff5a1f"
+            activeTextColor="#ffffff"
+            colors={["#ff5a1f", "#ff844b", "#ffa07a"]}
+            size="sm"
+            frame={true}
+            particleCount={14}
+            spread={48}
+            animationTime={520}
+            timeVariance={250}
+            gooeyness={0.5}
+            wobble={0.45}
+            hoverEffect={true}
+            onChange={(index) => {
+              const item = gooeyItems[index];
+              if (item?.href) handleNavClick(item.href);
+            }}
+          />
+        </div>
+
+        {/* Right Floating Pod: Action Controls */}
+        <div className="header-floating-pod header-floating-pod--actions">
+          <div className="header-actions">
+            <button className="command-trigger-btn" onClick={onOpenCommand} title="Search studio (⌘K)">
+              <Search size={13} />
+              <span className="kbd-shortcut">⌘K</span>
+            </button>
+
+            <button
+              className="icon-button"
+              onClick={handleSoundToggle}
+              title={soundOn ? "Mute studio sound" : "Enable studio sound"}
+              aria-label={soundOn ? "Mute studio sound" : "Enable studio sound"}
             >
-              {link.label}
-            </a>
-          ))}
-        </nav>
+              {soundOn ? <Volume2 size={15} /> : <VolumeX size={15} />}
+            </button>
 
-        <div className="header-actions">
-          <button className="command-trigger-btn" onClick={onOpenCommand} title="Search studio (⌘K)">
-            <Search size={14} />
-            <span className="kbd-shortcut">⌘K</span>
-          </button>
+            <button
+              className="icon-button"
+              onClick={onToggle}
+              aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {dark ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
 
-          <button
-            className="icon-button"
-            onClick={handleSoundToggle}
-            title={soundOn ? "Mute studio sound" : "Enable studio sound"}
-            aria-label={soundOn ? "Mute studio sound" : "Enable studio sound"}
-          >
-            {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
-          </button>
-
-          <button
-            className="icon-button"
-            onClick={onToggle}
-            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            {dark ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
-
-          <button className="header-cta" onClick={onOpenContact}>
-            Start a conversation <ArrowUpRight size={14} />
-          </button>
+            <button className="header-cta" onClick={onOpenContact}>
+              Start a conversation <ArrowUpRight size={13} />
+            </button>
+          </div>
         </div>
 
         {isProduct && <Link href="/" className="mobile-back">← back to studio</Link>}
