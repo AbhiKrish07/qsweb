@@ -29,6 +29,7 @@ import { playClick } from "@/lib/sound";
 import QuietStudioLab3D from "@/components/QuietStudioLab3D";
 import FluxLines from "@/components/FluxLines";
 import ElectricLogo from "@/components/ElectricLogo";
+import Strands from "@/components/Strands";
 import { BLOG_POSTS } from "@/pages/Notes";
 
 if (typeof window !== "undefined") {
@@ -660,9 +661,17 @@ export default function Home({
               </p>
             </div>
 
-            {/* Floating Checkmark Badge */}
-            <div className="floating-check-badge" aria-hidden="true">
-              <Check size={24} strokeWidth={2.8} />
+            {/* Mid-Left Floating Widget: Interactive Strands Glass Orb from React Bits */}
+            <div className="floating-widget-strands" aria-label="Interactive Strands Glass Orb" title="Click or hover to stir strands">
+              <Strands
+                colors={["#ff5a1f", "#ff7849", "#ffa07a", "#fff4ed", "#38bdf8", "#2563eb", "#1d4ed8"]}
+                glass={true}
+                glassSize={1.05}
+                energy={0.7}
+                interactive
+                clickPulse
+                lightMode={!isDark}
+              />
             </div>
 
             {/* Top-Right Floating Widget: Interactive ElectricLogo from React Bits */}
