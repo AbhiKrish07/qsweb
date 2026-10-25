@@ -604,26 +604,13 @@ export default function QuietStudioLab3D() {
             </p>
 
             <div className="lab-hero-actions">
-              <a
-                href="#models"
-                onClick={(e) => {
-                  e.preventDefault();
-                  playClick();
-                  const target = document.getElementById("models");
-                  if (target) {
-                    const top = target.getBoundingClientRect().top + window.scrollY;
-                    window.scrollTo({
-                      top,
-                      behavior: "smooth",
-                    });
-                  } else {
-                    window.location.hash = "models";
-                  }
-                }}
+              <Link
+                href="/models"
+                onClick={() => playClick()}
                 className="sentient-primary-pill"
               >
-                Vertical Models <ArrowDownRight size={14} />
-              </a>
+                Vertical Models <ArrowUpRight size={14} />
+              </Link>
 
               <Link
                 href="/research"

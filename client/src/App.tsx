@@ -15,6 +15,7 @@ import CodingAssets from "./pages/CodingAssets";
 import Templates from "./pages/Templates";
 import Changelog from "./pages/Changelog";
 import System from "./pages/System";
+import Models from "./pages/Models";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
 import GooeyNav from "./components/GooeyNav";
@@ -23,7 +24,7 @@ import { isSoundEnabled, toggleSound, playClick } from "./lib/sound";
 function ScrollToTop() {
   const [location] = useLocation();
   useEffect(() => {
-    if (location === "/models" || window.location.hash) return;
+    if (window.location.hash) return;
     window.scrollTo(0, 0);
   }, [location]);
   return null;
@@ -74,17 +75,8 @@ function Header({
     setMobileNavOpen(false);
 
     if (href === "/models" || href === "/#models") {
-      if (location === "/" || location === "/models") {
-        const target = document.getElementById("models");
-        if (target) {
-          const top = target.getBoundingClientRect().top + window.scrollY;
-          window.scrollTo({ top: top - 80, behavior: "smooth" });
-        } else {
-          window.location.hash = "models";
-        }
-      } else {
-        setLocation("/models");
-      }
+      setLocation("/models");
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -398,7 +390,7 @@ function AppShell() {
         <div key={`${String(location)}-${studioMode}`} className="page-transition">
           <Switch>
             <Route path="/">{() => <Home mode={studioMode} onModeChange={handleStudioModeChange} />}</Route>
-            <Route path="/models">{() => <Home mode="agent" onModeChange={handleStudioModeChange} defaultSection="models" />}</Route>
+            <Route path="/models" component={Models} />
             <Route path="/products/:slug" component={ProductPage} />
             <Route path="/research" component={Research} />
             <Route path="/research/:slug" component={ResearchArticle} />
