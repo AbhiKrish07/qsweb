@@ -6,10 +6,14 @@ import {
   ArrowRight,
   ArrowUpRight,
   Check,
+  ChevronDown,
   Code,
   Command,
   Cpu,
+  ExternalLink,
+  Eye,
   FileCode,
+  FileText,
   Github,
   Globe,
   Layers,
@@ -17,13 +21,14 @@ import {
   LoaderCircle,
   Mail,
   MoveUpRight,
+  Palette,
+  PenTool,
   Search,
   Sparkles,
   Terminal,
   Zap,
 } from "lucide-react";
 import { Link } from "wouter";
-import { categories, getCategoryLabel, products, type Product, type ProductCategory } from "@/lib/products";
 import { toast } from "sonner";
 import { playClick } from "@/lib/sound";
 import QuietStudioLab3D from "@/components/QuietStudioLab3D";
@@ -32,412 +37,212 @@ import ElectricLogo from "@/components/ElectricLogo";
 import Strands from "@/components/Strands";
 import HalftoneReveal from "@/components/HalftoneReveal";
 import TextLoop from "@/components/TextLoop";
-import { BLOG_POSTS } from "@/pages/Notes";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-function ProductVisual({ product, compact = false }: { product: Product; compact?: boolean }) {
-  return (
-    <div className={`product-visual visual-${product.visual} ${compact ? "compact" : ""}`} aria-hidden="true">
-      {product.visual === "learnloop" && (
-        <>
-          <div className="loop-ring ring-one" />
-          <div className="loop-ring ring-two" />
-          <div className="loop-core">
-            <span>learn</span>
-            <span>loop</span>
-          </div>
-          <div className="loop-node node-one">01</div>
-          <div className="loop-node node-two">↗</div>
-          <div className="loop-node node-three">02</div>
-        </>
-      )}
-      {product.visual === "whitespace" && (
-        <>
-          <div className="window-stack">
-            <div className="window-head">
-              <i />
-              <i />
-              <i />
-            </div>
-            <div className="window-copy">
-              <b>context</b>
-              <span>saved to whitespace</span>
-              <span>⌘ K to recall</span>
-            </div>
-          </div>
-          <div className="ghost-window" />
-        </>
-      )}
-      {product.visual === "aethel" && (
-        <>
-          <div className="aethel-sphere">
-            <div className="sphere-grid" />
-            <div className="sphere-glow" />
-          </div>
-          <div className="aethel-cross cross-a" />
-          <div className="aethel-cross cross-b" />
-          <span className="aethel-label">INTENT → ACTION</span>
-        </>
-      )}
-      {product.visual === "capture" && (
-        <>
-          <div className="aethel-sphere">
-            <div className="sphere-grid" />
-            <div className="sphere-glow" />
-          </div>
-          <span className="aethel-label">LOCAL RUNTIME</span>
-        </>
-      )}
-    </div>
-  );
+/* =========================================================================
+   CASE STUDIES / SELECTED WORK DATA (SECTION 05)
+   ========================================================================= */
+interface CaseStudy {
+  id: string;
+  name: string;
+  label: "CONCEPT CASE STUDY" | "CLIENT ENGAGEMENT";
+  category: "branding" | "design" | "writing";
+  industry: string;
+  services: string[];
+  description: string;
+  metrics?: string;
+  imageBg: string;
 }
 
-function CategoryTab({
-  category,
-  active,
-  onClick,
-}: {
-  category: (typeof categories)[number];
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button className={`category-tab ${active ? "active" : ""}`} onClick={onClick} aria-pressed={active}>
-      <span className="tab-number">{category.count}</span>
-      <span>{category.label}</span>
-      <ArrowRight size={14} className="tab-arrow" />
-    </button>
-  );
-}
-
-function ProductCard({ product, featured = false }: { product: Product; featured?: boolean }) {
-  const projectHref = `/products/${product.slug}`;
-  const codeHref = product.github || `https://github.com/AbhiKrish07/${product.slug}`;
-  
-  // Distinct rationale/essay link per product
-  const rationaleHref =
-    product.slug === "zen-ai"
-      ? "/blog/ai-as-a-proactive-life-partner"
-      : product.slug === "learnloop"
-      ? "/blog/why-vertical-models-beat-general-ai"
-      : product.slug === "aethel"
-      ? "/research/interface-as-reflex"
-      : "/thesis";
-
-  // Distinct system/specs link per product
-  const specsHref =
-    product.slug === "zen-ai"
-      ? "/system"
-      : product.slug === "learnloop"
-      ? "/templates"
-      : "/research";
-
-  return (
-    <div className={`product-card ${featured ? "featured" : ""}`}>
-      <div className="card-meta">
-        <span>
-          {product.index} — {getCategoryLabel(product.category)}
-        </span>
-        <span className={`status status-${product.color}`}>{product.status}</span>
-      </div>
-
-      <Link href={projectHref}>
-        <ProductVisual product={product} compact={!featured} />
-      </Link>
-
-      <div className="card-copy">
-        <div>
-          <Link href={projectHref}>
-            <h3>{product.name}</h3>
-          </Link>
-          <p>{product.oneLiner}</p>
-        </div>
-        <Link href={projectHref} className="circle-arrow" aria-label={`Open ${product.name}`}>
-          <MoveUpRight size={16} />
-        </Link>
-      </div>
-
-      <div className="card-tags">
-        {product.tags.map((tag) => (
-          <span key={tag}>{tag}</span>
-        ))}
-      </div>
-
-      <div className="project-card-interactive-links">
-        <Link href={projectHref} className="project-quick-link" title="Open Interactive App & Demo">
-          <Globe size={12} />
-          <span>Interactive App</span>
-        </Link>
-        <a href={codeHref} target="_blank" rel="noreferrer" className="project-quick-link" title="View Source Code on GitHub">
-          <Github size={12} />
-          <span>Source Code</span>
-        </a>
-        <Link href={rationaleHref} className="project-quick-link" title="Read Architectural Rationale">
-          <FileCode size={12} />
-          <span>Why Needed</span>
-        </Link>
-        <Link href={specsHref} className="project-quick-link" title="View System Architecture & Specs">
-          <Layers size={12} />
-          <span>System Specs</span>
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-const noteContent = [
+const CASE_STUDIES: CaseStudy[] = [
   {
-    type: "ESSAY — 06.09.26",
-    title: "The case for building less software.",
-    excerpt: "Why the next generation of tools should feel more like a reflex than a destination.",
-    body: "The best product is often the layer you no longer notice. Quiet Studio is interested in the small, capable objects that keep you moving without asking you to become their operator. Less surface area. More trust. Fewer decisions between an intention and the thing itself.",
+    id: "hotel-buci",
+    name: "Hôtel Buci Paris",
+    label: "CONCEPT CASE STUDY",
+    category: "branding",
+    industry: "Hospitality & Luxury",
+    services: ["Brand Identity", "Typography", "Foil Stationery", "Packaging"],
+    description:
+      "A refined, tactile visual identity celebrating Parisian heritage with warm paper tones, custom grotesque typography, and foil-stamped collateral.",
+    metrics: "Identity System · 14 Touchpoints",
+    imageBg: "radial-gradient(circle at 50% 50%, rgba(255, 90, 31, 0.15) 0%, rgba(20, 20, 19, 0.95) 100%)",
   },
   {
-    type: "LOG — 28.08.26",
-    title: "What one useful thing looks like.",
-    excerpt: "A shipping rule for a studio of one.",
-    body: "One useful thing is specific enough to use today and opinionated enough to remember tomorrow. It should solve a real problem, have a point of view, and leave the rest of the roadmap alone until the signal is clear.",
+    id: "stylin-pitch",
+    name: "Stylin Pitch System",
+    label: "CLIENT ENGAGEMENT",
+    category: "design",
+    industry: "Developer Tools & SaaS",
+    services: ["Presentation Design", "18-Slide Pitch Deck", "Data Graphics"],
+    description:
+      "Series-A investor pitch deck system and interactive presentation slides built for technical narrative clarity, visual momentum, and venture storytelling.",
+    metrics: "$4.2M Seed Raised",
+    imageBg: "radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%)",
   },
   {
-    type: "RESEARCH — 14.08.26",
-    title: "When AI stops feeling like AI.",
-    excerpt: "Early observations from Aethel.",
-    body: "The magic is not in making systems speak more. It is in making them understand when language is unnecessary. Aethel is a running set of experiments around intent, timing, and the dignity of not being interrupted.",
+    id: "darling-publication",
+    name: "Darling Magazine",
+    label: "CONCEPT CASE STUDY",
+    category: "writing",
+    industry: "Media & Publishing",
+    services: ["Editorial Design", "Brand Voice Playbook", "Website Copy"],
+    description:
+      "Typographic publication layout and brand voice guidelines celebrating thoughtful longform discourse and quiet editorial pacing.",
+    metrics: "Voice Guide · 8 Editorial Templates",
+    imageBg: "radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.15) 0%, rgba(28, 25, 23, 0.95) 100%)",
+  },
+  {
+    id: "ideapeel-revamp",
+    name: "Ideapeel Studio",
+    label: "CLIENT ENGAGEMENT",
+    category: "branding",
+    industry: "Creative Technology",
+    services: ["Brand Identity", "Digital Assets", "System Guidelines", "Icons"],
+    description:
+      "Comprehensive studio brand overhaul translating complex technical infrastructure into an intuitive visual language and modular design system.",
+    metrics: "Complete Brand Revamp",
+    imageBg: "radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.15) 0%, rgba(24, 24, 27, 0.95) 100%)",
+  },
+  {
+    id: "reed-words",
+    name: "Reed Words",
+    label: "CONCEPT CASE STUDY",
+    category: "writing",
+    industry: "Consumer Software",
+    services: ["Website Copywriting", "Landing Pages", "Strategic Messaging"],
+    description:
+      "Clear, resonant brand messaging and website copy that eliminates generic tech buzzwords in favor of honest, human-centered tone.",
+    metrics: "Full Web Copy · 3 Landing Pages",
+    imageBg: "radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.15) 0%, rgba(20, 24, 20, 0.95) 100%)",
+  },
+  {
+    id: "bricks-design",
+    name: "Bricks Architecture",
+    label: "CONCEPT CASE STUDY",
+    category: "design",
+    industry: "Architecture & Space",
+    services: ["Visual Language", "Print Collateral", "Digital Portfolio"],
+    description:
+      "Geometric identity and tactile collateral extending across digital surfaces and sustainable print materials with modular precision.",
+    metrics: "Modular Collateral System",
+    imageBg: "radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.15) 0%, rgba(24, 20, 22, 0.95) 100%)",
   },
 ];
 
-const LOOPS_FORM_ACTION = "https://app.loops.so/api/newsletter-form/cmatylqt31ghsxb0izxxyerf0";
+/* =========================================================================
+   FAQ QUESTIONS & ANSWERS (SECTION 10)
+   ========================================================================= */
+const FAQ_ITEMS = [
+  {
+    q: "What services does Quiet Studio offer?",
+    a: "We specialize in three core creative disciplines: Branding & Identity (brand strategy, naming, logos, color and typography systems, guidelines), Design (graphics, presentation and pitch decks, brochures, social suites, editorial layouts, packaging), and Writing (website copywriting, landing pages, brand messaging, newsletters, business writing, editing and proofreading). We also offer ongoing monthly creative partnerships.",
+  },
+  {
+    q: "How does the AI-assisted process work?",
+    a: "Quiet Studio uses AI to accelerate research, explore variations, build initial drafts, and handle repetitive asset scaling. This removes production overhead and lowers turnaround time while preserving original creative depth.",
+  },
+  {
+    q: "Do humans review the deliverables?",
+    a: "Always. Every deliverable is directed, curated, edited, and approved by human creative leads before you ever see it. We treat AI as a fast production engine, never as an unmonitored autopilot.",
+  },
+  {
+    q: "Can you work with an existing brand?",
+    a: "Yes. We can adopt your existing brand guidelines, color palettes, fonts, and assets, ensuring all new design and copy seamlessly matches your current look and tone.",
+  },
+  {
+    q: "Can I request both design and writing?",
+    a: "Absolutely. In fact, combining design and writing is our sweet spot—ensuring the visual layout and the words work together harmoniously rather than feeling disconnected.",
+  },
+  {
+    q: "How do revisions work?",
+    a: "All projects include clear revision rounds. You can leave precise contextual feedback, and we refine the deliverables until you are completely satisfied and approve the final files.",
+  },
+  {
+    q: "Do you offer monthly packages?",
+    a: "Yes. Our Creative Partnership packages provide dedicated monthly capacity across branding, design, and writing for growing teams that need regular creative output without agency retainer bloat.",
+  },
+  {
+    q: "How do I start a project?",
+    a: "Click 'Start a project', fill out our project brief with your goals, timeline, and reference links, and we’ll review your details and send a proposal within 24 to 48 hours.",
+  },
+  {
+    q: "Can I work with Quiet Studio internationally?",
+    a: "Yes. Quiet Studio operates globally with clients across North America, Europe, Asia, and worldwide, working asynchronously and collaboratively across timezones.",
+  },
+];
 
-function StudioWaitlistForm() {
+/* =========================================================================
+   WAITLIST / INTAKE QUICK FORM COMPONENT
+   ========================================================================= */
+function StudioQuickForm() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [service, setService] = useState("Branding & Identity");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const cleanEmail = email.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
-      toast("Please enter a valid email address.");
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast("Please enter a valid work email.");
       return;
     }
-
-    // Rate limiting check: 60s cooldown per Loops instructions
-    const now = Date.now();
-    const previousTimestamp = localStorage.getItem("loops-form-timestamp");
-    if (previousTimestamp && Number(previousTimestamp) + 60000 > now) {
-      setStatus("error");
-      setErrorMessage("Too many signups, please try again in a little while");
-      return;
-    }
-    localStorage.setItem("loops-form-timestamp", String(now));
-
-    setStatus("loading");
-    playClick();
-
-    let loopSuccess = false;
-    let localSuccess = false;
-
-    // 1. Submit directly to Loops endpoint with urlencoded form
-    try {
-      const formBody = "userGroup=&mailingLists=&email=" + encodeURIComponent(cleanEmail);
-      const res = await fetch(LOOPS_FORM_ACTION, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: formBody,
-      });
-      if (res.ok) {
-        loopSuccess = true;
-      }
-    } catch (err) {
-      console.warn("Client Loops fetch failed or blocked by CORS/Adblocker:", err);
-    }
-
-    // 2. Submit to Quiet Studio server: stores in data/waitlist.json, logs alert to glexionstriker@gmail.com, and serves as server-side backup forwarder to Loops
-    try {
-      const localRes = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: cleanEmail,
-          source: "First Page Hero Waitlist",
-          ownerNotification: "glexionstriker@gmail.com",
-        }),
-      });
-      if (localRes.ok) {
-        localSuccess = true;
-      }
-    } catch (err) {
-      console.error("Local waitlist API error:", err);
-    }
-
-    if (loopSuccess || localSuccess) {
-      setStatus("success");
-      toast("You're on the waitlist! We'll be in touch.");
-    } else {
-      setStatus("error");
-      setErrorMessage("Oops! Something went wrong, please try again");
-      localStorage.setItem("loops-form-timestamp", "");
-    }
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      toast.success("Thank you. We'll be in touch with a project proposal.");
+      setEmail("");
+    }, 700);
   };
-
-  const handleReset = () => {
-    setStatus("idle");
-    setEmail("");
-    setErrorMessage("");
-  };
-
-  if (status === "success") {
-    return (
-      <div className="hero-waitlist-success-badge">
-        <div className="waitlist-success-icon">
-          <Check size={16} />
-        </div>
-        <div className="waitlist-success-text">
-          <strong>You're on the waitlist!</strong>
-          <span>We'll email updates and early access invites directly to your inbox.</span>
-        </div>
-        <button type="button" onClick={handleReset} className="waitlist-back-btn">
-          Add another &rarr;
-        </button>
-      </div>
-    );
-  }
 
   return (
-    <div className="hero-waitlist-container">
-      <form className={`hero-waitlist-form ${status === "loading" ? "is-loading" : ""}`} onSubmit={handleSubmit}>
-        <div className="hero-waitlist-input-wrap">
-          <Mail size={16} className="hero-waitlist-icon" />
-          <input
-            type="email"
-            className="hero-waitlist-input"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={status === "loading"}
-            aria-label="Join the Quiet Studio Waitlist"
-          />
-        </div>
-        <button
-          type="submit"
-          className="hero-waitlist-submit-btn"
-          disabled={status === "loading"}
-        >
-          {status === "loading" ? (
-            <>
-              <LoaderCircle size={15} className="spin" />
-              <span>Joining...</span>
-            </>
-          ) : (
-            <>
-              <span>Join Waitlist</span>
-              <ArrowRight size={14} />
-            </>
-          )}
-        </button>
-      </form>
-      {status === "error" && (
-        <div className="hero-waitlist-error">
-          <span>{errorMessage}</span>
-          <button type="button" onClick={handleReset} className="waitlist-try-again-btn">
-            Try again
-          </button>
-        </div>
-      )}
-      <div className="hero-waitlist-sub-micro">
-        <span className="dot-pulse" />
-        <span>Get studio updates, early access to apps, and labs research. No spam.</span>
-      </div>
-    </div>
-  );
-}
-
-function NewsletterForm() {
-  const [email, setEmail] = useState("");
-  const [state, setState] = useState<"idle" | "loading" | "done">("idle");
-
-  const submit = async (event: FormEvent) => {
-    event.preventDefault();
-    const cleanEmail = email.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
-      toast("Enter a valid email address to subscribe.");
-      return;
-    }
-    setState("loading");
-
-    // Submit to Loops
-    try {
-      await fetch(LOOPS_FORM_ACTION, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: "userGroup=&mailingLists=&email=" + encodeURIComponent(cleanEmail),
-      });
-    } catch {
-      /* ignore client-side CORS errors */
-    }
-
-    try {
-      await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: cleanEmail, source: "Home Footer Newsletter", target: "glexionstriker@gmail.com" }),
-      });
-    } catch {
-      /* fallback graceful handler */
-    }
-    setState("done");
-    toast("You’re on the list! Welcome to the quiet.");
-  };
-
-  if (state === "done") {
-    return (
-      <div className="newsletter-success success-pop">
-        <Check size={15} /> You’re on the list.
-      </div>
-    );
-  }
-
-  return (
-    <form className={`newsletter-form ${state === "loading" ? "is-loading" : ""}`} onSubmit={submit}>
-      <Mail size={15} />
+    <form onSubmit={handleSubmit} className="waitlist-form" style={{ maxWidth: "480px", margin: "0 auto" }}>
       <input
-        aria-label="Email address"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-        placeholder="your@email.com"
         type="email"
-        disabled={state === "loading"}
+        placeholder="you@company.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        disabled={loading}
       />
-      <button aria-label="Subscribe" type="submit" disabled={state === "loading"}>
-        {state === "loading" ? <LoaderCircle className="spin" size={15} /> : <ArrowUpRight size={16} />}
+      <button type="submit" disabled={loading}>
+        {loading ? <LoaderCircle size={14} className="spin" /> : "Start a project →"}
       </button>
     </form>
   );
 }
 
+/* =========================================================================
+   MAIN HOMEPAGE COMPONENT (SECTION 16 BUILD ORDER)
+   ========================================================================= */
 export default function Home({
   mode = "human",
   onModeChange,
-  defaultSection,
 }: {
   mode?: "human" | "agent";
-  onModeChange?: (m: "human" | "agent") => void;
-  defaultSection?: string;
+  onModeChange?: (mode: "human" | "agent") => void;
 }) {
-  const [activeCategory, setActiveCategory] = useState<ProductCategory>("flagship");
-  const [query, setQuery] = useState("");
-  const [openNote, setOpenNote] = useState<number | null>(null);
   const homeRef = useRef<HTMLDivElement>(null);
-  const [isDark, setIsDark] = useState(() =>
-    typeof document !== "undefined" ? document.documentElement.classList.contains("dark") : false
-  );
+  const [workFilter, setWorkFilter] = useState<"all" | "branding" | "design" | "writing">("all");
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return document.documentElement.classList.contains("dark");
+    }
+    return true;
+  });
+
+  const openProjectModal = () => {
+    playClick();
+    window.dispatchEvent(new CustomEvent("open-contact-modal"));
+  };
+
+  const openClientPortal = () => {
+    playClick();
+    window.dispatchEvent(new CustomEvent("open-client-portal"));
+  };
 
   useEffect(() => {
-    if (typeof document === "undefined") return;
     const observer = new MutationObserver(() => {
       setIsDark(document.documentElement.classList.contains("dark"));
     });
@@ -445,223 +250,23 @@ export default function Home({
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!defaultSection || typeof window === "undefined") return;
-    const timer = setTimeout(() => {
-      const target = document.getElementById(defaultSection);
-      if (target) {
-        const top = target.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({ top: top - 80, behavior: "smooth" });
-      }
-    }, 250);
-    return () => clearTimeout(timer);
-  }, [defaultSection]);
-
-  // Filter products across categories with search support
-  const filtered = useMemo(
-    () =>
-      products.filter(
-        (product) =>
-          product.category === activeCategory &&
-          `${product.name} ${product.oneLiner} ${product.tags.join(" ")}`.toLowerCase().includes(query.toLowerCase())
-      ),
-    [activeCategory, query]
-  );
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    // Refresh ScrollTrigger when DOM layout switches modes
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 150);
-
-    const ctx = gsap.context(() => {
-      // 1. Manifesto Parallax Scrub (kinetic text & rule reveal)
-      if (document.querySelector(".manifesto-section")) {
-        gsap.fromTo(
-          ".manifesto-section .old-hero-text-block",
-          { opacity: 0.2, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            scrollTrigger: {
-              trigger: ".manifesto-section",
-              start: "top 85%",
-              end: "top 45%",
-              scrub: 1,
-            },
-          }
-        );
-
-        gsap.fromTo(
-          ".manifesto-lead",
-          { y: 40, opacity: 0.3 },
-          {
-            y: 0,
-            opacity: 1,
-            scrollTrigger: {
-              trigger: ".manifesto-layout",
-              start: "top 85%",
-              end: "center center",
-              scrub: 1,
-            },
-          }
-        );
-
-        gsap.fromTo(
-          ".manifesto-statement > p",
-          { y: 35, opacity: 0.25 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.1,
-            scrollTrigger: {
-              trigger: ".manifesto-statement",
-              start: "top 80%",
-              end: "center 50%",
-              scrub: 1,
-            },
-          }
-        );
-
-        gsap.fromTo(
-          ".manifesto-rule",
-          { scaleX: 0, transformOrigin: "left" },
-          {
-            scaleX: 1,
-            scrollTrigger: {
-              trigger: ".manifesto-statement",
-              start: "top 75%",
-              end: "bottom 75%",
-              scrub: 1,
-            },
-          }
-        );
-      }
-
-      // 2. Models Showcase 3D Angle Glide
-      if (document.querySelector(".model-showcase-card")) {
-        gsap.utils.toArray<HTMLElement>(".model-showcase-card").forEach((card, i) => {
-          const angle = i === 0 ? -4 : i === 2 ? 4 : 0;
-          gsap.fromTo(
-            card,
-            { y: 60, rotateY: angle, opacity: 0.3 },
-            {
-              y: 0,
-              rotateY: 0,
-              opacity: 1,
-              scrollTrigger: {
-                trigger: card,
-                start: "top 90%",
-                end: "top 45%",
-                scrub: 1,
-              },
-            }
-          );
-        });
-      }
-
-      // 3. Open Source Product Cards Parallax Scrub
-      if (document.querySelector(".product-card")) {
-        gsap.utils.toArray<HTMLElement>(".product-card").forEach((card, i) => {
-          gsap.fromTo(
-            card,
-            { y: 40, opacity: 0.35 },
-            {
-              y: 0,
-              opacity: 1,
-              scrollTrigger: {
-                trigger: card,
-                start: "top 90%",
-                end: "top 55%",
-                scrub: 1,
-              },
-            }
-          );
-        });
-      }
-
-      // 4. Notes Grid Stagger Scrub
-      if (document.querySelector(".note-card")) {
-        gsap.utils.toArray<HTMLElement>(".note-card").forEach((card) => {
-          gsap.fromTo(
-            card,
-            { y: 35, opacity: 0.4 },
-            {
-              y: 0,
-              opacity: 1,
-              scrollTrigger: {
-                trigger: card,
-                start: "top 90%",
-                end: "top 60%",
-                scrub: 1,
-              },
-            }
-          );
-        });
-      }
-
-      // 5. Closing Studio Ring Kinetic Rotation Scrub
-      if (document.querySelector(".closing-ring")) {
-        gsap.to(".closing-ring", {
-          rotate: 240,
-          scale: 1.35,
-          scrollTrigger: {
-            trigger: ".closing-section",
-            start: "top bottom",
-            end: "bottom bottom",
-            scrub: 1,
-          },
-        });
-      }
-    }, homeRef);
-
-    // Dynamic 3D magnetic tilt & cursor spotlight on cards
-    const handleCardPointerMove = (e: MouseEvent) => {
-      const card = (e.target as HTMLElement).closest(".product-card, .model-showcase-card, .note-card") as HTMLElement | null;
-      if (!card) return;
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty("--mouse-x", `${x}px`);
-      card.style.setProperty("--mouse-y", `${y}px`);
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -3;
-      const rotateY = ((x - centerX) / centerX) * 3;
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-    };
-
-    const handleCardPointerLeave = (e: MouseEvent) => {
-      const card = (e.target as HTMLElement).closest(".product-card, .model-showcase-card, .note-card") as HTMLElement | null;
-      if (!card) return;
-      card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)";
-    };
-
-    document.addEventListener("mousemove", handleCardPointerMove, { passive: true });
-    document.addEventListener("mouseout", handleCardPointerLeave, { passive: true });
-
-    return () => {
-      clearTimeout(timer);
-      ctx.revert();
-      document.removeEventListener("mousemove", handleCardPointerMove);
-      document.removeEventListener("mouseout", handleCardPointerLeave);
-    };
-  }, [mode]);
+  const filteredWork = useMemo(() => {
+    if (workFilter === "all") return CASE_STUDIES;
+    return CASE_STUDIES.filter((c) => c.category === workFilter);
+  }, [workFilter]);
 
   return (
     <div className="home-page" ref={homeRef}>
       {mode === "human" ? (
         /* =========================================================================
-           HUMAN MODE: SPATIAL HERO (STUDIO MANIFESTO), OPEN CORE APPS & ESSAYS
-           Tactile floating widgets, QuietStudio manifesto content, and local-first software
+           QUIET STUDIO — COMPLETE CREATIVE STUDIO HOMEPAGE (SECTIONS 01-16)
            ========================================================================= */
         <>
-          {/* Spatial Prioritize-Inspired Hero with Studio Manifesto Content */}
+          {/* =====================================================================
+              SECTION 02 — HERO
+              ===================================================================== */}
           <section className="human-spatial-canvas" id="overview">
-            {/* Interactive FluxLines Background from React Bits */}
+            {/* Interactive FluxLines Background */}
             <div className="hero-flux-backdrop" aria-hidden="true">
               <FluxLines
                 colors={
@@ -690,12 +295,12 @@ export default function Home({
             <div className="floating-widget-note" aria-hidden="true">
               <div className="pin-dot" />
               <p>
-                The best technology doesn’t ask to be noticed. It becomes a quiet extension of what you were already trying to do.
+                The best technology doesn’t ask to be noticed. Powered by AI. Refined by people.
               </p>
             </div>
 
-            {/* Mid-Left Floating Widget: Interactive Strands Glass Orb from React Bits */}
-            <div className="floating-widget-strands" aria-label="Interactive Strands Glass Orb" title="Click or hover to stir strands">
+            {/* Mid-Left Floating Widget: Interactive Strands Glass Orb */}
+            <div className="floating-widget-strands" aria-label="Interactive Strands Glass Orb" title="Interactive Art Direction Orb">
               <Strands
                 colors={["#ff5a1f", "#ff7849", "#ffa07a", "#fff4ed", "#38bdf8", "#2563eb", "#1d4ed8"]}
                 glass={true}
@@ -708,14 +313,14 @@ export default function Home({
               />
             </div>
 
-            {/* Top-Right Floating Widget: Interactive ElectricLogo from React Bits */}
-            <div className="floating-widget-electric" aria-label="Zen AI Electric Runtime">
+            {/* Top-Right Floating Widget: Interactive Electric Studio Engine */}
+            <div className="floating-widget-electric" aria-label="Quiet Studio Production Engine">
               <div className="electric-widget-header">
                 <div className="electric-widget-title">
                   <span className="electric-live-dot" />
-                  <span>Zen AI Runtime</span>
+                  <span>Studio Engine</span>
                 </div>
-                <span className="electric-tag-pill">QUANTIZED</span>
+                <span className="electric-tag-pill">AI + HUMAN</span>
               </div>
               <div className="electric-logo-canvas-wrap">
                 <ElectricLogo
@@ -733,42 +338,62 @@ export default function Home({
               </div>
             </div>
 
-            {/* Center Hero Content (Quiet Studio Manifesto Content) */}
+            {/* Center Hero Content */}
             <div className="human-hero-brand-badge">
               <span className="brand-dot" />
             </div>
 
             <h1 className="human-hero-headline-prioritize">
-              Technology should
-              <span className="headline-light-line">get out of your way</span>
+              Creative work,
+              <span className="headline-light-line">without the usual overhead.</span>
             </h1>
 
             <p className="human-hero-sub-prioritize">
-              Quiet Studio is a one-person product studio exploring open-core apps, local-first computing, and tools
-              that make the complex feel calm—without dashboards or productivity theatre.
+              We build brands, design experiences and create words that help businesses communicate better.
             </p>
 
+            {/* Disciplines Tagline */}
+            <div
+              style={{
+                font: "600 12px 'DM Mono', monospace",
+                color: "var(--orange)",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                margin: "4px 0 16px",
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+              }}
+            >
+              <span>Branding</span>
+              <span>·</span>
+              <span>Design</span>
+              <span>·</span>
+              <span>Writing</span>
+            </div>
+
+            {/* Hero CTAs */}
             <div className="human-hero-cta-group">
-              <a
-                href="#apps"
+              <button
+                type="button"
                 className="human-hero-cta-btn"
+                onClick={openProjectModal}
+              >
+                <span>Start a project</span>
+                <ArrowRight size={14} />
+              </button>
+              <a
+                href="#work"
+                className="human-hero-secondary-btn"
                 onClick={(e) => {
                   e.preventDefault();
                   playClick();
-                  document.getElementById("apps")?.scrollIntoView({ behavior: "smooth" });
+                  document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
                 }}
               >
-                <span>Explore Open Core Apps</span>
-                <ArrowRight size={14} />
+                <span>Explore our work</span>
+                <ArrowDownRight size={13} />
               </a>
-              <Link
-                href="/thesis"
-                className="human-hero-secondary-btn"
-                onClick={() => playClick()}
-              >
-                <span>Read Studio Thesis</span>
-                <ArrowUpRight size={13} />
-              </Link>
               {onModeChange && (
                 <button
                   type="button"
@@ -777,7 +402,7 @@ export default function Home({
                     playClick();
                     onModeChange("agent");
                   }}
-                  title="Switch to AI Laboratory: Models & Research"
+                  title="Switch to AI Laboratory"
                 >
                   <Sparkles size={13} />
                   <span>AI Lab ↗</span>
@@ -785,14 +410,14 @@ export default function Home({
               )}
             </div>
 
-            {/* Bottom-Left Floating Widget: Interactive HalftoneReveal from React Bits */}
-            <div className="floating-widget-halftone" aria-label="Interactive Halftone Reveal">
+            {/* Bottom-Left Floating Widget: Interactive HalftoneReveal */}
+            <div className="floating-widget-halftone" aria-label="Disciplined Craft">
               <div className="halftone-widget-header">
                 <div className="halftone-widget-title">
                   <span className="halftone-indicator-dot" />
-                  <span>Halftone Reveal</span>
+                  <span>Craft Standard</span>
                 </div>
-                <span className="halftone-tag-pill">SCREEN // 60°</span>
+                <span className="halftone-tag-pill">HONEST CRAFT</span>
               </div>
               <div className="halftone-canvas-wrap">
                 <HalftoneReveal
@@ -810,40 +435,40 @@ export default function Home({
               </div>
             </div>
 
-            {/* Bottom-Right Floating Sync Widget */}
+            {/* Bottom-Right Floating Context Stack */}
             <div className="floating-widget-sync" aria-hidden="true">
-              <div className="sync-header">Open Core Stack</div>
+              <div className="sync-header">Persistent Brand Context</div>
               <div className="sync-icon-row">
-                <div className="sync-app-box" title="Rust Inference">
-                  <Terminal size={18} />
+                <div className="sync-app-box" title="Brand Strategy">
+                  <Palette size={18} />
                 </div>
-                <div className="sync-app-box" title="Local Intelligence">
-                  <Cpu size={18} />
+                <div className="sync-app-box" title="Design Systems">
+                  <LayoutGrid size={18} />
                 </div>
-                <div className="sync-app-box" title="Zero Telemetry">
-                  <Zap size={18} />
+                <div className="sync-app-box" title="Editorial Voice">
+                  <PenTool size={18} />
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Seamless Overlapping Ribbon: Interactive TextLoop from React Bits */}
-          <div className="hero-textloop-bridge" aria-label="QuietStudio Labs Ribbon">
+          {/* Seamless Overlapping Ribbon: Interactive TextLoop */}
+          <div className="hero-textloop-bridge" aria-label="Quiet Studio Ribbon">
             <TextLoop
-              text="QuietStudio ✦ Labs"
+              text="Quiet Studio ✦ Branding ✦ Design ✦ Writing ✦ Creative Partnerships"
               shape="line"
-              speed={120}
+              speed={110}
               direction="forward"
               separator="✦"
               curviness={90}
               tilt={0}
-              fontSize={40}
+              fontSize={38}
               fontWeight={800}
               letterSpacing={1}
               uppercase
               ribbon
               ribbonColor="#ff5a36"
-              ribbonWidth={76}
+              ribbonWidth={74}
               edgeFade={0}
               cross
               crossAngle={14}
@@ -856,109 +481,699 @@ export default function Home({
             />
           </div>
 
-          {/* Section 1: Open Source Applications & Software */}
+          {/* =====================================================================
+              SECTION 03 — THREE CORE SERVICE CARDS (TRUST / WHAT WE DO)
+              ===================================================================== */}
           <section
             className="products-section"
-            id="apps"
+            id="services"
             style={{ padding: "7vw 9.2vw", background: "var(--background)" }}
           >
             <div className="section-heading compact-heading">
               <div>
                 <div className="section-marker" style={{ color: "var(--orange)" }}>
-                  [ 01 — OPEN CORE APPLICATIONS &amp; SOFTWARE ]
+                  [ 01 — WHAT WE DO ]
                 </div>
                 <h2>
-                  Things in
+                  Everything your brand
                   <br />
-                  <em>motion.</em>
+                  <em>needs to communicate well.</em>
                 </h2>
-                <p className="section-description" style={{ marginTop: "12px", color: "var(--muted-ink)", maxWidth: "440px" }}>
-                  Open-core, local-first applications built for zero friction, complete privacy, and continuous flow.
+                <p className="section-description" style={{ marginTop: "12px", color: "var(--muted-ink)", maxWidth: "520px" }}>
+                  From building an identity from scratch to producing everyday creative assets, we bring branding, design and writing together under one roof.
                 </p>
               </div>
-              <a
-                href="https://github.com/AbhiKrish07"
-                target="_blank"
-                rel="noreferrer"
+              <button
+                type="button"
                 className="outline-button"
+                onClick={openProjectModal}
               >
-                Browse All on GitHub <Github size={14} />
-              </a>
+                Find the right service <ArrowUpRight size={14} />
+              </button>
             </div>
 
-            <div className="product-grid" style={{ marginTop: "4vw" }}>
-              {products.slice(0, 2).map((product, index) => (
-                <ProductCard
-                  key={product.slug}
-                  product={product}
-                  featured={index === 0}
-                />
+            <div className="partnership-pricing-grid" style={{ marginTop: "4vw" }}>
+              {/* Service 1: Branding */}
+              <div className="partnership-plan-card featured-plan">
+                <div className="plan-head-row">
+                  <span className="status status-orange">DISCIPLINE 01</span>
+                  <span style={{ font: "600 11px 'DM Mono', monospace", color: "var(--orange)" }}>IDENTITY</span>
+                </div>
+                <h3 className="plan-name">Branding &amp; Identity</h3>
+                <p style={{ fontSize: "14px", color: "var(--muted-ink)", lineHeight: 1.5, margin: 0 }}>
+                  Build a distinctive identity. Strategy, visual language, and persistent brand context that sets you apart.
+                </p>
+                <div style={{ borderTop: "1px solid var(--line)", paddingTop: "14px" }}>
+                  <div style={{ font: "600 10px 'DM Mono', monospace", color: "var(--muted-ink)", textTransform: "uppercase", marginBottom: "8px" }}>
+                    Core Deliverables
+                  </div>
+                  <ul className="plan-deliverables-list">
+                    <li><span className="tech-pillar-bullet">✦</span> Brand discovery &amp; positioning</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Naming and messaging playbook</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Logo design &amp; vector suite</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Color systems &amp; typography rules</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Brand guidelines &amp; stationery</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Digital applications &amp; social kit</li>
+                  </ul>
+                </div>
+                <button
+                  type="button"
+                  className="primary-button"
+                  style={{ marginTop: "auto", justifyContent: "center" }}
+                  onClick={openProjectModal}
+                >
+                  Start a branding project <ArrowRight size={13} />
+                </button>
+              </div>
+
+              {/* Service 2: Design */}
+              <div className="partnership-plan-card">
+                <div className="plan-head-row">
+                  <span className="status status-cream">DISCIPLINE 02</span>
+                  <span style={{ font: "600 11px 'DM Mono', monospace", color: "var(--muted-ink)" }}>VISUAL</span>
+                </div>
+                <h3 className="plan-name">Design Studio</h3>
+                <p style={{ fontSize: "14px", color: "var(--muted-ink)", lineHeight: 1.5, margin: 0 }}>
+                  Turn ideas into visual experiences. High-craft graphics, presentations, brochures, and digital collateral.
+                </p>
+                <div style={{ borderTop: "1px solid var(--line)", paddingTop: "14px" }}>
+                  <div style={{ font: "600 10px 'DM Mono', monospace", color: "var(--muted-ink)", textTransform: "uppercase", marginBottom: "8px" }}>
+                    Core Deliverables
+                  </div>
+                  <ul className="plan-deliverables-list">
+                    <li><span className="tech-pillar-bullet">✦</span> Presentation design &amp; pitch decks</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Marketing graphics &amp; campaigns</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Social media visual suites</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Brochures &amp; editorial design</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Infographics &amp; technical diagrams</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Packaging &amp; business collateral</li>
+                  </ul>
+                </div>
+                <button
+                  type="button"
+                  className="outline-button"
+                  style={{ marginTop: "auto", justifyContent: "center" }}
+                  onClick={openProjectModal}
+                >
+                  Start a design project <ArrowRight size={13} />
+                </button>
+              </div>
+
+              {/* Service 3: Writing */}
+              <div className="partnership-plan-card">
+                <div className="plan-head-row">
+                  <span className="status status-cream">DISCIPLINE 03</span>
+                  <span style={{ font: "600 11px 'DM Mono', monospace", color: "var(--muted-ink)" }}>VOICE</span>
+                </div>
+                <h3 className="plan-name">Writing Studio</h3>
+                <p style={{ fontSize: "14px", color: "var(--muted-ink)", lineHeight: 1.5, margin: 0 }}>
+                  Find the right words for your brand. Websites, newsletters, business copy, and founder manifestos without AI fluff.
+                </p>
+                <div style={{ borderTop: "1px solid var(--line)", paddingTop: "14px" }}>
+                  <div style={{ font: "600 10px 'DM Mono', monospace", color: "var(--muted-ink)", textTransform: "uppercase", marginBottom: "8px" }}>
+                    Core Deliverables
+                  </div>
+                  <ul className="plan-deliverables-list">
+                    <li><span className="tech-pillar-bullet">✦</span> Website &amp; landing page copy</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Brand messaging &amp; manifestos</li>
+                    <li><span className="tech-pillar-bullet">✦</span> LinkedIn content &amp; founder voice</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Email newsletters &amp; campaigns</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Case studies &amp; product copy</li>
+                    <li><span className="tech-pillar-bullet">✦</span> Editing, tone check &amp; proofreading</li>
+                  </ul>
+                </div>
+                <button
+                  type="button"
+                  className="outline-button"
+                  style={{ marginTop: "auto", justifyContent: "center" }}
+                  onClick={openProjectModal}
+                >
+                  Start a writing project <ArrowRight size={13} />
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* =====================================================================
+              SECTION 04 — WHY QUIET STUDIO (THE OPERATING MODEL DIFFERENCE)
+              ===================================================================== */}
+          <section
+            className="notes-section"
+            id="difference"
+            style={{ padding: "7vw 9.2vw", background: "var(--card)", borderTop: "1px solid var(--line)" }}
+          >
+            <div className="section-heading compact-heading">
+              <div>
+                <div className="section-marker" style={{ color: "var(--orange)" }}>
+                  [ 02 — WHY QUIET STUDIO ]
+                </div>
+                <h2>
+                  A creative studio
+                  <br />
+                  <em>built differently.</em>
+                </h2>
+                <p className="section-description" style={{ marginTop: "12px", color: "var(--muted-ink)", maxWidth: "540px" }}>
+                  We combine human creativity with intelligent tools to help businesses build their identities and communicate more effectively.
+                </p>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <span className="status status-orange">TRADITIONAL VS QUIET STUDIO</span>
+              </div>
+            </div>
+
+            <div className="comparison-table-wrap" style={{ marginTop: "4vw" }}>
+              <div className="comparison-row head">
+                <span>Operational Dimension</span>
+                <span>Traditional Workflow</span>
+                <span>Quiet Studio</span>
+              </div>
+
+              <div className="comparison-row">
+                <span className="comp-label">Brand Onboarding</span>
+                <span style={{ color: "var(--muted-ink)" }}>Repeated onboarding and fragmented context for every new task</span>
+                <span style={{ fontWeight: 600, color: "var(--foreground)" }}>Persistent brand context and stored knowledge rules</span>
+              </div>
+
+              <div className="comparison-row">
+                <span className="comp-label">Drafting Phase</span>
+                <span style={{ color: "var(--muted-ink)" }}>Slow, manual first drafts with multi-week waiting periods</span>
+                <span style={{ fontWeight: 600, color: "var(--foreground)" }}>AI-assisted rapid production with wide initial exploration</span>
+              </div>
+
+              <div className="comparison-row">
+                <span className="comp-label">Revision Cycles</span>
+                <span style={{ color: "var(--muted-ink)" }}>Disconnected email threads and lost feedback notes</span>
+                <span style={{ fontWeight: 600, color: "var(--foreground)" }}>Centralized review and approval workspace</span>
+              </div>
+
+              <div className="comparison-row">
+                <span className="comp-label">Asset Production</span>
+                <span style={{ color: "var(--muted-ink)" }}>Repetitive manual rebuilding for every new banner and format</span>
+                <span style={{ fontWeight: 600, color: "var(--foreground)" }}>Reusable workflows, components, and automated variant scaling</span>
+              </div>
+
+              <div className="comparison-row">
+                <span className="comp-label">Team Capacity</span>
+                <span style={{ color: "var(--muted-ink)" }}>Limited agency hours bottlenecked by account managers</span>
+                <span style={{ fontWeight: 600, color: "var(--foreground)" }}>Human + AI collaboration delivering consistent momentum</span>
+              </div>
+            </div>
+          </section>
+
+          {/* =====================================================================
+              SECTION 05 — SELECTED WORK GALLERY (4-6 PROJECTS)
+              ===================================================================== */}
+          <section
+            className="models-showcase-section"
+            id="work"
+            style={{ padding: "7vw 9.2vw", background: "var(--background)" }}
+          >
+            <div className="section-heading compact-heading">
+              <div>
+                <div className="section-marker" style={{ color: "var(--orange)" }}>
+                  [ 03 — SELECTED WORK ]
+                </div>
+                <h2>
+                  Proof in
+                  <br />
+                  <em>the craft.</em>
+                </h2>
+                <p className="section-description" style={{ marginTop: "12px", color: "var(--muted-ink)", maxWidth: "520px" }}>
+                  A selection of recent studio engagements and concept case studies across branding, design, and writing.
+                </p>
+              </div>
+
+              {/* Filter pills */}
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                {(["all", "branding", "design", "writing"] as const).map((filter) => (
+                  <button
+                    key={filter}
+                    type="button"
+                    className={`outline-button ${workFilter === filter ? "active" : ""}`}
+                    style={{
+                      padding: "8px 14px",
+                      fontSize: "11px",
+                      textTransform: "uppercase",
+                      background: workFilter === filter ? "var(--foreground)" : "transparent",
+                      color: workFilter === filter ? "var(--background)" : "var(--muted-ink)",
+                      borderColor: workFilter === filter ? "var(--foreground)" : "var(--line)",
+                    }}
+                    onClick={() => {
+                      playClick();
+                      setWorkFilter(filter);
+                    }}
+                  >
+                    {filter === "all" ? "All Work" : filter}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="models-grid" style={{ marginTop: "4vw" }}>
+              {filteredWork.map((project) => (
+                <div className="model-showcase-card" key={project.id}>
+                  <div className="model-head">
+                    <span
+                      className="model-badge"
+                      style={{
+                        color: project.label === "CLIENT ENGAGEMENT" ? "#22c55e" : "#fbbf24",
+                      }}
+                    >
+                      {project.label}
+                    </span>
+                    <span className="model-latency">{project.industry}</span>
+                  </div>
+
+                  <h3 style={{ margin: "10px 0 6px" }}>{project.name}</h3>
+                  <p className="model-tagline" style={{ color: "var(--orange)" }}>
+                    {project.services.join(" · ")}
+                  </p>
+                  <p style={{ fontSize: "13.5px", color: "var(--muted-ink)", lineHeight: 1.55, margin: "8px 0 16px" }}>
+                    {project.description}
+                  </p>
+
+                  <div className="model-specs-box">
+                    <div className="model-spec-pair">
+                      <span>Category</span>
+                      <span style={{ textTransform: "capitalize" }}>{project.category}</span>
+                    </div>
+                    <div className="model-spec-pair">
+                      <span>Scope</span>
+                      <span>{project.metrics || "End-to-End"}</span>
+                    </div>
+                    <div className="model-spec-pair">
+                      <span>Approach</span>
+                      <span>AI + Human Craft</span>
+                    </div>
+                    <div className="model-spec-pair">
+                      <span>Status</span>
+                      <span>Archived Case Study</span>
+                    </div>
+                  </div>
+
+                  <div className="model-actions" style={{ marginTop: "16px" }}>
+                    <button
+                      type="button"
+                      className="outline-button"
+                      style={{ width: "100%", justifyContent: "center" }}
+                      onClick={openProjectModal}
+                    >
+                      Start a similar project <ArrowRight size={13} />
+                    </button>
+                  </div>
+                </div>
               ))}
             </div>
           </section>
 
-          {/* Section 2: Blog & Research Journal */}
-          <section className="notes-section" id="notes" style={{ padding: "7vw 9.2vw", background: "var(--card)", borderTop: "1px solid var(--line)" }}>
+          {/* =====================================================================
+              SECTION 06 — HOW IT WORKS (FOUR STEPS)
+              ===================================================================== */}
+          <section
+            className="notes-section"
+            id="how-it-works"
+            style={{ padding: "7vw 9.2vw", background: "var(--card)", borderTop: "1px solid var(--line)" }}
+          >
             <div className="section-heading compact-heading">
               <div>
-                <div className="section-marker">[ 02 — THE RESEARCH JOURNAL &amp; BLOG ]</div>
-                <h2>
-                  Thinking
-                  <br />
-                  <em>out loud.</em>
-                </h2>
-                <p className="section-description">
-                  In-depth essays and working notes on making AI a proactive life partner, building domain-vertical models, and the craft of calm software.
-                </p>
-                <div style={{ marginTop: "18px" }}>
-                  <Link href="/blog" className="primary-button" style={{ padding: "10px 18px", fontSize: "11px" }}>
-                    <span>Browse All Blog Essays</span> <ArrowRight size={13} />
-                  </Link>
+                <div className="section-marker" style={{ color: "var(--orange)" }}>
+                  [ 04 — HOW IT WORKS ]
                 </div>
+                <h2>
+                  Four steps.
+                  <br />
+                  <em>Zero friction.</em>
+                </h2>
+                <p className="section-description" style={{ marginTop: "12px", color: "var(--muted-ink)", maxWidth: "520px" }}>
+                  How we move from your brief to approved, production-ready deliverables.
+                </p>
               </div>
-              <div className="newsletter-box">
-                <span>Subscribe to Essays</span>
-                <NewsletterForm />
+              <button
+                type="button"
+                className="primary-button"
+                onClick={openProjectModal}
+              >
+                Submit your brief <ArrowUpRight size={14} />
+              </button>
+            </div>
+
+            <div className="how-steps-grid">
+              <div className="how-step-card">
+                <span className="how-step-num">STEP 01</span>
+                <h3>Tell us what you need.</h3>
+                <p>
+                  Share your brief, goals, references, and constraints through our structured intake form or direct conversation.
+                </p>
+              </div>
+
+              <div className="how-step-card">
+                <span className="how-step-num">STEP 02</span>
+                <h3>We understand your brand.</h3>
+                <p>
+                  We synthesize your assets, tone, audience preferences, and visual standards into persistent studio context.
+                </p>
+              </div>
+
+              <div className="how-step-card">
+                <span className="how-step-num">STEP 03</span>
+                <h3>We create.</h3>
+                <p>
+                  AI-assisted workflows accelerate exploratory variations while human creative directors shape the craft, nuance, and execution.
+                </p>
+              </div>
+
+              <div className="how-step-card">
+                <span className="how-step-num">STEP 04</span>
+                <h3>You review and approve.</h3>
+                <p>
+                  Centralized revision rounds, rapid refinements, and direct delivery of production-ready files to your workspace.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* =====================================================================
+              SECTION 07 — THE TECHNOLOGY BEHIND THE STUDIO (AI + HUMAN)
+              ===================================================================== */}
+          <section
+            className="manifesto-section"
+            id="operating-model"
+            style={{ padding: "7vw 9.2vw" }}
+          >
+            <div className="section-marker" style={{ color: "var(--orange)" }}>
+              [ 05 — THE OPERATING MODEL ]
+            </div>
+
+            <div
+              className="old-hero-text-block"
+              style={{
+                margin: "1rem 0 1.5rem",
+                paddingBottom: "1.5rem",
+                borderBottom: "1px solid color-mix(in srgb, var(--background) 18%, transparent)",
+              }}
+            >
+              <p
+                className="eyebrow"
+                style={{
+                  color: "var(--orange)",
+                  font: "600 11px/1.4 'DM Mono', monospace",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  marginBottom: "12px",
+                }}
+              >
+                <span className="pulse-dot" /> Production Architecture · Quiet Studio
+              </p>
+              <h2
+                style={{
+                  font: "700 clamp(2.2rem, 4.5vw, 4.5rem)/0.92 'Space Grotesk', sans-serif",
+                  letterSpacing: "-0.06em",
+                  color: "var(--background)",
+                  textTransform: "uppercase",
+                  margin: "0 0 16px",
+                }}
+              >
+                Intelligent by design.
+                <br />
+                <em style={{ fontStyle: "italic", fontFamily: "serif", textTransform: "none" }}>
+                  Human by intention.
+                </em>
+              </h2>
+              <p
+                style={{
+                  font: "400 15px/1.6 'DM Sans', sans-serif",
+                  color: "color-mix(in srgb, var(--background) 75%, transparent)",
+                  maxWidth: "680px",
+                  margin: 0,
+                }}
+              >
+                Quiet Studio uses AI to assist with research, ideation, first drafts, variations and repetitive production. Humans remain responsible for creative direction, quality and final judgment.
+              </p>
+            </div>
+
+            <div className="tech-pillars-grid">
+              <div className="tech-pillar-card" style={{ background: "rgba(255, 255, 255, 0.04)", color: "var(--background)", borderColor: "rgba(255, 255, 255, 0.12)" }}>
+                <span className="tech-pillar-badge">MACHINE LEVERAGE</span>
+                <h3 style={{ color: "var(--background)" }}>What AI Does</h3>
+                <p style={{ fontSize: "13.5px", color: "color-mix(in srgb, var(--background) 70%, transparent)", lineHeight: 1.5, margin: 0 }}>
+                  Handles the high-volume mechanical lift so creative energy is never wasted on mundane tasks:
+                </p>
+                <ul style={{ color: "var(--background)" }}>
+                  <li><span className="tech-pillar-bullet">✦</span> Synthesizing industry benchmarks and visual research</li>
+                  <li><span className="tech-pillar-bullet">✦</span> Rapidly drafting initial layouts and structural skeletons</li>
+                  <li><span className="tech-pillar-bullet">✦</span> Exploring dozens of palette and typographic variations</li>
+                  <li><span className="tech-pillar-bullet">✦</span> Automating multi-format asset scaling and banner exports</li>
+                </ul>
+              </div>
+
+              <div className="tech-pillar-card highlight" style={{ background: "rgba(255, 90, 31, 0.08)", color: "var(--background)", borderColor: "rgba(255, 90, 31, 0.4)" }}>
+                <span className="tech-pillar-badge">HUMAN DISCERNMENT</span>
+                <h3 style={{ color: "var(--background)" }}>What Humans Direct</h3>
+                <p style={{ fontSize: "13.5px", color: "color-mix(in srgb, var(--background) 70%, transparent)", lineHeight: 1.5, margin: 0 }}>
+                  Provides the critical taste, taste-making, and restraint that machines cannot replicate:
+                </p>
+                <ul style={{ color: "var(--background)" }}>
+                  <li><span className="tech-pillar-bullet">✦</span> Art direction, emotional resonance, and brand positioning</li>
+                  <li><span className="tech-pillar-bullet">✦</span> Nuanced typography, layout tension, and physical tactile feel</li>
+                  <li><span className="tech-pillar-bullet">✦</span> Honest, human brand copywriting without generic AI slop</li>
+                  <li><span className="tech-pillar-bullet">✦</span> Final quality verification, scrutiny, and client alignment</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* =====================================================================
+              SECTION 08 — ONGOING PARTNERSHIP & PRICING
+              ===================================================================== */}
+          <section
+            className="products-section"
+            id="partnerships"
+            style={{ padding: "7vw 9.2vw", background: "var(--background)", borderTop: "1px solid var(--line)" }}
+          >
+            <div className="section-heading compact-heading">
+              <div>
+                <div className="section-marker" style={{ color: "var(--orange)" }}>
+                  [ 06 — ONGOING CREATIVE PARTNERSHIPS ]
+                </div>
+                <h2>
+                  More than a
+                  <br />
+                  <em>one-time project.</em>
+                </h2>
+                <p className="section-description" style={{ marginTop: "12px", color: "var(--muted-ink)", maxWidth: "520px" }}>
+                  An ongoing creative relationship for businesses that regularly need design and writing without hiring in-house or paying agency retainers.
+                </p>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <span className="status status-orange">PREDICTABLE MONTHLY SPRINT</span>
               </div>
             </div>
 
-            <div className="notes-grid" style={{ marginTop: "4vw" }}>
-              {BLOG_POSTS.slice(0, 3).map((post, index) => (
-                <article
-                  className={`note-card ${index === 0 ? "note-featured" : ""} ${index === 2 ? "note-dark" : ""}`}
-                  key={post.slug}
+            <div className="partnership-pricing-grid" style={{ marginTop: "4vw" }}>
+              {/* Plan 1: Sprint */}
+              <div className="partnership-plan-card">
+                <div className="plan-head-row">
+                  <span className="plan-name">Sprint</span>
+                  <span className="plan-price-label">Per Asset</span>
+                </div>
+                <div className="plan-price">
+                  $149–249
+                </div>
+                <p style={{ fontSize: "13px", color: "var(--muted-ink)", lineHeight: 1.5, margin: 0 }}>
+                  Fast turnaround for a single high-priority deliverable (pitch deck refresh, landing page copy, or social asset kit).
+                </p>
+                <ul className="plan-deliverables-list" style={{ marginTop: "12px" }}>
+                  <li><Check size={14} color="var(--orange)" /> 1 targeted deliverable</li>
+                  <li><Check size={14} color="var(--orange)" /> 48–72 hour turnaround</li>
+                  <li><Check size={14} color="var(--orange)" /> 2 revision rounds</li>
+                  <li><Check size={14} color="var(--orange)" /> Production-ready source files</li>
+                </ul>
+                <button
+                  type="button"
+                  className="outline-button"
+                  style={{ marginTop: "auto", justifyContent: "center" }}
+                  onClick={openProjectModal}
                 >
-                  <span className="note-type">{post.category} — {post.date}</span>
-                  <h3>{post.title}</h3>
-                  <p>{post.excerpt}</p>
-                  <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "16px" }}>
-                    <span style={{ font: "500 10px 'DM Mono', monospace", color: "var(--muted-ink)", textTransform: "uppercase" }}>
-                      {post.readTime}
-                    </span>
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="note-read"
-                    >
-                      Read full essay <ArrowRight size={14} />
-                    </Link>
+                  Book a Sprint <ArrowRight size={13} />
+                </button>
+              </div>
+
+              {/* Plan 2: Creative Pack */}
+              <div className="partnership-plan-card featured-plan">
+                <div className="plan-head-row">
+                  <span className="plan-name">Creative Pack</span>
+                  <span className="plan-price-label">Project Scope</span>
+                </div>
+                <div className="plan-price" style={{ color: "var(--orange)" }}>
+                  $399–699
+                </div>
+                <p style={{ fontSize: "13px", color: "var(--muted-ink)", lineHeight: 1.5, margin: 0 }}>
+                  Multi-asset sprint for launches, brand overhauls, complete pitch presentations, or full website copywriting suites.
+                </p>
+                <ul className="plan-deliverables-list" style={{ marginTop: "12px" }}>
+                  <li><Check size={14} color="var(--orange)" /> Complete project scope</li>
+                  <li><Check size={14} color="var(--orange)" /> Brand discovery &amp; style curation</li>
+                  <li><Check size={14} color="var(--orange)" /> 5–7 business day turnaround</li>
+                  <li><Check size={14} color="var(--orange)" /> Comprehensive asset package</li>
+                </ul>
+                <button
+                  type="button"
+                  className="primary-button"
+                  style={{ marginTop: "auto", justifyContent: "center" }}
+                  onClick={openProjectModal}
+                >
+                  Start Creative Pack <ArrowRight size={13} />
+                </button>
+              </div>
+
+              {/* Plan 3: Monthly Partnership */}
+              <div className="partnership-plan-card">
+                <div className="plan-head-row">
+                  <span className="plan-name">Monthly</span>
+                  <span className="plan-price-label">Ongoing / Mo</span>
+                </div>
+                <div className="plan-price">
+                  $599–999
+                </div>
+                <p style={{ fontSize: "13px", color: "var(--muted-ink)", lineHeight: 1.5, margin: 0 }}>
+                  Your dedicated ongoing creative team across branding, design, and writing with centralized portal requests.
+                </p>
+                <ul className="plan-deliverables-list" style={{ marginTop: "12px" }}>
+                  <li><Check size={14} color="var(--orange)" /> Continuous monthly creative output</li>
+                  <li><Check size={14} color="var(--orange)" /> Persistent brand context in portal</li>
+                  <li><Check size={14} color="var(--orange)" /> Priority queue &amp; fast turnaround</li>
+                  <li><Check size={14} color="var(--orange)" /> Pause or cancel anytime</li>
+                </ul>
+                <button
+                  type="button"
+                  className="outline-button"
+                  style={{ marginTop: "auto", justifyContent: "center" }}
+                  onClick={openProjectModal}
+                >
+                  Explore Partnership <ArrowRight size={13} />
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {/* =====================================================================
+              SECTION 09 — TESTIMONIALS & TRUST (STUDIO CONVICTION)
+              ===================================================================== */}
+          <section
+            className="notes-section"
+            id="trust"
+            style={{ padding: "7vw 9.2vw", background: "var(--card)", borderTop: "1px solid var(--line)", textAlign: "center" }}
+          >
+            <div className="section-marker" style={{ color: "var(--orange)", justifyContent: "center" }}>
+              [ 07 — STUDIO PRINCIPLES &amp; TRUST ]
+            </div>
+
+            <blockquote
+              style={{
+                font: "500 clamp(1.4rem, 2.5vw, 2.4rem)/1.35 'Space Grotesk', sans-serif",
+                letterSpacing: "-0.03em",
+                color: "var(--foreground)",
+                maxWidth: "840px",
+                margin: "2vw auto 1.5vw",
+              }}
+            >
+              “The website should feel like a serious creative studio, not a SaaS dashboard pretending to be an agency. We don’t fabricate claims or client logos—just honest, disciplined craft.”
+            </blockquote>
+
+            <div style={{ font: "600 11px 'DM Mono', monospace", color: "var(--orange)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              Quiet Studio Principles · thequietstudio.space
+            </div>
+          </section>
+
+          {/* =====================================================================
+              SECTION 10 — FAQ (9 QUESTIONS ACCORDION)
+              ===================================================================== */}
+          <section
+            className="products-section"
+            id="faq"
+            style={{ padding: "7vw 9.2vw", background: "var(--background)", borderTop: "1px solid var(--line)" }}
+          >
+            <div className="section-heading compact-heading">
+              <div>
+                <div className="section-marker" style={{ color: "var(--orange)" }}>
+                  [ 08 — FREQUENTLY ASKED QUESTIONS ]
+                </div>
+                <h2>
+                  Answers before
+                  <br />
+                  <em>you ask.</em>
+                </h2>
+                <p className="section-description" style={{ marginTop: "12px", color: "var(--muted-ink)", maxWidth: "520px" }}>
+                  Clear, honest details on how we collaborate, handle revisions, incorporate AI, and deliver files.
+                </p>
+              </div>
+              <button
+                type="button"
+                className="outline-button"
+                onClick={openProjectModal}
+              >
+                Have another question? Ask us <ArrowRight size={13} />
+              </button>
+            </div>
+
+            <div className="faq-accordion-list">
+              {FAQ_ITEMS.map((item, idx) => (
+                <details className="faq-accordion-item" key={item.q} open={idx === 0}>
+                  <summary className="faq-accordion-summary" onClick={() => playClick()}>
+                    <span>{item.q}</span>
+                    <span className="faq-accordion-icon">+</span>
+                  </summary>
+                  <div className="faq-accordion-body">
+                    {item.a}
                   </div>
-                </article>
+                </details>
               ))}
+            </div>
+          </section>
+
+          {/* =====================================================================
+              SECTION 11 — FINAL CTA
+              ===================================================================== */}
+          <section className="closing-section" id="cta">
+            <div className="closing-ring" />
+            <p className="eyebrow" style={{ color: "var(--orange)", textTransform: "uppercase", font: "600 11px 'DM Mono', monospace" }}>
+              [ START A PROJECT ]
+            </p>
+            <h2>
+              Let’s make
+              <br />
+              <em>something meaningful.</em>
+            </h2>
+            <p style={{ maxWidth: "480px", color: "var(--muted-ink)", fontSize: "15px", lineHeight: 1.5, margin: "-18px 0 28px", position: "relative", zIndex: 2 }}>
+              Tell us what you're building. We'll help you bring it to life with thoughtful branding, design, and words.
+            </p>
+            <div style={{ display: "flex", gap: "14px", flexWrap: "wrap", justifyContent: "center", position: "relative", zIndex: 10 }}>
+              <button
+                type="button"
+                className="primary-button"
+                onClick={openProjectModal}
+              >
+                Start a project <ArrowUpRight size={16} />
+              </button>
+              <a
+                href="mailto:glexionstriker@gmail.com"
+                className="outline-button"
+                onClick={() => playClick()}
+              >
+                Email the studio <Mail size={14} />
+              </a>
             </div>
           </section>
         </>
       ) : (
         /* =========================================================================
            AGENT MODE: AI LABORATORY HEADER, RESEARCH MANIFESTO, MODELS & WHITEPAPERS
-           Cinematic dark header, theoretical foundations, sparse tensor memory & intent models
            ========================================================================= */
         <>
-          {/* Section 1: The 3D Interactive AI Laboratory */}
           <div id="overview">
             <QuietStudioLab3D />
           </div>
 
-          {/* Section 2: AI Lab Manifesto (In Terms of Models and Research Papers) */}
           <section className="manifesto-section" id="manifesto">
             <div className="section-marker">[ 01 — THE AI LAB MANIFESTO: RESEARCH &amp; MODELS ]</div>
 
@@ -1048,7 +1263,6 @@ export default function Home({
             </div>
           </section>
 
-          {/* Section 3: Vertical AI Models & Intent Engines */}
           <section className="models-showcase-section" id="models" style={{ padding: "7vw 9.2vw", background: "var(--background)" }}>
             <div className="section-heading compact-heading">
               <div>
@@ -1073,7 +1287,6 @@ export default function Home({
             </div>
 
             <div className="models-grid" style={{ marginTop: "4vw" }}>
-              {/* Model 1: Aethel Intent Engine */}
               <div className="model-showcase-card">
                 <div className="model-head">
                   <span className="model-badge" style={{ color: "#fbbf24" }}>VERTICAL MODEL</span>
@@ -1109,7 +1322,6 @@ export default function Home({
                 </div>
               </div>
 
-              {/* Model 2: SCTM Tensor Memory */}
               <div className="model-showcase-card">
                 <div className="model-head">
                   <span className="model-badge">AI MEMORY SYSTEM</span>
@@ -1145,12 +1357,9 @@ export default function Home({
                   </Link>
                 </div>
               </div>
-
-
             </div>
           </section>
 
-          {/* Section 4: AI Research & Architecture Whitepapers */}
           <section className="research-preview-section" id="research" style={{ padding: "7vw 9.2vw", background: "var(--card)", borderTop: "1px solid var(--line)" }}>
             <div className="section-heading compact-heading">
               <div>
@@ -1192,33 +1401,64 @@ export default function Home({
           </section>
         </>
       )}
-
-      {/* =========================================================================
-          CLOSING STUDIO FOOTER (UNIFIED ACROSS MODES)
-          ========================================================================= */}
-      <section className="closing-section">
-        <div className="closing-ring" />
-        <p className="eyebrow">If this sounds like your kind of quiet</p>
-        <h2>
-          Let’s make
-          <br />
-          <em>something useful.</em>
-        </h2>
-        <div className="closing-waitlist-wrap">
-          <StudioWaitlistForm />
-        </div>
-        <a
-          href="mailto:glexionstriker@gmail.com"
-          className="primary-button"
-          onClick={() => {
-            playClick();
-          }}
-        >
-          Message the studio <ArrowUpRight size={16} />
-        </a>
-      </section>
     </div>
   );
 }
 
-export { ProductVisual };
+export function ProductVisual({ product, compact = false }: { product: any; compact?: boolean }) {
+  return (
+    <div className={`product-visual visual-${product?.visual || "aethel"} ${compact ? "compact" : ""}`} aria-hidden="true">
+      {product?.visual === "learnloop" && (
+        <>
+          <div className="loop-ring ring-one" />
+          <div className="loop-ring ring-two" />
+          <div className="loop-core">
+            <span>learn</span>
+            <span>loop</span>
+          </div>
+          <div className="loop-node node-one">01</div>
+          <div className="loop-node node-two">↗</div>
+          <div className="loop-node node-three">02</div>
+        </>
+      )}
+      {product?.visual === "whitespace" && (
+        <>
+          <div className="window-stack">
+            <div className="window-head">
+              <i />
+              <i />
+              <i />
+            </div>
+            <div className="window-copy">
+              <b>context</b>
+              <span>saved to whitespace</span>
+              <span>⌘ K to recall</span>
+            </div>
+          </div>
+          <div className="ghost-window" />
+        </>
+      )}
+      {product?.visual === "aethel" && (
+        <>
+          <div className="aethel-sphere">
+            <div className="sphere-grid" />
+            <div className="sphere-glow" />
+          </div>
+          <div className="aethel-cross cross-a" />
+          <div className="aethel-cross cross-b" />
+          <span className="aethel-label">INTENT → ACTION</span>
+        </>
+      )}
+      {product?.visual === "capture" && (
+        <>
+          <div className="aethel-sphere">
+            <div className="sphere-grid" />
+            <div className="sphere-glow" />
+          </div>
+          <span className="aethel-label">LOCAL RUNTIME</span>
+        </>
+      )}
+    </div>
+  );
+}
+

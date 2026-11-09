@@ -18,6 +18,7 @@ import System from "./pages/System";
 import Models from "./pages/Models";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
+import ClientPortalModal from "./components/ClientPortalModal";
 import GooeyNav from "./components/GooeyNav";
 import { isSoundEnabled, toggleSound, playClick } from "./lib/sound";
 
@@ -35,6 +36,7 @@ function Header({
   onToggle,
   onOpenCommand,
   onOpenContact,
+  onOpenClientPortal,
   studioMode,
   onStudioModeChange,
 }: {
@@ -42,6 +44,7 @@ function Header({
   onToggle: () => void;
   onOpenCommand: () => void;
   onOpenContact: () => void;
+  onOpenClientPortal: () => void;
   studioMode: "human" | "agent";
   onStudioModeChange: (mode: "human" | "agent") => void;
 }) {
@@ -58,15 +61,16 @@ function Header({
   const navLinks =
     studioMode === "human"
       ? [
-          { label: "Open Core Apps", href: "/#apps" },
-          { label: "Blog & Notes", href: "/blog" },
+          { label: "Services", href: "/#services" },
+          { label: "Our Work", href: "/#work" },
+          { label: "How It Works", href: "/#how-it-works" },
           { label: "About", href: "/about" },
         ]
       : [
+          { label: "Studio Services", href: "/#services" },
           { label: "AI Lab", href: "/#overview" },
           { label: "Models", href: "/models" },
           { label: "Research", href: "/research" },
-          { label: "Thesis", href: "/thesis" },
           { label: "About", href: "/about" },
         ];
 
@@ -157,7 +161,7 @@ function Header({
             <span>quiet studio</span>
           </Link>
 
-          {/* Global Studio Mode Switcher: Products (Open Core Apps) vs AI Lab (Models & Research) */}
+          {/* Global Studio Mode Switcher */}
           <div className="header-mode-toggle" role="group" aria-label="Studio Mode Switcher">
             <button
               type="button"
@@ -166,10 +170,10 @@ function Header({
                 playClick();
                 onStudioModeChange("human");
               }}
-              title="Products: Open Core Apps & Software"
+              title="Creative Studio: Branding, Design &amp; Writing"
             >
               <span className="mode-btn-symbol">✦</span>
-              <span>Products</span>
+              <span>Studio</span>
             </button>
             <button
               type="button"
@@ -178,7 +182,7 @@ function Header({
                 playClick();
                 onStudioModeChange("agent");
               }}
-              title="AI Lab: Vertical Models & Research Papers"
+              title="AI Lab: Vertical Models &amp; Research"
             >
               <span className="mode-btn-symbol">✱</span>
               <span>AI Lab</span>
@@ -214,6 +218,14 @@ function Header({
         {/* Right Floating Pod: Action Controls */}
         <div className="header-floating-pod header-floating-pod--actions">
           <div className="header-actions">
+            <button
+              className="client-login-nav-btn"
+              onClick={onOpenClientPortal}
+              title="Client Workspace &amp; Deliverables"
+            >
+              Client Login
+            </button>
+
             <button className="command-trigger-btn" onClick={onOpenCommand} title="Search studio (⌘K)">
               <Search size={13} />
               <span className="kbd-shortcut">⌘K</span>
@@ -237,7 +249,7 @@ function Header({
             </button>
 
             <button className="header-cta" onClick={onOpenContact}>
-              Start a conversation <ArrowUpRight size={13} />
+              Start a project <ArrowUpRight size={13} />
             </button>
           </div>
         </div>
@@ -259,7 +271,7 @@ function Header({
             <div className="mobile-nav-links">
               {navLinks.map((link, idx) => {
                 const isActive =
-                  link.href === "/#products"
+                  link.href === "/#services"
                     ? location === "/"
                     : location.startsWith(link.href);
                 return (
@@ -277,9 +289,26 @@ function Header({
               })}
             </div>
 
-            <div className="mobile-nav-foot">
-              <button className="primary-button" onClick={() => { setMobileNavOpen(false); onOpenContact(); }} style={{ width: "100%", justifyContent: "center" }}>
-                Start a conversation <ArrowUpRight size={14} />
+            <div className="mobile-nav-foot" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              <button
+                className="client-login-nav-btn"
+                onClick={() => {
+                  setMobileNavOpen(false);
+                  onOpenClientPortal();
+                }}
+                style={{ width: "100%", padding: "10px", textAlign: "center" }}
+              >
+                Client Workspace Login
+              </button>
+              <button
+                className="primary-button"
+                onClick={() => {
+                  setMobileNavOpen(false);
+                  onOpenContact();
+                }}
+                style={{ width: "100%", justifyContent: "center" }}
+              >
+                Start a project <ArrowUpRight size={14} />
               </button>
             </div>
           </div>
@@ -289,36 +318,76 @@ function Header({
   );
 }
 
-function Footer({ onOpenContact }: { onOpenContact: () => void }) {
+function Footer({
+  onOpenContact,
+  onOpenClientPortal,
+}: {
+  onOpenContact: () => void;
+  onOpenClientPortal: () => void;
+}) {
   return (
     <footer className="site-footer">
       <div className="footer-top">
         <div>
           <div className="footer-brand"><span className="brand-dot" /> quiet studio</div>
-          <p className="footer-line">Making the future feel obvious.</p>
+          <p className="footer-line" style={{ maxWidth: "340px", lineHeight: 1.5 }}>
+            Branding, design and writing for businesses that want thoughtful creative work without the traditional agency overhead.
+          </p>
+          <div style={{ marginTop: "14px", font: "600 11px 'DM Mono', monospace", color: "var(--orange)" }}>
+            thequietstudio.space
+          </div>
         </div>
         <div className="footer-links">
           <div>
-            <span className="meta-label">Explore</span>
-            <Link href="/" onClick={() => playClick()}>Products</Link>
-            <Link href="/thesis" onClick={() => playClick()}>Thesis</Link>
-            <Link href="/research" onClick={() => playClick()}>Research</Link>
-            <Link href="/templates" onClick={() => playClick()}>Templates</Link>
-            <Link href="/changelog" onClick={() => playClick()}>Changelog</Link>
-            <Link href="/system" onClick={() => playClick()}>Design System</Link>
-            <Link href="/notes" onClick={() => playClick()}>Notes</Link>
-            <Link href="/about" onClick={() => playClick()}>About Abhinav</Link>
+            <span className="meta-label">Studio</span>
+            <Link href="/about" onClick={() => playClick()}>About</Link>
+            <a href="/#services" onClick={() => playClick()}>Services</a>
+            <a href="/#work" onClick={() => playClick()}>Our Work</a>
+            <a href="/#how-it-works" onClick={() => playClick()}>How It Works</a>
+            <button
+              onClick={onOpenContact}
+              className="footer-contact-link"
+              style={{ background: "none", border: 0, padding: 0, cursor: "pointer", textAlign: "left" }}
+            >
+              Start a Project <ArrowUpRight size={12} />
+            </button>
           </div>
           <div>
-            <span className="meta-label">Elsewhere</span>
-            <a href="https://github.com/AbhiKrish07" target="_blank" rel="noreferrer">GitHub <Github size={13} /></a>
-            <button onClick={onOpenContact} className="footer-contact-link">
-              Contact <ArrowUpRight size={13} />
+            <span className="meta-label">Services</span>
+            <a href="/#services" onClick={() => playClick()}>Branding &amp; Identity</a>
+            <a href="/#services" onClick={() => playClick()}>Design Studio</a>
+            <a href="/#services" onClick={() => playClick()}>Writing Studio</a>
+            <a href="/#partnerships" onClick={() => playClick()}>Creative Partnerships</a>
+          </div>
+          <div>
+            <span className="meta-label">Resources</span>
+            <a href="/#how-it-works" onClick={() => playClick()}>How We Work</a>
+            <a href="/#operating-model" onClick={() => playClick()}>Operating Model</a>
+            <a href="/#faq" onClick={() => playClick()}>FAQ</a>
+            <button
+              onClick={onOpenClientPortal}
+              className="footer-contact-link"
+              style={{ background: "none", border: 0, padding: 0, cursor: "pointer", textAlign: "left" }}
+            >
+              Client Login <ArrowUpRight size={12} />
             </button>
+          </div>
+          <div>
+            <span className="meta-label">Legal</span>
+            <Link href="/thesis" onClick={() => playClick()}>Privacy Policy</Link>
+            <Link href="/thesis" onClick={() => playClick()}>Terms of Service</Link>
+            <Link href="/thesis" onClick={() => playClick()}>Cookie Policy</Link>
+            <a href="https://github.com/AbhiKrish07" target="_blank" rel="noreferrer" style={{ marginTop: "4px" }}>
+              GitHub <Github size={12} />
+            </a>
           </div>
         </div>
       </div>
-      <div className="footer-bottom"><span>© 2026 Quiet Studio</span><span>Built slowly. Shipped often.</span><span>India / Everywhere</span></div>
+      <div className="footer-bottom">
+        <span>© 2026 Quiet Studio · thequietstudio.space</span>
+        <span>Powered by AI. Refined by people.</span>
+        <span>India / Worldwide</span>
+      </div>
     </footer>
   );
 }
@@ -335,6 +404,7 @@ function AppShell() {
   });
   const [commandOpen, setCommandOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const [clientPortalOpen, setClientPortalOpen] = useState(false);
   const [studioMode, setStudioMode] = useState<"human" | "agent">(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("quiet-studio-mode");
@@ -367,11 +437,14 @@ function AppShell() {
   useEffect(() => {
     const handleOpenCommand = () => setCommandOpen(true);
     const handleOpenContact = () => setContactOpen(true);
+    const handleOpenClientPortal = () => setClientPortalOpen(true);
     window.addEventListener("open-command-palette", handleOpenCommand);
     window.addEventListener("open-contact-modal", handleOpenContact);
+    window.addEventListener("open-client-portal", handleOpenClientPortal);
     return () => {
       window.removeEventListener("open-command-palette", handleOpenCommand);
       window.removeEventListener("open-contact-modal", handleOpenContact);
+      window.removeEventListener("open-client-portal", handleOpenClientPortal);
     };
   }, []);
 
@@ -383,6 +456,7 @@ function AppShell() {
         onToggle={() => setDark((value) => !value)}
         onOpenCommand={() => setCommandOpen(true)}
         onOpenContact={() => setContactOpen(true)}
+        onOpenClientPortal={() => setClientPortalOpen(true)}
         studioMode={studioMode}
         onStudioModeChange={handleStudioModeChange}
       />
@@ -412,10 +486,18 @@ function AppShell() {
         </div>
       </main>
 
-      <Footer onOpenContact={() => setContactOpen(true)} />
+      <Footer
+        onOpenContact={() => setContactOpen(true)}
+        onOpenClientPortal={() => setClientPortalOpen(true)}
+      />
 
       <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} />
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
+      <ClientPortalModal
+        open={clientPortalOpen}
+        onClose={() => setClientPortalOpen(false)}
+        onOpenProjectModal={() => setContactOpen(true)}
+      />
 
       <Toaster theme={dark ? "dark" : "light"} position="bottom-right" toastOptions={{ className: "q-toast" }} />
     </div>

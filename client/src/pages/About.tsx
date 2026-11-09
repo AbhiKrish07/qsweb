@@ -3,5 +3,154 @@ import { Link } from "wouter";
 import abhinavImg from "@/assets/abhinav.png";
 
 export default function About() {
-  return <div className="about-page"><section className="about-hero"><div className="section-marker">[ 05 — ABOUT THE STUDIO ]</div><div className="about-hero-layout"><div><p className="about-role">Abhinav Krish — builder / polymath / student / author</p><h1>Hi, I’m<br /><em>Abhinav.</em></h1><p className="about-lede">Founder and lead developer of QuietStudio: a one-person product studio exploring AI, research, open source, and the small systems that make life feel more effortless.</p><a className="primary-button" href="https://www.linkedin.com/in/abhinav-krish-639bab314/" target="_blank" rel="noreferrer">Connect on LinkedIn <Linkedin size={15} /></a></div><div className="about-photo-wrap"><img src={abhinavImg} alt="Abhinav Krish surrounded by greenery" /><span>ABHINAV / 2026</span></div></div></section><section className="about-body"><div className="about-sidebar"><span className="meta-label">The short version</span><span>Abhinav Krish</span><span>Founder / lead developer</span><span>VIT + IIT Madras</span><span>AI / quantum / data science</span><span>Author / badminton player</span></div><div className="about-copy"><p>I’m building QuietStudio as a home for useful software, independent research, and open-source contributions. The studio is where products like Capture, TrendCulture, Titan, Zen AI, and Aethel can share one point of view: technology should get out of your way.</p><p>My work sits across product design, React, Flutter, Kotlin, Python, Tailwind CSS, and SQL. I’m currently pursuing a B.Tech in Computer Science and Quantum Computing at Vellore Institute of Technology, Chennai, alongside a BS in Data Science and Applications at IIT Madras.</p><p>My current research explores Sparse Confident Tensor Memory (SCTM): architectures for more stable memory and context retrieval in language models, using ideas including isotropic whitening and discrete authority gating.</p><div className="about-quote">“The best technology doesn’t ask to be noticed.”</div><p>Before QuietStudio, I built Reflect with Google Cloud NLP and Vertex AI during the Gen AI Exchange Hackathon 2025, developed event software for the AFS South Zone / India Regional Meet serving more than 200 international participants, and took part in Xavier University’s Invisible Wars cyber defence challenge.</p><p>Outside software, I’ve published five books and several digital zines, create minimalist visual systems and digital media, and play competitive badminton. The work is broad by design: the throughline is curiosity made practical.</p></div></section><section className="about-projects"><div className="section-marker">[ CURRENTLY BUILDING ]</div><div className="about-project-grid"><div><span className="project-index">01</span><h3>QuietStudio</h3><p>The umbrella for products, research, and open-source experiments.</p></div><div><span className="project-index">02</span><h3>Capture</h3><p>Personal system for capturing thought before it disappears.</p></div><div><span className="project-index">03</span><h3>SCTM research</h3><p>Exploring more stable memory and context retrieval for AI systems.</p></div></div></section><section className="timeline-section"><div className="section-marker">[ THE THREAD SO FAR ]</div><div className="timeline"><div className="timeline-item"><span>2023</span><div><h3>Start with curiosity</h3><p>Published books and digital zines while building a foundation across code, design, and storytelling.</p></div></div><div className="timeline-item"><span>2025</span><div><h3>Ship for real people</h3><p>Built Reflect at the Gen AI Exchange Hackathon and delivered event software for 200+ AFS participants.</p></div></div><div className="timeline-item active"><span>NOW</span><div><h3>Build QuietStudio</h3><p>Growing a product studio around Capture, TrendCulture, Zen OS, Titan, and a public research practice.</p></div></div><div className="timeline-item"><span>NEXT</span><div><h3>Make the invisible useful</h3><p>Push SCTM research forward, release open source, and turn the strongest concepts into products people keep.</p></div></div></div></section><section className="about-links"><span className="section-marker">[ FIND ME ELSEWHERE ]</span><div><a href="https://www.linkedin.com/in/abhinav-krish-639bab314/" target="_blank" rel="noreferrer">LinkedIn <ExternalLink size={15} /></a><a href="https://github.com/AbhiKrish07" target="_blank" rel="noreferrer">GitHub <Github size={15} /></a><a href="mailto:glexionstriker@gmail.com">Email <Mail size={15} /></a></div></section><div className="about-back"><Link href="/"><ArrowLeft size={14} /> back to studio</Link></div></div>;
+  return (
+    <div className="about-page">
+      {/* Hero Section */}
+      <section className="about-hero">
+        <div className="section-marker">[ 01 — ABOUT QUIET STUDIO ]</div>
+        <div className="about-hero-layout">
+          <div>
+            <p className="about-role">Independent Creative Studio · Founded by Abhinav Krish</p>
+            <h1>
+              A different kind of
+              <br />
+              <em>creative studio.</em>
+            </h1>
+            <p className="about-lede">
+              Quiet Studio was built around a simple idea: creative work should be thoughtful, accessible and efficient. We combine human creativity with intelligent tools to help businesses build their identities and communicate more effectively.
+            </p>
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginTop: "16px" }}>
+              <a
+                className="primary-button"
+                href="mailto:glexionstriker@gmail.com"
+              >
+                Message the Studio <Mail size={15} />
+              </a>
+              <a
+                className="outline-button"
+                href="https://www.linkedin.com/in/abhinav-krish-639bab314/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Founder LinkedIn <Linkedin size={15} />
+              </a>
+            </div>
+          </div>
+          <div className="about-photo-wrap">
+            <img src={abhinavImg} alt="Abhinav Krish — Founder of Quiet Studio" />
+            <span>ABHINAV KRISH / FOUNDER</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Philosophy & How It Operates */}
+      <section className="about-body">
+        <div className="about-sidebar">
+          <span className="meta-label">The short version</span>
+          <span>Quiet Studio</span>
+          <span>Branding, Design &amp; Writing</span>
+          <span>Abhinav Krish (Founder)</span>
+          <span>VIT + IIT Madras</span>
+          <span>AI + Human Collaboration</span>
+          <span>India / Worldwide</span>
+        </div>
+        <div className="about-copy">
+          <p>
+            Traditional creative agencies are often weighed down by repeated onboarding, bloated account management layers, disconnected revision cycles, and high retainer markups. At the same time, purely automated AI tools generate generic, soulless slop that fails to reflect what makes a brand memorable.
+          </p>
+          <p>
+            Quiet Studio was created as an independent, evolving creative studio to bridge that gap. We use artificial intelligence as a rapid production engine for research, variations, and first drafts, while human creative direction retains full responsibility for strategy, tone, aesthetic judgment, and final craft.
+          </p>
+          <div className="about-quote">
+            “The website should feel like a serious creative studio, not a SaaS dashboard pretending to be an agency.”
+          </div>
+          <p>
+            Quiet Studio is led by Abhinav Krish, an independent designer, developer, and researcher currently pursuing a B.Tech in Computer Science and Quantum Computing at Vellore Institute of Technology, Chennai, alongside a BS in Data Science and Applications at IIT Madras.
+          </p>
+          <p>
+            Rather than claiming a bloated agency headcount, we operate with radical honesty: a streamlined studio model delivering high-craft branding, presentation design, and strategic copy for ambitious businesses worldwide.
+          </p>
+        </div>
+      </section>
+
+      {/* Core Studio Disciplines */}
+      <section className="about-projects">
+        <div className="section-marker">[ CORE STUDIO DISCIPLINES ]</div>
+        <div className="about-project-grid">
+          <div>
+            <span className="project-index">01</span>
+            <h3>Branding &amp; Identity</h3>
+            <p>Distinctive visual identities, logos, color systems, typography, and brand voice guidelines.</p>
+          </div>
+          <div>
+            <span className="project-index">02</span>
+            <h3>Design Studio</h3>
+            <p>Pitch decks, marketing collateral, social suites, editorial layouts, and digital brand surfaces.</p>
+          </div>
+          <div>
+            <span className="project-index">03</span>
+            <h3>Writing Studio</h3>
+            <p>Websites, landing pages, founder manifestos, newsletters, and business copy that speaks with honest tone.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Studio Timeline */}
+      <section className="timeline-section">
+        <div className="section-marker">[ THE THREAD SO FAR ]</div>
+        <div className="timeline">
+          <div className="timeline-item">
+            <span>2023</span>
+            <div>
+              <h3>Foundations &amp; Storytelling</h3>
+              <p>Published books, digital zines, and creative publications while building a foundation across design and code.</p>
+            </div>
+          </div>
+          <div className="timeline-item">
+            <span>2025</span>
+            <div>
+              <h3>AI Systems &amp; Real Shipping</h3>
+              <p>Built generative AI applications at the Gen AI Exchange Hackathon and engineered event software for 200+ participants.</p>
+            </div>
+          </div>
+          <div className="timeline-item active">
+            <span>NOW</span>
+            <div>
+              <h3>Quiet Studio Launch</h3>
+              <p>Establishing the AI + Human creative studio model for branding, design, writing, and client partnerships at thequietstudio.space.</p>
+            </div>
+          </div>
+          <div className="timeline-item">
+            <span>NEXT</span>
+            <div>
+              <h3>Product-Led Retention</h3>
+              <p>Expanding the client workspace, asset library, and persistent brand context platform.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social / Contact */}
+      <section className="about-links">
+        <span className="section-marker">[ GET IN TOUCH ]</span>
+        <div>
+          <a href="https://www.linkedin.com/in/abhinav-krish-639bab314/" target="_blank" rel="noreferrer">
+            LinkedIn <ExternalLink size={15} />
+          </a>
+          <a href="https://github.com/AbhiKrish07" target="_blank" rel="noreferrer">
+            GitHub <Github size={15} />
+          </a>
+          <a href="mailto:glexionstriker@gmail.com">
+            Email <Mail size={15} />
+          </a>
+        </div>
+      </section>
+
+      <div className="about-back">
+        <Link href="/">
+          <ArrowLeft size={14} /> back to studio
+        </Link>
+      </div>
+    </div>
+  );
 }
