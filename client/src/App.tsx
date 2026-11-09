@@ -16,6 +16,9 @@ import Templates from "./pages/Templates";
 import Changelog from "./pages/Changelog";
 import System from "./pages/System";
 import Models from "./pages/Models";
+import ServicesPage from "./pages/Services";
+import BrandingPage from "./pages/Branding";
+import DesignPage from "./pages/Design";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
 import ClientPortalModal from "./components/ClientPortalModal";
@@ -464,6 +467,9 @@ function AppShell() {
         <div key={`${String(location)}-${studioMode}`} className="page-transition">
           <Switch>
             <Route path="/">{() => <Home mode={studioMode} onModeChange={handleStudioModeChange} />}</Route>
+            <Route path="/services" component={ServicesPage} />
+            <Route path="/branding" component={BrandingPage} />
+            <Route path="/design" component={DesignPage} />
             <Route path="/models" component={Models} />
             <Route path="/products/:slug" component={ProductPage} />
             <Route path="/research" component={Research} />
