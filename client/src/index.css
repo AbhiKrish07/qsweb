@@ -113,15 +113,15 @@
 @keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 .app-shell { min-height: 100vh; overflow-x: clip; background: var(--background); transition: background .35s ease, color .35s ease; }
-/* Floating Dynamic Island Header with GooeyNav */
+/* Floating Dynamic Island Header with Responsive Mega-Menus */
 .site-header {
   height: auto;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 0 clamp(16px, 3.5vw, 40px);
+  gap: clamp(10px, 1.8vw, 24px);
+  padding: 0 clamp(16px, 3vw, 40px);
   position: fixed;
   top: 16px;
   left: 0;
@@ -140,24 +140,31 @@
   display: inline-flex;
   align-items: center;
   border-radius: 9999px;
-  background: color-mix(in srgb, var(--card) 82%, transparent);
+  background: rgba(18, 18, 18, 0.88);
   -webkit-backdrop-filter: blur(24px) saturate(1.8);
   backdrop-filter: blur(24px) saturate(1.8);
-  border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
-  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.22), 0 4px 14px -4px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5), 0 4px 14px -4px rgba(0, 0, 0, 0.25);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
   white-space: nowrap;
 }
 
 .header-floating-pod:hover {
-  border-color: color-mix(in srgb, var(--foreground) 25%, transparent);
-  box-shadow: 0 20px 42px -10px rgba(0, 0, 0, 0.28), 0 6px 16px -4px rgba(0, 0, 0, 0.12);
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 20px 42px -10px rgba(0, 0, 0, 0.6), 0 6px 16px -4px rgba(0, 0, 0, 0.3);
 }
 
 .header-floating-pod--brand {
   padding: 5px 12px 5px 16px;
   gap: 14px;
+}
+
+.header-floating-pod--brand .brand-mark,
+.header-floating-pod--brand .brand-mark:visited,
+.header-floating-pod--brand .brand-mark span {
+  color: #ffffff !important;
+  font-weight: 700;
 }
 
 .header-floating-pod--nav {
@@ -167,17 +174,19 @@
   box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  flex-shrink: 1;
-  min-width: 0;
+  flex-shrink: 0;
+  margin: 0 auto;
+  position: relative;
 }
 
 .header-floating-pod--actions {
   padding: 5px 10px 5px 12px;
   gap: 8px;
-  margin-left: auto;
+  margin-left: 0;
+  flex-shrink: 0;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 960px) {
   .header-floating-pod--nav {
     display: none !important;
   }
@@ -185,6 +194,244 @@
 
 .header-floating-pod--actions .header-actions {
   margin-left: 0;
+}
+
+/* =========================================================================
+   QUIET STUDIO AGENCY INTERACTIVE MEGA-MENU NAVIGATION
+   ========================================================================= */
+.agency-nav-pod {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 6px;
+  border-radius: 9999px;
+  background: rgba(18, 18, 18, 0.88);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.agency-nav-item-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.agency-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6.5px 13px;
+  border-radius: 9999px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  font: 500 13px/1 "Cabinet Grotesk", "Space Grotesk", -apple-system, sans-serif;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.agency-nav-btn:hover,
+.agency-nav-btn.is-active,
+.agency-nav-btn.is-open {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.agency-nav-btn.is-active {
+  background: #ff5a1f;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(255, 90, 31, 0.35);
+}
+
+.agency-nav-btn .nav-chevron {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.6;
+}
+
+.agency-nav-btn.is-open .nav-chevron {
+  transform: rotate(180deg);
+  opacity: 1;
+  color: #ff5a1f;
+}
+
+/* Mega-Menu Dropdown Panel */
+.agency-mega-menu {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(680px, 92vw);
+  background: rgba(14, 14, 13, 0.96);
+  -webkit-backdrop-filter: blur(32px) saturate(1.8);
+  backdrop-filter: blur(32px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 26px;
+  padding: 26px 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 26px;
+  box-shadow: 0 36px 80px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  z-index: 10000;
+  pointer-events: auto;
+  animation: megaMenuDrop 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Invisible hover bridge to prevent accidental close */
+.agency-mega-menu::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  height: 20px;
+}
+
+@keyframes megaMenuDrop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.agency-mega-aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-right: 20px;
+}
+
+.agency-mega-lead {
+  font: 500 clamp(1.4rem, 1.9vw, 1.85rem)/1.1 "Space Grotesk", "Cabinet Grotesk", sans-serif;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.agency-mega-lead .highlight {
+  color: #ff5a1f;
+  display: inline-block;
+  margin-left: 2px;
+}
+
+.agency-mega-lead .highlight-star {
+  display: inline-block;
+  width: 0.28em;
+  height: 0.28em;
+  margin-left: 0.12em;
+  background: #ff5a1f;
+  vertical-align: 0.4em;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.agency-mega-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font: 600 12px/1 "DM Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-top: 24px;
+}
+
+.agency-mega-all:hover {
+  color: #ff5a1f;
+  gap: 12px;
+}
+
+.agency-mega-main {
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.agency-mega-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.agency-mega-item + .agency-mega-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.agency-mega-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.agency-mega-item-txt {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.agency-mega-item-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font: 600 14px/1.25 "Space Grotesk", "Cabinet Grotesk", sans-serif;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease;
+}
+
+.agency-mega-glyph {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.agency-mega-item:hover .agency-mega-item-title {
+  color: #ff5a1f;
+}
+
+.agency-mega-item-desc {
+  font: 400 12px/1.4 "DM Sans", sans-serif;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.agency-mega-item-arrow {
+  width: 15px;
+  height: 15px;
+  color: #ff5a1f;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.agency-mega-item:hover .agency-mega-item-arrow {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .brand-mark, .brand-mark:visited, .footer-brand, .footer-brand:visited { display: inline-flex; align-items: center; gap: 9px; font: 700 14px/1 "Space Grotesk", sans-serif; letter-spacing: -.04em; white-space: nowrap; color: var(--foreground); }

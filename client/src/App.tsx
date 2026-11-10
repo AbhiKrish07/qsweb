@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Route, Switch, useLocation } from "wouter";
-import { ArrowRight, ArrowUpRight, Github, Menu, Moon, Search, Sun, Volume2, VolumeX, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Github, Menu, Moon, Search, Sun, Volume2, VolumeX, X } from "lucide-react";
 import { Toaster } from "sonner";
 import Home from "./pages/Home";
 import ProductPage from "./pages/ProductPage";
@@ -30,6 +30,121 @@ function ScrollToTop() {
   return null;
 }
 
+const MEGA_MENUS = {
+  services: {
+    lead: "Three disciplines, one",
+    leadHighlight: "studio",
+    allLink: { text: "All our services", href: "/#expertises" },
+    items: [
+      {
+        title: "Branding & Identity",
+        desc: "Strategy, visual systems, naming, typography & comprehensive brand guidelines.",
+        href: "/#expertises",
+        shape: "sceau",
+        color: "#b4a0e5",
+      },
+      {
+        title: "Brand & Creative",
+        desc: "Digital and physical experiences that elevate your brand and captivate users.",
+        href: "/#expertises",
+        shape: "fleur",
+        color: "#ff5a1f",
+      },
+      {
+        title: "Writing & Content",
+        desc: "Finding the right words to make your brand understood, trusted, and remembered.",
+        href: "/#expertises",
+        shape: "etoile-huit",
+        color: "#eab308",
+      },
+      {
+        title: "Creative Production",
+        desc: "Dedicated squads, rapid sprint delivery, bespoke components & AI workflows.",
+        href: "/#expertises",
+        shape: "trefle",
+        color: "#22c55e",
+      },
+    ],
+  },
+  work: {
+    lead: "Thoughtful work, lasting",
+    leadHighlight: "impact",
+    allLink: { text: "View all work", href: "/#realisations" },
+    items: [
+      {
+        title: "Project Atlas",
+        desc: "Autonomous AI sprint platform for engineering & product squads.",
+        href: "/#realisations",
+        shape: "eclat",
+        color: "#ff5a1f",
+      },
+      {
+        title: "Fintech Identity",
+        desc: "Minimalist high-trust design system & motion identity for global finance.",
+        href: "/#realisations",
+        shape: "sceau",
+        color: "#38bdf8",
+      },
+      {
+        title: "Product Brand",
+        desc: "Spatial brand language and tactile UI for next-generation intelligence.",
+        href: "/#realisations",
+        shape: "etoile-dix",
+        color: "#a855f7",
+      },
+      {
+        title: "Startup Presentation",
+        desc: "High-conversion interactive pitch deck & editorial founder story.",
+        href: "/#realisations",
+        shape: "fleur",
+        color: "#f97316",
+      },
+      {
+        title: "Digital Editorial",
+        desc: "Custom typography, reading mechanics, and digital publishing architecture.",
+        href: "/#realisations",
+        shape: "soleil",
+        color: "#eab308",
+      },
+    ],
+  },
+  about: {
+    lead: "Quiet Studio, that's",
+    leadHighlight: "us",
+    allLink: { text: "About the studio", href: "/#agence" },
+    items: [
+      {
+        title: "About Quiet Studio",
+        desc: "Independent creative studio combining human taste with AI workflows.",
+        href: "/#agence",
+        shape: "fleur",
+        color: "#ff5a1f",
+      },
+      {
+        title: "Our Thesis",
+        desc: "Why quiet, crafted software and typography beat noisy generative slop.",
+        href: "/thesis",
+        shape: "etoile-quatre",
+        color: "#a855f7",
+      },
+      {
+        title: "Commitments & Impact",
+        desc: "Direct partner access, transparent pricing, zero agency waste.",
+        href: "/#engagements",
+        shape: "trefle",
+        color: "#22c55e",
+      },
+      {
+        title: "Client Portal & Sprint Hub",
+        desc: "Real-time sprint tracker and artifact delivery hub for active partners.",
+        href: "#contact",
+        shape: "soleil",
+        color: "#eab308",
+      },
+    ],
+  },
+};
+
 function Header({
   dark,
   onToggle,
@@ -48,7 +163,36 @@ function Header({
   const [location, setLocation] = useLocation();
   const [soundOn, setSoundOn] = useState(isSoundEnabled());
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<"services" | "work" | "about" | null>(null);
+  const dropdownTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isProduct = location.startsWith("/products/");
+
+  const handleDropdownEnter = (menu: "services" | "work" | "about") => {
+    if (dropdownTimerRef.current) {
+      clearTimeout(dropdownTimerRef.current);
+      dropdownTimerRef.current = null;
+    }
+    setActiveDropdown(menu);
+  };
+
+  const handleDropdownLeave = () => {
+    if (dropdownTimerRef.current) {
+      clearTimeout(dropdownTimerRef.current);
+    }
+    dropdownTimerRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 240);
+  };
+
+  const handleDropdownItemClick = (href: string) => {
+    playClick();
+    setActiveDropdown(null);
+    if (href === "#contact" || href === "/#contact") {
+      onOpenContact();
+      return;
+    }
+    handleNavClick(href);
+  };
 
   const handleSoundToggle = () => {
     const nextState = toggleSound();
@@ -83,13 +227,20 @@ function Header({
 
     if (href.startsWith("/#")) {
       const targetId = href.replace("/#", "");
+      const findElement = (id: string) => {
+        if (id === "engagements") {
+          return document.getElementById("engagements") || document.getElementById("confiance") || document.getElementById("actualites");
+        }
+        return document.getElementById(id);
+      };
+
       if (location !== "/") {
         setLocation("/");
         setTimeout(() => {
-          if (targetId === "overview") {
+          if (targetId === "overview" || targetId === "hh") {
             window.scrollTo({ top: 0, behavior: "smooth" });
           } else {
-            const target = document.getElementById(targetId);
+            const target = findElement(targetId);
             if (target) {
               const top = target.getBoundingClientRect().top + window.scrollY;
               window.scrollTo({ top: top - 80, behavior: "smooth" });
@@ -97,10 +248,10 @@ function Header({
           }
         }, 150);
       } else {
-        if (targetId === "overview") {
+        if (targetId === "overview" || targetId === "hh") {
           window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
-          const target = document.getElementById(targetId);
+          const target = findElement(targetId);
           if (target) {
             const top = target.getBoundingClientRect().top + window.scrollY;
             window.scrollTo({ top: top - 80, behavior: "smooth" });
@@ -158,7 +309,7 @@ function Header({
             <span>quiet studio</span>
           </Link>
 
-          {/* Global Studio Mode Switcher: Products (Open Core Apps) vs AI Lab (Models & Research) */}
+          {/* Global Studio Mode Switcher: Products vs Agency */}
           <div className="header-mode-toggle" role="group" aria-label="Studio Mode Switcher">
             <button
               type="button"
@@ -187,29 +338,160 @@ function Header({
           </div>
         </div>
 
-        {/* Center Floating Pod: Interactive GooeyNav from React Bits */}
+        {/* Center Floating Pod: Agency Nav with Dropdowns OR Products GooeyNav */}
         <div className="header-floating-pod header-floating-pod--nav">
-          <GooeyNav
-            items={gooeyItems}
-            activeIndex={activeNavIndex}
-            theme={dark ? "dark" : "light"}
-            color="#ff5a1f"
-            activeTextColor="#ffffff"
-            colors={["#ff5a1f", "#ff844b", "#ffa07a"]}
-            size="sm"
-            frame={true}
-            particleCount={14}
-            spread={48}
-            animationTime={520}
-            timeVariance={250}
-            gooeyness={0.5}
-            wobble={0.45}
-            hoverEffect={true}
-            onChange={(index) => {
-              const item = gooeyItems[index];
-              if (item?.href) handleNavClick(item.href);
-            }}
-          />
+          {studioMode === "agent" ? (
+            <div className="agency-nav-pod" onMouseLeave={handleDropdownLeave}>
+              <button
+                type="button"
+                className={`agency-nav-btn ${location === "/" && !activeDropdown ? "is-active" : ""}`}
+                onClick={() => handleNavClick("/#hh")}
+              >
+                Overview
+              </button>
+
+              <div className="agency-nav-item-wrap">
+                <button
+                  type="button"
+                  className={`agency-nav-btn ${activeDropdown === "services" ? "is-open" : ""}`}
+                  onMouseEnter={() => handleDropdownEnter("services")}
+                  onClick={() => handleNavClick("/#expertises")}
+                  aria-expanded={activeDropdown === "services"}
+                >
+                  Services <ChevronDown size={12} className="nav-chevron" />
+                </button>
+              </div>
+
+              <div className="agency-nav-item-wrap">
+                <button
+                  type="button"
+                  className={`agency-nav-btn ${activeDropdown === "work" ? "is-open" : ""}`}
+                  onMouseEnter={() => handleDropdownEnter("work")}
+                  onClick={() => handleNavClick("/#realisations")}
+                  aria-expanded={activeDropdown === "work"}
+                >
+                  Work <ChevronDown size={12} className="nav-chevron" />
+                </button>
+              </div>
+
+              <div className="agency-nav-item-wrap">
+                <button
+                  type="button"
+                  className={`agency-nav-btn ${activeDropdown === "about" ? "is-open" : ""}`}
+                  onMouseEnter={() => handleDropdownEnter("about")}
+                  onClick={() => handleNavClick("/#agence")}
+                  aria-expanded={activeDropdown === "about"}
+                >
+                  About <ChevronDown size={12} className="nav-chevron" />
+                </button>
+              </div>
+
+              <button
+                type="button"
+                className="agency-nav-btn"
+                onClick={() => handleNavClick("/blog")}
+              >
+                Insights
+              </button>
+
+              <button
+                type="button"
+                className="agency-nav-btn"
+                onClick={() => handleNavClick("/#engagements")}
+              >
+                Impact
+              </button>
+
+              {/* Mega-Menu Dropdown Panel */}
+              {activeDropdown && MEGA_MENUS[activeDropdown] && (
+                <div
+                  className="agency-mega-menu"
+                  onMouseEnter={() => {
+                    if (dropdownTimerRef.current) {
+                      clearTimeout(dropdownTimerRef.current);
+                      dropdownTimerRef.current = null;
+                    }
+                  }}
+                  onMouseLeave={handleDropdownLeave}
+                >
+                  <div className="agency-mega-aside">
+                    <div>
+                      <p className="agency-mega-lead">
+                        {MEGA_MENUS[activeDropdown].lead}{" "}
+                        <span className="highlight">
+                          {MEGA_MENUS[activeDropdown].leadHighlight}
+                          <span className="highlight-star" />
+                        </span>
+                      </p>
+                    </div>
+                    <a
+                      href={MEGA_MENUS[activeDropdown].allLink.href}
+                      className="agency-mega-all"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDropdownItemClick(MEGA_MENUS[activeDropdown].allLink.href);
+                      }}
+                    >
+                      {MEGA_MENUS[activeDropdown].allLink.text}
+                      <ArrowUpRight size={13} />
+                    </a>
+                  </div>
+
+                  <div className="agency-mega-main">
+                    {MEGA_MENUS[activeDropdown].items.map((item, idx) => (
+                      <a
+                        key={idx}
+                        href={item.href}
+                        className="agency-mega-item"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDropdownItemClick(item.href);
+                        }}
+                      >
+                        <div className="agency-mega-item-txt">
+                          <span className="agency-mega-item-title">
+                            <span
+                              className="agency-mega-glyph"
+                              style={{
+                                WebkitMaskImage: `url(/assets/img/formes/${item.shape}.svg)`,
+                                maskImage: `url(/assets/img/formes/${item.shape}.svg)`,
+                                backgroundColor: item.color,
+                              }}
+                            />
+                            {item.title}
+                          </span>
+                          <span className="agency-mega-item-desc">{item.desc}</span>
+                        </div>
+                        <ArrowUpRight size={15} className="agency-mega-item-arrow" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <GooeyNav
+              items={gooeyItems}
+              activeIndex={activeNavIndex}
+              theme={dark ? "dark" : "light"}
+              color="#ff5a1f"
+              activeTextColor="#ffffff"
+              colors={["#ff5a1f", "#ff844b", "#ffa07a"]}
+              size="sm"
+              frame={true}
+              particleCount={14}
+              spread={48}
+              animationTime={520}
+              timeVariance={250}
+              gooeyness={0.5}
+              wobble={0.45}
+              hoverEffect={true}
+              onChange={(index) => {
+                const item = gooeyItems[index];
+                if (item?.href) handleNavClick(item.href);
+              }}
+            />
+          )}
         </div>
 
         {/* Right Floating Pod: Action Controls */}
