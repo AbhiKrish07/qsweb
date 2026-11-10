@@ -64,11 +64,11 @@ function Header({
           { label: "About", href: "/about" },
         ]
       : [
-          { label: "Agency", href: "/#agency-overview" },
-          { label: "Features", href: "/#agency-features" },
-          { label: "Hub", href: "/#agency-hub" },
-          { label: "Pricing", href: "/#agency-pricing" },
-          { label: "About", href: "/about" },
+          { label: "Overview", href: "/#hh" },
+          { label: "Services", href: "/#expertises" },
+          { label: "Work", href: "/#realisations" },
+          { label: "Agency", href: "/#agence" },
+          { label: "Impact", href: "/#engagements" },
         ];
 
   const handleNavClick = (href: string) => {
@@ -382,16 +382,14 @@ function AppShell() {
   return (
     <div className={`app-shell ${isAgencyHome ? "agency-shell" : ""}`}>
       <ScrollToTop />
-      {!isAgencyHome && (
-        <Header
-          dark={dark}
-          onToggle={() => setDark((value) => !value)}
-          onOpenCommand={() => setCommandOpen(true)}
-          onOpenContact={() => setContactOpen(true)}
-          studioMode={studioMode}
-          onStudioModeChange={handleStudioModeChange}
-        />
-      )}
+      <Header
+        dark={dark}
+        onToggle={() => setDark((value) => !value)}
+        onOpenCommand={() => setCommandOpen(true)}
+        onOpenContact={() => setContactOpen(true)}
+        studioMode={studioMode}
+        onStudioModeChange={handleStudioModeChange}
+      />
       <main>
         <div key={`${String(location)}-${studioMode}`} className="page-transition">
           <Switch>

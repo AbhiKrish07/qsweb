@@ -168,85 +168,18 @@ export default function AgencySection({ onSwitchToProducts }: AgencySectionProps
 
   return (
     <div className="bitwip-unified-container" ref={containerRef}>
-      {/* Floating Quiet Studio Mode Switcher Bridge (Unifies Products & Agency without altering Bitwip) */}
-      <aside
-        className="quiet-bitwip-bridge"
-        aria-label="Studio Mode Switcher"
-        style={{
-          position: 'fixed',
-          top: '18px',
-          right: '24px',
-          zIndex: 99999,
-          pointerEvents: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '4px',
-          background: 'rgba(18, 20, 20, 0.82)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
-          borderRadius: '999px',
-          padding: '4px 6px',
-          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.45)',
-        }}
-      >
-        <button
-          type="button"
-          onClick={() => handleModeSwitch('human')}
-          style={{
-            background: 'transparent',
-            border: 'none',
-            color: 'rgba(255, 255, 255, 0.7)',
-            fontFamily: '"Cabinet Grotesk", "Space Grotesk", sans-serif',
-            fontWeight: 600,
-            fontSize: '12px',
-            letterSpacing: '0.02em',
-            padding: '6px 14px',
-            borderRadius: '999px',
-            cursor: 'pointer',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#ffffff';
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
-            e.currentTarget.style.background = 'transparent';
-          }}
-        >
-          <span style={{ color: '#ff5a1f', fontSize: '11px' }}>✦</span>
-          <span>Products</span>
-        </button>
+      {/* Hide Bitwip's default header so Quiet Studio's uniform signature header is shown */}
+      <style>{`
+        header.nav,
+        .nav--allegee,
+        .nav__bar,
+        .menu#menu,
+        .quiet-bitwip-bridge {
+          display: none !important;
+        }
+      `}</style>
 
-        <button
-          type="button"
-          style={{
-            background: '#ff5a1f',
-            color: '#ffffff',
-            border: 'none',
-            fontFamily: '"Cabinet Grotesk", "Space Grotesk", sans-serif',
-            fontWeight: 700,
-            fontSize: '12px',
-            letterSpacing: '0.02em',
-            padding: '6px 14px',
-            borderRadius: '999px',
-            cursor: 'default',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            boxShadow: '0 2px 10px rgba(255, 90, 31, 0.35)',
-          }}
-        >
-          <span style={{ fontSize: '11px' }}>✱</span>
-          <span>Agency</span>
-        </button>
-      </aside>
-
-      {/* Bitwip Agency Original HTML Markup */}
+      {/* Bitwip Agency Original Content */}
       <div
         className="bitwip-native-content"
         dangerouslySetInnerHTML={{ __html: BITWIP_BODY_HTML }}
