@@ -201,6 +201,92 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         .quiet-bitwip-bridge {
           display: none !important;
         }
+
+        /* High-Contrast Typography & Accessibility Overrides */
+        .bitwip-unified-container {
+          --txt: #ffffff !important;
+          --txt-2: rgba(255, 255, 255, 0.94) !important;
+          --txt-3: rgba(255, 255, 255, 0.85) !important;
+          --encre: #111111 !important;
+        }
+
+        /* Dark Sections */
+        .bitwip-unified-container .sec:not(.papier) h1,
+        .bitwip-unified-container .sec:not(.papier) h2,
+        .bitwip-unified-container .sec:not(.papier) h3,
+        .bitwip-unified-container .sec:not(.papier) h4,
+        .bitwip-unified-container .cta h2,
+        .bitwip-unified-container .hh h1 {
+          color: #ffffff !important;
+          font-weight: 700 !important;
+          letter-spacing: -0.02em !important;
+        }
+
+        .bitwip-unified-container .sec:not(.papier) p,
+        .bitwip-unified-container .sec:not(.papier) .qr__a,
+        .bitwip-unified-container .sec:not(.papier) .xep__d,
+        .bitwip-unified-container .cta p {
+          color: rgba(255, 255, 255, 0.88) !important;
+          line-height: 1.6 !important;
+        }
+
+        .bitwip-unified-container .label {
+          color: #ff5a1f !important;
+          font-weight: 700 !important;
+          letter-spacing: 0.08em !important;
+        }
+
+        /* Paper / Light Sections (.papier) */
+        .bitwip-unified-container .sec.papier,
+        .bitwip-unified-container .papier {
+          background: #f7f5f1 !important;
+          color: #111111 !important;
+        }
+
+        .bitwip-unified-container .sec.papier h2,
+        .bitwip-unified-container .sec.papier h3,
+        .bitwip-unified-container .sec.papier h4,
+        .bitwip-unified-container .sec.papier .head__t {
+          color: #111111 !important;
+          font-weight: 700 !important;
+        }
+
+        .bitwip-unified-container .sec.papier p,
+        .bitwip-unified-container .sec.papier .sensee__lead,
+        .bitwip-unified-container .sec.papier .sensee__p,
+        .bitwip-unified-container .sec.papier .head__i,
+        .bitwip-unified-container .sec.papier .actu__ex,
+        .bitwip-unified-container .sec.papier .qa__a p {
+          color: #1d1d1f !important;
+          line-height: 1.65 !important;
+        }
+
+        .bitwip-unified-container .sec.papier .actu__t a,
+        .bitwip-unified-container .sec.papier summary {
+          color: #111111 !important;
+          font-weight: 700 !important;
+        }
+
+        .bitwip-unified-container .sec.papier .actu__t a:hover {
+          color: #ff5a1f !important;
+        }
+
+        .bitwip-unified-container .sec.papier .qa__ico {
+          color: #ff5a1f !important;
+        }
+
+        .bitwip-unified-container .actu__meta {
+          color: #52525b !important;
+          font-weight: 500 !important;
+        }
+
+        .bitwip-unified-container .clocks .clock {
+          color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .bitwip-unified-container .clocks .clock:hover {
+          color: #ff5a1f !important;
+        }
       `}</style>
 
       {/* Bitwip Agency Original Content */}
