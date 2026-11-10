@@ -424,10 +424,12 @@ export default function Home({
   mode = "human",
   onModeChange,
   defaultSection,
+  onOpenContact,
 }: {
   mode?: "human" | "agent";
   onModeChange?: (m: "human" | "agent") => void;
   defaultSection?: string;
+  onOpenContact?: () => void;
 }) {
   const [activeCategory, setActiveCategory] = useState<ProductCategory>("flagship");
   const [query, setQuery] = useState("");
@@ -655,7 +657,7 @@ export default function Home({
   if (mode === "agent") {
     return (
       <div className="agency-wrapper" ref={homeRef}>
-        <AgencySection onSwitchToProducts={() => onModeChange?.("human")} />
+        <AgencySection onSwitchToProducts={() => onModeChange?.("human")} onOpenContact={onOpenContact} />
       </div>
     );
   }

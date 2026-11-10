@@ -146,6 +146,8 @@
   border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
   box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.22), 0 4px 14px -4px rgba(0, 0, 0, 0.08);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .header-floating-pod:hover {
@@ -165,11 +167,20 @@
   box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .header-floating-pod--actions {
   padding: 5px 10px 5px 12px;
   gap: 8px;
+  margin-left: auto;
+}
+
+@media (max-width: 1200px) {
+  .header-floating-pod--nav {
+    display: none !important;
+  }
 }
 
 .header-floating-pod--actions .header-actions {

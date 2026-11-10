@@ -6,10 +6,34 @@ import { playClick } from '@/lib/sound';
 
 interface AgencySectionProps {
   onSwitchToProducts?: () => void;
+  onOpenContact?: () => void;
 }
 
-export default function AgencySection({ onSwitchToProducts }: AgencySectionProps) {
+export default function AgencySection({ onSwitchToProducts, onOpenContact }: AgencySectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      const handleContactClicks = (e: MouseEvent) => {
+        const target = (e.target as HTMLElement)?.closest('a');
+        if (target) {
+          const href = target.getAttribute('href');
+          if (href === '#contact' || href === '/en/contact' || target.getAttribute('data-cta') === 'contactez-nous' || href?.startsWith('mailto:')) {
+            if (onOpenContact) {
+              e.preventDefault();
+              playClick();
+              onOpenContact();
+            }
+          }
+        }
+      };
+      container.addEventListener('click', handleContactClicks);
+      return () => {
+        container.removeEventListener('click', handleContactClicks);
+      };
+    }
+  }, [onOpenContact]);
 
   useEffect(() => {
     // 1. Initialize global helper functions required by Bitwip before scripts run

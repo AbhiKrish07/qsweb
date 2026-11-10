@@ -257,6 +257,38 @@ function Header({
               </button>
             </div>
 
+            {/* Mobile Studio Mode Switcher */}
+            <div style={{ padding: "16px 0 6px" }}>
+              <div className="header-mode-toggle" style={{ width: "100%", justifyContent: "center" }} role="group" aria-label="Mobile Studio Mode Switcher">
+                <button
+                  type="button"
+                  className={`mode-toggle-btn ${studioMode === "human" ? "active" : ""}`}
+                  style={{ flex: 1, justifyContent: "center" }}
+                  onClick={() => {
+                    playClick();
+                    onStudioModeChange("human");
+                    setMobileNavOpen(false);
+                  }}
+                >
+                  <span className="mode-btn-symbol">✦</span>
+                  <span>Products</span>
+                </button>
+                <button
+                  type="button"
+                  className={`mode-toggle-btn ${studioMode === "agent" ? "active" : ""}`}
+                  style={{ flex: 1, justifyContent: "center" }}
+                  onClick={() => {
+                    playClick();
+                    onStudioModeChange("agent");
+                    setMobileNavOpen(false);
+                  }}
+                >
+                  <span className="mode-btn-symbol">✱</span>
+                  <span>Agency</span>
+                </button>
+              </div>
+            </div>
+
             <div className="mobile-nav-links">
               {navLinks.map((link, idx) => {
                 const isActive =
@@ -393,7 +425,7 @@ function AppShell() {
       <main>
         <div key={`${String(location)}-${studioMode}`} className="page-transition">
           <Switch>
-            <Route path="/">{() => <Home mode={studioMode} onModeChange={handleStudioModeChange} />}</Route>
+            <Route path="/">{() => <Home mode={studioMode} onModeChange={handleStudioModeChange} onOpenContact={() => setContactOpen(true)} />}</Route>
             <Route path="/models" component={Models} />
             <Route path="/products/:slug" component={ProductPage} />
             <Route path="/research" component={Research} />
