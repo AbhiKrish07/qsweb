@@ -18,7 +18,6 @@ import System from "./pages/System";
 import Models from "./pages/Models";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
-import GooeyNav from "./components/GooeyNav";
 import { isSoundEnabled, toggleSound, playClick } from "./lib/sound";
 
 function ScrollToTop() {
@@ -38,28 +37,28 @@ const MEGA_MENUS = {
     items: [
       {
         title: "Branding & Identity",
-        desc: "Strategy, visual systems, naming, typography & comprehensive brand guidelines.",
+        desc: "Strategy, positioning, naming, logo design, typography & brand guidelines.",
         href: "/#expertises",
         shape: "sceau",
         color: "#b4a0e5",
       },
       {
-        title: "Brand & Creative",
-        desc: "Digital and physical experiences that elevate your brand and captivate users.",
+        title: "Design & Creative",
+        desc: "Presentations, pitch decks, publications, marketing graphics & design systems.",
         href: "/#expertises",
         shape: "fleur",
         color: "#ff5a1f",
       },
       {
         title: "Writing & Content",
-        desc: "Finding the right words to make your brand understood, trusted, and remembered.",
+        desc: "Website copy, brand messaging, articles, newsletters & product descriptions.",
         href: "/#expertises",
         shape: "etoile-huit",
         color: "#eab308",
       },
       {
         title: "Creative Production",
-        desc: "Dedicated squads, rapid sprint delivery, bespoke components & AI workflows.",
+        desc: "AI-assisted workflows, rapid sprint delivery, bespoke components & human craft.",
         href: "/#expertises",
         shape: "trefle",
         color: "#22c55e",
@@ -67,44 +66,44 @@ const MEGA_MENUS = {
     ],
   },
   work: {
-    lead: "Thoughtful work, lasting",
-    leadHighlight: "impact",
-    allLink: { text: "View all work", href: "/#realisations" },
+    lead: "Good work speaks for",
+    leadHighlight: "itself",
+    allLink: { text: "Selected work", href: "/#realisations" },
     items: [
       {
-        title: "Project Atlas",
-        desc: "Autonomous AI sprint platform for engineering & product squads.",
-        href: "/#realisations",
-        shape: "eclat",
-        color: "#ff5a1f",
-      },
-      {
         title: "Fintech Identity",
-        desc: "Minimalist high-trust design system & motion identity for global finance.",
+        desc: "Studio concept · Visual identity, typography and system for modern finance.",
         href: "/#realisations",
         shape: "sceau",
         color: "#38bdf8",
       },
       {
         title: "Product Brand",
-        desc: "Spatial brand language and tactile UI for next-generation intelligence.",
+        desc: "Studio concept · Packaging, visual language and consistent identity.",
         href: "/#realisations",
-        shape: "etoile-dix",
-        color: "#a855f7",
+        shape: "fleur",
+        color: "#ff5a1f",
       },
       {
         title: "Startup Presentation",
-        desc: "High-conversion interactive pitch deck & editorial founder story.",
+        desc: "Studio concept · Clear storytelling, pitch deck slides and visual design.",
         href: "/#realisations",
-        shape: "fleur",
+        shape: "eclat",
         color: "#f97316",
       },
       {
-        title: "Digital Editorial",
-        desc: "Custom typography, reading mechanics, and digital publishing architecture.",
+        title: "Editorial System",
+        desc: "Studio concept · Publication exploring writing, typography and information design.",
         href: "/#realisations",
         shape: "soleil",
         color: "#eab308",
+      },
+      {
+        title: "Brand Voice System",
+        desc: "Studio concept · Messaging framework and consistent voice across touchpoints.",
+        href: "/#realisations",
+        shape: "etoile-dix",
+        color: "#a855f7",
       },
     ],
   },
@@ -115,29 +114,29 @@ const MEGA_MENUS = {
     items: [
       {
         title: "About Quiet Studio",
-        desc: "Independent creative studio combining human taste with AI workflows.",
+        desc: "Independent creative studio focused on branding, design and writing.",
         href: "/#agence",
         shape: "fleur",
         color: "#ff5a1f",
       },
       {
-        title: "Our Thesis",
-        desc: "Why quiet, crafted software and typography beat noisy generative slop.",
-        href: "/thesis",
+        title: "Our Approach",
+        desc: "Human creativity, supported by intelligent technology and brand understanding.",
+        href: "/#agence",
         shape: "etoile-quatre",
         color: "#a855f7",
       },
       {
-        title: "Commitments & Impact",
-        desc: "Direct partner access, transparent pricing, zero agency waste.",
-        href: "/#engagements",
+        title: "How We Work",
+        desc: "From first conversation to finished work: Discover, Define, Create, Refine, Deliver.",
+        href: "/#agence",
         shape: "trefle",
         color: "#22c55e",
       },
       {
-        title: "Client Portal & Sprint Hub",
-        desc: "Real-time sprint tracker and artifact delivery hub for active partners.",
-        href: "#contact",
+        title: "Frequently Asked Questions",
+        desc: "Practical answers about our services, process, timelines and collaboration.",
+        href: "/#faq",
         shape: "soleil",
         color: "#eab308",
       },
@@ -219,6 +218,23 @@ function Header({
     playClick();
     setMobileNavOpen(false);
 
+    // Auto-switch studioMode if navigating across mode sections
+    if (
+      href.startsWith("/#expertises") ||
+      href.startsWith("/#realisations") ||
+      href.startsWith("/#agence") ||
+      href.startsWith("/#faq") ||
+      href.startsWith("/#hh")
+    ) {
+      if (studioMode !== "agent") {
+        onStudioModeChange("agent");
+      }
+    } else if (href.startsWith("/#apps") || href.startsWith("/#foundations")) {
+      if (studioMode !== "human") {
+        onStudioModeChange("human");
+      }
+    }
+
     if (href === "/models" || href === "/#models") {
       setLocation("/models");
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -264,31 +280,9 @@ function Header({
     setLocation(href);
   };
 
-  const gooeyItems = useMemo(() => {
-    return navLinks.map((link) => ({
-      label: link.label,
-      href: link.href,
-      onClick: () => {
-        handleNavClick(link.href);
-      },
-    }));
-  }, [navLinks]);
-
-  const activeNavIndex = useMemo(() => {
-    if (location === "/" || location === "") {
-      return 0;
-    }
-    const idx = navLinks.findIndex((l) => {
-      if (l.href === location) return true;
-      if (!l.href.startsWith("/#") && location.startsWith(l.href)) return true;
-      return false;
-    });
-    return idx >= 0 ? idx : 0;
-  }, [location, navLinks]);
-
   return (
     <>
-      <header className="site-header site-header--floating">
+      <header className="site-header site-header--capsule">
         {/* Three Line Collapsible Menu Icon (Mobile Left) */}
         <button
           className="mobile-menu-toggle"
@@ -302,227 +296,241 @@ function Header({
           {mobileNavOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
 
-        {/* Left Floating Pod: Brand Mark + Studio Mode Switcher */}
-        <div className="header-floating-pod header-floating-pod--brand">
-          <Link href="/" className="brand-mark" aria-label="Quiet Studio home" onClick={() => playClick()}>
-            <span className="brand-dot" />
-            <span>quiet studio</span>
+        {/* Floating Rounded Capsule Navigation (Exact Quiet Studio Reference) */}
+        <div className="quiet-capsule-bar">
+          {/* Brand Logo */}
+          <Link
+            href="/"
+            className="capsule-logo"
+            aria-label="Quiet Studio home"
+            onClick={() => {
+              playClick();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
+            <span>QUIET STUDIO<span className="capsule-dot">.</span></span>
           </Link>
 
-          {/* Global Studio Mode Switcher: Products vs Agency */}
-          <div className="header-mode-toggle" role="group" aria-label="Studio Mode Switcher">
-            <button
-              type="button"
-              className={`mode-toggle-btn ${studioMode === "human" ? "active" : ""}`}
-              onClick={() => {
-                playClick();
-                onStudioModeChange("human");
-              }}
-              title="Products: Open Core Apps & Software"
-            >
-              <span className="mode-btn-symbol">✦</span>
-              <span>Products</span>
-            </button>
-            <button
-              type="button"
-              className={`mode-toggle-btn ${studioMode === "agent" ? "active" : ""}`}
-              onClick={() => {
-                playClick();
-                onStudioModeChange("agent");
-              }}
-              title="Quiet Studio Agency: Dedicated Design & Engineering Sprints"
-            >
-              <span className="mode-btn-symbol">✱</span>
-              <span>Agency</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Center Floating Pod: Agency Nav with Dropdowns OR Products GooeyNav */}
-        <div className="header-floating-pod header-floating-pod--nav">
-          {studioMode === "agent" ? (
-            <div className="agency-nav-pod" onMouseLeave={handleDropdownLeave}>
-              <button
-                type="button"
-                className={`agency-nav-btn ${location === "/" && !activeDropdown ? "is-active" : ""}`}
-                onClick={() => handleNavClick("/#hh")}
-              >
-                Overview
-              </button>
-
-              <div className="agency-nav-item-wrap">
-                <button
-                  type="button"
-                  className={`agency-nav-btn ${activeDropdown === "services" ? "is-open" : ""}`}
-                  onMouseEnter={() => handleDropdownEnter("services")}
-                  onClick={() => handleNavClick("/#expertises")}
-                  aria-expanded={activeDropdown === "services"}
-                >
-                  Services <ChevronDown size={12} className="nav-chevron" />
-                </button>
-              </div>
-
-              <div className="agency-nav-item-wrap">
-                <button
-                  type="button"
-                  className={`agency-nav-btn ${activeDropdown === "work" ? "is-open" : ""}`}
-                  onMouseEnter={() => handleDropdownEnter("work")}
-                  onClick={() => handleNavClick("/#realisations")}
-                  aria-expanded={activeDropdown === "work"}
-                >
-                  Work <ChevronDown size={12} className="nav-chevron" />
-                </button>
-              </div>
-
-              <div className="agency-nav-item-wrap">
-                <button
-                  type="button"
-                  className={`agency-nav-btn ${activeDropdown === "about" ? "is-open" : ""}`}
-                  onMouseEnter={() => handleDropdownEnter("about")}
-                  onClick={() => handleNavClick("/#agence")}
-                  aria-expanded={activeDropdown === "about"}
-                >
-                  About <ChevronDown size={12} className="nav-chevron" />
-                </button>
-              </div>
-
-              <button
-                type="button"
-                className="agency-nav-btn"
-                onClick={() => handleNavClick("/blog")}
-              >
-                Insights
-              </button>
-
-              <button
-                type="button"
-                className="agency-nav-btn"
-                onClick={() => handleNavClick("/#engagements")}
-              >
-                Impact
-              </button>
-
-              {/* Mega-Menu Dropdown Panel */}
-              {activeDropdown && MEGA_MENUS[activeDropdown] && (
-                <div
-                  className="agency-mega-menu"
-                  onMouseEnter={() => {
-                    if (dropdownTimerRef.current) {
-                      clearTimeout(dropdownTimerRef.current);
-                      dropdownTimerRef.current = null;
-                    }
-                  }}
-                  onMouseLeave={handleDropdownLeave}
-                >
-                  <div className="agency-mega-aside">
-                    <div>
-                      <p className="agency-mega-lead">
-                        {MEGA_MENUS[activeDropdown].lead}{" "}
-                        <span className="highlight">
-                          {MEGA_MENUS[activeDropdown].leadHighlight}
-                          <span className="highlight-star" />
-                        </span>
-                      </p>
-                    </div>
-                    <a
-                      href={MEGA_MENUS[activeDropdown].allLink.href}
-                      className="agency-mega-all"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleDropdownItemClick(MEGA_MENUS[activeDropdown].allLink.href);
-                      }}
-                    >
-                      {MEGA_MENUS[activeDropdown].allLink.text}
-                      <ArrowUpRight size={13} />
-                    </a>
-                  </div>
-
-                  <div className="agency-mega-main">
-                    {MEGA_MENUS[activeDropdown].items.map((item, idx) => (
-                      <a
-                        key={idx}
-                        href={item.href}
-                        className="agency-mega-item"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleDropdownItemClick(item.href);
-                        }}
-                      >
-                        <div className="agency-mega-item-txt">
-                          <span className="agency-mega-item-title">
-                            <span
-                              className="agency-mega-glyph"
-                              style={{
-                                WebkitMaskImage: `url(/assets/img/formes/${item.shape}.svg)`,
-                                maskImage: `url(/assets/img/formes/${item.shape}.svg)`,
-                                backgroundColor: item.color,
-                              }}
-                            />
-                            {item.title}
-                          </span>
-                          <span className="agency-mega-item-desc">{item.desc}</span>
-                        </div>
-                        <ArrowUpRight size={15} className="agency-mega-item-arrow" />
-                      </a>
-                    ))}
-                  </div>
+          {/* Nav Links with Hover Mega Dropdowns */}
+          <nav className="capsule-links" onMouseLeave={handleDropdownLeave}>
+            {studioMode === "agent" ? (
+              <>
+                {/* Services Dropdown */}
+                <div className="capsule-nav-item">
+                  <button
+                    type="button"
+                    className={`capsule-nav-btn ${activeDropdown === "services" ? "is-open" : ""}`}
+                    onMouseEnter={() => handleDropdownEnter("services")}
+                    onClick={() => handleNavClick("/#expertises")}
+                    aria-expanded={activeDropdown === "services"}
+                  >
+                    Services <ChevronDown size={11} className="capsule-chevron" />
+                  </button>
                 </div>
-              )}
-            </div>
-          ) : (
-            <GooeyNav
-              items={gooeyItems}
-              activeIndex={activeNavIndex}
-              theme={dark ? "dark" : "light"}
-              color="#ff5a1f"
-              activeTextColor="#ffffff"
-              colors={["#ff5a1f", "#ff844b", "#ffa07a"]}
-              size="sm"
-              frame={true}
-              particleCount={14}
-              spread={48}
-              animationTime={520}
-              timeVariance={250}
-              gooeyness={0.5}
-              wobble={0.45}
-              hoverEffect={true}
-              onChange={(index) => {
-                const item = gooeyItems[index];
-                if (item?.href) handleNavClick(item.href);
-              }}
-            />
-          )}
-        </div>
 
-        {/* Right Floating Pod: Action Controls */}
-        <div className="header-floating-pod header-floating-pod--actions">
-          <div className="header-actions">
-            <button className="command-trigger-btn" onClick={onOpenCommand} title="Search studio (⌘K)">
+                {/* Work Dropdown */}
+                <div className="capsule-nav-item">
+                  <button
+                    type="button"
+                    className={`capsule-nav-btn ${activeDropdown === "work" ? "is-open" : ""}`}
+                    onMouseEnter={() => handleDropdownEnter("work")}
+                    onClick={() => handleNavClick("/#realisations")}
+                    aria-expanded={activeDropdown === "work"}
+                  >
+                    Work <ChevronDown size={11} className="capsule-chevron" />
+                  </button>
+                </div>
+
+                {/* About Dropdown */}
+                <div className="capsule-nav-item">
+                  <button
+                    type="button"
+                    className={`capsule-nav-btn ${activeDropdown === "about" ? "is-open" : ""}`}
+                    onMouseEnter={() => handleDropdownEnter("about")}
+                    onClick={() => handleNavClick("/#agence")}
+                    aria-expanded={activeDropdown === "about"}
+                  >
+                    About <ChevronDown size={11} className="capsule-chevron" />
+                  </button>
+                </div>
+
+                {/* News */}
+                <div className="capsule-nav-item">
+                  <button
+                    type="button"
+                    className="capsule-nav-btn"
+                    onClick={() => handleNavClick("/blog")}
+                  >
+                    News
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Products Mode Nav Links */}
+                <div className="capsule-nav-item">
+                  <button
+                    type="button"
+                    className="capsule-nav-btn"
+                    onClick={() => handleNavClick("/#apps")}
+                  >
+                    Open Core Apps
+                  </button>
+                </div>
+                <div className="capsule-nav-item">
+                  <button
+                    type="button"
+                    className="capsule-nav-btn"
+                    onClick={() => handleNavClick("/blog")}
+                  >
+                    Blog & Notes
+                  </button>
+                </div>
+                <div className="capsule-nav-item">
+                  <button
+                    type="button"
+                    className="capsule-nav-btn"
+                    onClick={() => handleNavClick("/#foundations")}
+                  >
+                    Foundations
+                  </button>
+                </div>
+                <div className="capsule-nav-item">
+                  <button
+                    type="button"
+                    className="capsule-nav-btn"
+                    onClick={() => handleNavClick("/about")}
+                  >
+                    About
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* Studio Mode Switcher: Products vs Agency */}
+            <div className="capsule-mode-toggle" role="group" aria-label="Studio Mode Switcher">
+              <button
+                type="button"
+                className={`capsule-mode-btn ${studioMode === "human" ? "active mode-products" : ""}`}
+                onClick={() => {
+                  playClick();
+                  onStudioModeChange("human");
+                }}
+                title="Products: Open Core Apps & Systems"
+              >
+                ✦ Products
+              </button>
+              <button
+                type="button"
+                className={`capsule-mode-btn ${studioMode === "agent" ? "active mode-agency" : ""}`}
+                onClick={() => {
+                  playClick();
+                  onStudioModeChange("agent");
+                }}
+                title="Agency: Branding, Design & Writing Studio"
+              >
+                ✱ Agency
+              </button>
+            </div>
+          </nav>
+
+          {/* Action Controls */}
+          <div className="capsule-actions">
+            <button className="capsule-icon-btn" onClick={onOpenCommand} title="Search studio (⌘K)">
               <Search size={13} />
-              <span className="kbd-shortcut">⌘K</span>
             </button>
 
             <button
-              className="icon-button"
+              className="capsule-icon-btn"
               onClick={handleSoundToggle}
               title={soundOn ? "Mute studio sound" : "Enable studio sound"}
               aria-label={soundOn ? "Mute studio sound" : "Enable studio sound"}
             >
-              {soundOn ? <Volume2 size={15} /> : <VolumeX size={15} />}
+              {soundOn ? <Volume2 size={13} /> : <VolumeX size={13} />}
             </button>
 
             <button
-              className="icon-button"
+              className="capsule-icon-btn"
               onClick={onToggle}
               aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
             >
-              {dark ? <Sun size={15} /> : <Moon size={15} />}
+              {dark ? <Sun size={13} /> : <Moon size={13} />}
             </button>
 
-            <button className="header-cta" onClick={onOpenContact}>
-              Start a conversation <ArrowUpRight size={13} />
+            {/* Bright Orange Contact Button from Screenshot Spec */}
+            <button className="capsule-cta-btn" onClick={onOpenContact}>
+              <span>Contact us</span>
+              <ArrowRight size={13} />
             </button>
           </div>
+
+          {/* Mega-Menu Dropdown Panel */}
+          {activeDropdown && MEGA_MENUS[activeDropdown] && (
+            <div
+              className="capsule-mega-dropdown"
+              onMouseEnter={() => {
+                if (dropdownTimerRef.current) {
+                  clearTimeout(dropdownTimerRef.current);
+                  dropdownTimerRef.current = null;
+                }
+              }}
+              onMouseLeave={handleDropdownLeave}
+            >
+              <div className="capsule-mega-aside">
+                <div>
+                  <span className="capsule-mega-kicker">DISCIPLINE OVERVIEW</span>
+                  <p className="capsule-mega-lead">
+                    {MEGA_MENUS[activeDropdown].lead}{" "}
+                    <span className="capsule-mega-highlight">
+                      {MEGA_MENUS[activeDropdown].leadHighlight}
+                      <span className="capsule-mega-star">✦</span>
+                    </span>
+                  </p>
+                </div>
+                <a
+                  href={MEGA_MENUS[activeDropdown].allLink.href}
+                  className="capsule-mega-all"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleDropdownItemClick(MEGA_MENUS[activeDropdown].allLink.href);
+                  }}
+                >
+                  {MEGA_MENUS[activeDropdown].allLink.text}
+                  <ArrowRight size={13} />
+                </a>
+              </div>
+
+              <div className="capsule-mega-main">
+                {MEGA_MENUS[activeDropdown].items.map((item, idx) => (
+                  <a
+                    key={idx}
+                    href={item.href}
+                    className="capsule-mega-row"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleDropdownItemClick(item.href);
+                    }}
+                  >
+                    <div className="capsule-mega-row-txt">
+                      <span className="capsule-mega-row-title">
+                        <span
+                          className="capsule-glyph"
+                          style={{
+                            WebkitMaskImage: `url(/assets/img/formes/${item.shape}.svg)`,
+                            maskImage: `url(/assets/img/formes/${item.shape}.svg)`,
+                            backgroundColor: item.color,
+                          }}
+                        />
+                        {item.title}
+                      </span>
+                      <span className="capsule-mega-row-desc">{item.desc}</span>
+                    </div>
+                    <ArrowRight size={14} className="capsule-mega-arrow" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {isProduct && <Link href="/" className="mobile-back">← back to studio</Link>}
