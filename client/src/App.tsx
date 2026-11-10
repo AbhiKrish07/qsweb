@@ -308,10 +308,11 @@ function Header({
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
-            <span>QUIET STUDIO<span className="capsule-dot">.</span></span>
+            <span className="capsule-logo-dot" />
+            <span className="capsule-logo-text">quiet studio</span>
           </Link>
 
-          {/* Studio Mode Switcher: Products vs Agency (Placed right after Logo, per Screenshot 4) */}
+          {/* Studio Mode Switcher: Products vs Agency (Placed right after Logo) */}
           <div className="capsule-mode-toggle" role="group" aria-label="Studio Mode Switcher">
             <button
               type="button"
@@ -322,7 +323,8 @@ function Header({
               }}
               title="Products: Open Core Apps & Systems"
             >
-              ✦ Products
+              <span className="capsule-mode-symbol">✦</span>
+              <span>PRODUCTS</span>
             </button>
             <button
               type="button"
@@ -331,9 +333,10 @@ function Header({
                 playClick();
                 onStudioModeChange("agent");
               }}
-              title="Agency: Independent Product & AI Studio"
+              title="Agency: Independent Design & Software Studio"
             >
-              ✱ Agency
+              <span className="capsule-mode-symbol">✱</span>
+              <span>AGENCY</span>
             </button>
           </div>
 
@@ -397,7 +400,7 @@ function Header({
                 <div className="capsule-nav-item">
                   <button
                     type="button"
-                    className="capsule-nav-btn"
+                    className={`capsule-nav-btn ${location === "/" ? "capsule-nav-active" : ""}`}
                     onClick={() => handleNavClick("/#apps")}
                   >
                     Open Core Apps
@@ -406,10 +409,10 @@ function Header({
                 <div className="capsule-nav-item">
                   <button
                     type="button"
-                    className="capsule-nav-btn"
+                    className={`capsule-nav-btn ${location.startsWith("/blog") ? "capsule-nav-active" : ""}`}
                     onClick={() => handleNavClick("/blog")}
                   >
-                    Blog & Notes
+                    Blog &amp; Notes
                   </button>
                 </div>
                 <div className="capsule-nav-item">
@@ -424,7 +427,7 @@ function Header({
                 <div className="capsule-nav-item">
                   <button
                     type="button"
-                    className="capsule-nav-btn"
+                    className={`capsule-nav-btn ${location === "/about" ? "capsule-nav-active" : ""}`}
                     onClick={() => handleNavClick("/about")}
                   >
                     About
