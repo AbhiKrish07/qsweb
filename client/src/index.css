@@ -178,12 +178,36 @@
 }
 
 .capsule-links {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
+}
+
+/* Tactile sliding orange pill highlight that animates across tabs */
+.capsule-sliding-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #ff5a1f;
+  border-radius: 9999px;
+  box-shadow: 0 3px 14px rgba(255, 90, 31, 0.45);
+  transition: transform 0.32s cubic-bezier(0.34, 1.36, 0.64, 1),
+              width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.capsule-nav-item {
+  position: relative;
+  z-index: 2;
 }
 
 .capsule-nav-btn {
+  position: relative;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -191,26 +215,22 @@
   border-radius: 9999px;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.78);
   font: 500 13px/1 "Space Grotesk", "Cabinet Grotesk", -apple-system, sans-serif;
   letter-spacing: 0.01em;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
   text-decoration: none;
 }
 
-.capsule-nav-btn:hover,
-.capsule-nav-btn.is-open {
+.capsule-nav-btn:hover:not(.is-active) {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.09);
 }
 
-.capsule-nav-btn.capsule-nav-active {
-  background: #ff5a1f !important;
+.capsule-nav-btn.is-active {
   color: #ffffff !important;
   font-weight: 600;
-  box-shadow: 0 2px 10px rgba(255, 90, 31, 0.4);
 }
 
 .capsule-nav-btn .capsule-chevron {
@@ -221,7 +241,7 @@
 .capsule-nav-btn.is-open .capsule-chevron {
   transform: rotate(180deg);
   opacity: 1;
-  color: #ff5a1f;
+  color: #ffffff;
 }
 
 .capsule-mode-toggle {

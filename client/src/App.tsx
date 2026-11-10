@@ -166,6 +166,63 @@ function Header({
   const dropdownTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isProduct = location.startsWith("/products/");
 
+  // Navigation active tabs & sliding orange highlight pill state
+  const [activeProductsKey, setActiveProductsKey] = useState<string>("apps");
+  const [activeAgencyKey, setActiveAgencyKey] = useState<string>("services");
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, top: 0, width: 0, height: 0, opacity: 0 });
+  const navContainerRef = useRef<HTMLElement | null>(null);
+  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  // Sync active key with route/hash
+  useEffect(() => {
+    if (location.startsWith("/blog") || location.startsWith("/notes")) {
+      setActiveProductsKey("blog");
+      setActiveAgencyKey("news");
+    } else if (location.startsWith("/about")) {
+      setActiveProductsKey("about");
+      setActiveAgencyKey("about");
+    } else if (location === "/") {
+      if (studioMode === "human") {
+        setActiveProductsKey("apps");
+      }
+    }
+  }, [location, studioMode]);
+
+  // Recalculate indicator position on active tab or mode change
+  const updateIndicator = () => {
+    const currentKey = studioMode === "human" ? activeProductsKey : activeAgencyKey;
+    const currentBtn = itemRefs.current[currentKey];
+    const container = navContainerRef.current;
+    if (currentBtn && container) {
+      const containerRect = container.getBoundingClientRect();
+      const btnRect = currentBtn.getBoundingClientRect();
+      if (btnRect.width > 0) {
+        setIndicatorStyle({
+          left: btnRect.left - containerRect.left,
+          top: btnRect.top - containerRect.top,
+          width: btnRect.width,
+          height: btnRect.height,
+          opacity: 1,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    updateIndicator();
+    const t1 = setTimeout(updateIndicator, 40);
+    const t2 = setTimeout(updateIndicator, 150);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [studioMode, activeProductsKey, activeAgencyKey, location]);
+
+  useEffect(() => {
+    window.addEventListener("resize", updateIndicator);
+    return () => window.removeEventListener("resize", updateIndicator);
+  }, [studioMode, activeProductsKey, activeAgencyKey]);
+
   const handleDropdownEnter = (menu: "services" | "work" | "about") => {
     if (dropdownTimerRef.current) {
       clearTimeout(dropdownTimerRef.current);
@@ -340,17 +397,32 @@ function Header({
             </button>
           </div>
 
-          {/* Nav Links with Hover Mega Dropdowns */}
-          <nav className="capsule-links" onMouseLeave={handleDropdownLeave}>
+          {/* Nav Links with Animated Sliding Orange Pill Highlight */}
+          <nav className="capsule-links" ref={navContainerRef} onMouseLeave={handleDropdownLeave}>
+            {/* The sliding animated orange highlight pill */}
+            <span
+              className="capsule-sliding-indicator"
+              style={{
+                transform: `translate3d(${indicatorStyle.left}px, ${indicatorStyle.top}px, 0)`,
+                width: `${indicatorStyle.width}px`,
+                height: `${indicatorStyle.height}px`,
+                opacity: indicatorStyle.opacity,
+              }}
+            />
+
             {studioMode === "agent" ? (
               <>
                 {/* Services Dropdown */}
                 <div className="capsule-nav-item">
                   <button
+                    ref={(el) => { itemRefs.current["services"] = el; }}
                     type="button"
-                    className={`capsule-nav-btn ${activeDropdown === "services" ? "is-open" : ""}`}
+                    className={`capsule-nav-btn ${activeAgencyKey === "services" ? "is-active" : ""} ${activeDropdown === "services" ? "is-open" : ""}`}
                     onMouseEnter={() => handleDropdownEnter("services")}
-                    onClick={() => handleNavClick("/#expertises")}
+                    onClick={() => {
+                      setActiveAgencyKey("services");
+                      handleNavClick("/#expertises");
+                    }}
                     aria-expanded={activeDropdown === "services"}
                   >
                     Services <ChevronDown size={11} className="capsule-chevron" />
@@ -360,10 +432,14 @@ function Header({
                 {/* Work Dropdown */}
                 <div className="capsule-nav-item">
                   <button
+                    ref={(el) => { itemRefs.current["work"] = el; }}
                     type="button"
-                    className={`capsule-nav-btn ${activeDropdown === "work" ? "is-open" : ""}`}
+                    className={`capsule-nav-btn ${activeAgencyKey === "work" ? "is-active" : ""} ${activeDropdown === "work" ? "is-open" : ""}`}
                     onMouseEnter={() => handleDropdownEnter("work")}
-                    onClick={() => handleNavClick("/#realisations")}
+                    onClick={() => {
+                      setActiveAgencyKey("work");
+                      handleNavClick("/#realisations");
+                    }}
                     aria-expanded={activeDropdown === "work"}
                   >
                     Work <ChevronDown size={11} className="capsule-chevron" />
@@ -373,10 +449,14 @@ function Header({
                 {/* About Dropdown */}
                 <div className="capsule-nav-item">
                   <button
+                    ref={(el) => { itemRefs.current["about"] = el; }}
                     type="button"
-                    className={`capsule-nav-btn ${activeDropdown === "about" ? "is-open" : ""}`}
+                    className={`capsule-nav-btn ${activeAgencyKey === "about" ? "is-active" : ""} ${activeDropdown === "about" ? "is-open" : ""}`}
                     onMouseEnter={() => handleDropdownEnter("about")}
-                    onClick={() => handleNavClick("/#agence")}
+                    onClick={() => {
+                      setActiveAgencyKey("about");
+                      handleNavClick("/#agence");
+                    }}
                     aria-expanded={activeDropdown === "about"}
                   >
                     About <ChevronDown size={11} className="capsule-chevron" />
@@ -386,9 +466,13 @@ function Header({
                 {/* News */}
                 <div className="capsule-nav-item">
                   <button
+                    ref={(el) => { itemRefs.current["news"] = el; }}
                     type="button"
-                    className="capsule-nav-btn"
-                    onClick={() => handleNavClick("/blog")}
+                    className={`capsule-nav-btn ${activeAgencyKey === "news" ? "is-active" : ""}`}
+                    onClick={() => {
+                      setActiveAgencyKey("news");
+                      handleNavClick("/blog");
+                    }}
                   >
                     News
                   </button>
@@ -399,36 +483,52 @@ function Header({
                 {/* Products Mode Nav Links */}
                 <div className="capsule-nav-item">
                   <button
+                    ref={(el) => { itemRefs.current["apps"] = el; }}
                     type="button"
-                    className={`capsule-nav-btn ${location === "/" ? "capsule-nav-active" : ""}`}
-                    onClick={() => handleNavClick("/#apps")}
+                    className={`capsule-nav-btn ${activeProductsKey === "apps" ? "is-active" : ""}`}
+                    onClick={() => {
+                      setActiveProductsKey("apps");
+                      handleNavClick("/#apps");
+                    }}
                   >
                     Open Core Apps
                   </button>
                 </div>
                 <div className="capsule-nav-item">
                   <button
+                    ref={(el) => { itemRefs.current["blog"] = el; }}
                     type="button"
-                    className={`capsule-nav-btn ${location.startsWith("/blog") ? "capsule-nav-active" : ""}`}
-                    onClick={() => handleNavClick("/blog")}
+                    className={`capsule-nav-btn ${activeProductsKey === "blog" ? "is-active" : ""}`}
+                    onClick={() => {
+                      setActiveProductsKey("blog");
+                      handleNavClick("/blog");
+                    }}
                   >
                     Blog &amp; Notes
                   </button>
                 </div>
                 <div className="capsule-nav-item">
                   <button
+                    ref={(el) => { itemRefs.current["foundations"] = el; }}
                     type="button"
-                    className="capsule-nav-btn"
-                    onClick={() => handleNavClick("/#foundations")}
+                    className={`capsule-nav-btn ${activeProductsKey === "foundations" ? "is-active" : ""}`}
+                    onClick={() => {
+                      setActiveProductsKey("foundations");
+                      handleNavClick("/#foundations");
+                    }}
                   >
                     Foundations
                   </button>
                 </div>
                 <div className="capsule-nav-item">
                   <button
+                    ref={(el) => { itemRefs.current["about"] = el; }}
                     type="button"
-                    className={`capsule-nav-btn ${location === "/about" ? "capsule-nav-active" : ""}`}
-                    onClick={() => handleNavClick("/about")}
+                    className={`capsule-nav-btn ${activeProductsKey === "about" ? "is-active" : ""}`}
+                    onClick={() => {
+                      setActiveProductsKey("about");
+                      handleNavClick("/about");
+                    }}
                   >
                     About
                   </button>
