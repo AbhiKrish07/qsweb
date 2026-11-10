@@ -377,12 +377,12 @@ function AppShell() {
     };
   }, []);
 
-  const isAdsideHome = studioMode === "agent" && location === "/";
+  const isAgencyHome = studioMode === "agent" && location === "/";
 
   return (
-    <div className={`app-shell ${isAdsideHome ? "adside-shell" : ""}`}>
+    <div className={`app-shell ${isAgencyHome ? "agency-shell" : ""}`}>
       <ScrollToTop />
-      {!isAdsideHome && (
+      {!isAgencyHome && (
         <Header
           dark={dark}
           onToggle={() => setDark((value) => !value)}
@@ -418,7 +418,7 @@ function AppShell() {
         </div>
       </main>
 
-      {!isAdsideHome && <Footer onOpenContact={() => setContactOpen(true)} />}
+      {!isAgencyHome && <Footer onOpenContact={() => setContactOpen(true)} />}
 
       <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} />
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />

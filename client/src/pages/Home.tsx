@@ -654,8 +654,8 @@ export default function Home({
 
   if (mode === "agent") {
     return (
-      <div className="adside-wrapper" ref={homeRef}>
-        <AgencySection />
+      <div className="agency-wrapper" ref={homeRef}>
+        <AgencySection onSwitchToProducts={() => onModeChange?.("human")} />
       </div>
     );
   }

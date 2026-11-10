@@ -1,0 +1,1 @@
+body[data-variante="allegee"]{--jc-r:clamp(28px,4.4vw,64px)}body[data-variante="allegee"] .som__l a,body[data-variante="allegee"] .som:not(.som--bloc) .som__cur{font-size:clamp(1rem,.875rem + .25vw,1.0625rem)}@media (min-width:761px){.vc-alt__grille{display:flex;align-items:flex-start}.vc-alt__grille > li{flex:var(--ar,1) 1 0;min-width:0}}

@@ -310,7 +310,40 @@ function vitePluginEmailApi(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy(), vitePluginEmailApi()];
+function vitePluginBitwipStatic(): Plugin {
+  return {
+    name: "bitwip-static-routes",
+    configureServer(server: ViteDevServer) {
+      server.middlewares.use((req, res, next) => {
+        const url = req.url?.split("?")[0] || "";
+        if (url === "/en" || url.startsWith("/en/")) {
+          const subPath = url.replace(/^\/en\/?/, "");
+          const candidate1 = path.resolve(import.meta.dirname, "client/public/en", subPath, "index.html");
+          const candidate2 = path.resolve(import.meta.dirname, "client/public/en", subPath + ".html");
+          const candidate3 = path.resolve(import.meta.dirname, "client/public/en", subPath);
+
+          let target = "";
+          if (fs.existsSync(candidate1) && fs.statSync(candidate1).isFile()) {
+            target = candidate1;
+          } else if (fs.existsSync(candidate2) && fs.statSync(candidate2).isFile()) {
+            target = candidate2;
+          } else if (fs.existsSync(candidate3) && fs.statSync(candidate3).isFile()) {
+            target = candidate3;
+          }
+
+          if (target) {
+            res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+            fs.createReadStream(target).pipe(res);
+            return;
+          }
+        }
+        next();
+      });
+    },
+  };
+}
+
+const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy(), vitePluginEmailApi(), vitePluginBitwipStatic()];
 
 export default defineConfig({
   plugins,
