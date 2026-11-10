@@ -1,0 +1,177 @@
+.helix-gallery-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  overflow: hidden;
+  user-select: none;
+  touch-action: pan-y;
+  outline: none;
+}
+
+.helix-spiral-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  pointer-events: auto;
+}
+
+.helix-photo-node {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  cursor: pointer;
+  background: #181716;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.12s linear, opacity 0.3s ease, border-color 0.2s ease, filter 0.2s ease;
+  will-change: transform, opacity;
+}
+
+.helix-photo-node:hover {
+  border-color: var(--orange, #ff5a1f);
+  filter: brightness(1.12);
+  z-index: 9999 !important;
+}
+
+.helix-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.helix-photo-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(0, 0, 0, 0.3) 100%);
+  pointer-events: none;
+}
+
+/* Centered Children layer (fades smoothly when modal opens) */
+.helix-center-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  pointer-events: auto;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s ease;
+}
+
+.helix-center-content.is-faded {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.96);
+}
+
+/* Modal Open Overlay */
+.helix-active-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 14, 13, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: helixFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes helixFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.helix-modal-card {
+  position: relative;
+  max-width: 540px;
+  width: 100%;
+  background: #181716;
+  border: 1px solid rgba(255, 90, 31, 0.4);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+  animation: helixZoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes helixZoomIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.helix-modal-img {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+.helix-modal-captions {
+  padding: 20px 24px;
+  background: #141413;
+  color: #faf9f5;
+  text-align: left;
+}
+
+.helix-modal-captions h3 {
+  font: 700 20px "Space Grotesk", sans-serif;
+  color: #ffffff;
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+}
+
+.helix-modal-captions p {
+  font: 400 14px "DM Sans", sans-serif;
+  color: #a1a1aa;
+  margin: 0 0 14px;
+}
+
+.helix-modal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--orange, #ff5a1f);
+  color: #ffffff;
+  text-decoration: none;
+  font: 700 13px "Space Grotesk", sans-serif;
+  padding: 8px 18px;
+  border-radius: 999px;
+  transition: opacity 0.2s ease;
+}
+
+.helix-modal-link:hover {
+  opacity: 0.9;
+}
+
+.helix-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.helix-close-btn:hover {
+  background: var(--orange, #ff5a1f);
+}
+

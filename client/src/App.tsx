@@ -60,13 +60,14 @@ function Header({
       ? [
           { label: "Open Core Apps", href: "/#apps" },
           { label: "Blog & Notes", href: "/blog" },
+          { label: "Foundations", href: "/#foundations" },
           { label: "About", href: "/about" },
         ]
       : [
-          { label: "AI Lab", href: "/#overview" },
-          { label: "Models", href: "/models" },
-          { label: "Research", href: "/research" },
-          { label: "Thesis", href: "/thesis" },
+          { label: "Agency", href: "/#agency-overview" },
+          { label: "Features", href: "/#agency-features" },
+          { label: "Hub", href: "/#agency-hub" },
+          { label: "Pricing", href: "/#agency-pricing" },
           { label: "About", href: "/about" },
         ];
 
@@ -178,10 +179,10 @@ function Header({
                 playClick();
                 onStudioModeChange("agent");
               }}
-              title="AI Lab: Vertical Models & Research Papers"
+              title="Quiet Studio Agency: Dedicated Design & Engineering Sprints"
             >
               <span className="mode-btn-symbol">✱</span>
-              <span>AI Lab</span>
+              <span>Agency</span>
             </button>
           </div>
         </div>
@@ -324,6 +325,7 @@ function Footer({ onOpenContact }: { onOpenContact: () => void }) {
 }
 
 function AppShell() {
+  const [location] = useLocation();
   const [dark, setDark] = useState<boolean>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("quiet-studio-theme");
@@ -340,7 +342,7 @@ function AppShell() {
       const saved = localStorage.getItem("quiet-studio-mode");
       if (saved === "human" || saved === "agent") return saved;
     }
-    return "human";
+    return "agent";
   });
 
   const handleStudioModeChange = (nextMode: "human" | "agent") => {
@@ -375,17 +377,21 @@ function AppShell() {
     };
   }, []);
 
+  const isAdsideHome = studioMode === "agent" && location === "/";
+
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${isAdsideHome ? "adside-shell" : ""}`}>
       <ScrollToTop />
-      <Header
-        dark={dark}
-        onToggle={() => setDark((value) => !value)}
-        onOpenCommand={() => setCommandOpen(true)}
-        onOpenContact={() => setContactOpen(true)}
-        studioMode={studioMode}
-        onStudioModeChange={handleStudioModeChange}
-      />
+      {!isAdsideHome && (
+        <Header
+          dark={dark}
+          onToggle={() => setDark((value) => !value)}
+          onOpenCommand={() => setCommandOpen(true)}
+          onOpenContact={() => setContactOpen(true)}
+          studioMode={studioMode}
+          onStudioModeChange={handleStudioModeChange}
+        />
+      )}
       <main>
         <div key={`${String(location)}-${studioMode}`} className="page-transition">
           <Switch>
@@ -412,7 +418,7 @@ function AppShell() {
         </div>
       </main>
 
-      <Footer onOpenContact={() => setContactOpen(true)} />
+      {!isAdsideHome && <Footer onOpenContact={() => setContactOpen(true)} />}
 
       <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} />
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />

@@ -32,6 +32,7 @@ import ElectricLogo from "@/components/ElectricLogo";
 import Strands from "@/components/Strands";
 import HalftoneReveal from "@/components/HalftoneReveal";
 import TextLoop from "@/components/TextLoop";
+import AgencySection from "@/components/AgencySection";
 import { BLOG_POSTS } from "@/pages/Notes";
 
 if (typeof window !== "undefined") {
@@ -651,6 +652,14 @@ export default function Home({
     };
   }, [mode]);
 
+  if (mode === "agent") {
+    return (
+      <div className="adside-wrapper" ref={homeRef}>
+        <AgencySection />
+      </div>
+    );
+  }
+
   return (
     <div className="home-page" ref={homeRef}>
       {mode === "human" ? (
@@ -777,10 +786,10 @@ export default function Home({
                     playClick();
                     onModeChange("agent");
                   }}
-                  title="Switch to AI Laboratory: Models & Research"
+                  title="Switch to Quiet Studio Agency: Dedicated Design & Engineering Sprints"
                 >
                   <Sparkles size={13} />
-                  <span>AI Lab ↗</span>
+                  <span>Agency ↗</span>
                 </button>
               )}
             </div>
@@ -946,215 +955,12 @@ export default function Home({
               ))}
             </div>
           </section>
-        </>
-      ) : (
-        /* =========================================================================
-           AGENT MODE: AI LABORATORY HEADER, RESEARCH MANIFESTO, MODELS & WHITEPAPERS
-           Cinematic dark header, theoretical foundations, sparse tensor memory & intent models
-           ========================================================================= */
-        <>
-          {/* Section 1: The 3D Interactive AI Laboratory */}
-          <div id="overview">
-            <QuietStudioLab3D />
-          </div>
 
-          {/* Section 2: AI Lab Manifesto (In Terms of Models and Research Papers) */}
-          <section className="manifesto-section" id="manifesto">
-            <div className="section-marker">[ 01 — THE AI LAB MANIFESTO: RESEARCH &amp; MODELS ]</div>
-
-            <div
-              className="old-hero-text-block"
-              style={{
-                margin: "1rem 0 1.5rem",
-                paddingBottom: "1.5rem",
-                borderBottom: "1px solid color-mix(in srgb, var(--background) 18%, transparent)",
-              }}
-            >
-              <p
-                className="eyebrow"
-                style={{
-                  color: "var(--orange)",
-                  font: "600 11px/1.4 'DM Mono', monospace",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  flexWrap: "wrap",
-                  marginBottom: "12px",
-                }}
-              >
-                <span className="pulse-dot" /> independent AI research &amp; distilled tensor architectures — 2026
-              </p>
-              <h2
-                style={{
-                  font: "700 clamp(2rem, 4vw, 4.2rem)/0.92 'Space Grotesk', sans-serif",
-                  letterSpacing: "-0.06em",
-                  color: "var(--background)",
-                  textTransform: "uppercase",
-                  margin: "0 0 14px",
-                }}
-              >
-                A proactive partner in your life
-                <span style={{ color: "var(--orange)" }}>,</span>
-                <br />
-                <em style={{ fontStyle: "italic", fontFamily: "serif", textTransform: "none" }}>
-                  vertical for the tasks you need.
-                </em>
-              </h2>
-              <p
-                style={{
-                  font: "400 15px/1.55 'DM Sans', sans-serif",
-                  color: "color-mix(in srgb, var(--background) 70%, transparent)",
-                  maxWidth: "680px",
-                  margin: 0,
-                }}
-              >
-                The AI Laboratory at Quiet Studio isn’t just working on isolated memory mathematics. Our central goal
-                is making artificial intelligence a proactive companion in your daily life: deeply vertical, task-specialized,
-                and aware of your context so it executes what you need without syntax gymnastics.
-              </p>
-            </div>
-
-            <div className="manifesto-layout">
-              <p className="manifesto-lead">
-                Proactive intelligence <span>tailored to your tasks:</span>
-              </p>
-              <div className="manifesto-statement">
-                <p>from ambient intent detection to deep vertical execution.</p>
-                <div className="manifesto-rule" />
-                <p className="manifesto-fine">
-                  Instead of generalist chatbots that know everything superficially, our laboratory engineers vertical models and long-horizon context architectures (SCTM) that master specific workflows with zero friction and absolute privacy.
-                </p>
-              </div>
-            </div>
-
-            <div className="manifesto-bottom">
-              <div className="signal-card">
-                <Command size={18} />
-                <span>
-                  CORE ROLE: PROACTIVE LIFE &amp; WORK PARTNER
-                  <br />
-                  <b>MODEL ARCHITECTURE: VERTICAL TASK ENGINES</b>
-                </span>
-              </div>
-              <p>
-                Proactive instead of reactive.
-                <br />
-                Vertical models for actual work.
-                <br />
-                Calm intelligence that gets out of your way.
-              </p>
-            </div>
-          </section>
-
-          {/* Section 3: Vertical AI Models & Intent Engines */}
-          <section className="models-showcase-section" id="models" style={{ padding: "7vw 9.2vw", background: "var(--background)" }}>
+          {/* Section 3: Theoretical Foundations */}
+          <section className="research-preview-section" id="foundations" style={{ padding: "7vw 9.2vw", background: "var(--card)", borderTop: "1px solid var(--line)" }}>
             <div className="section-heading compact-heading">
               <div>
-                <div className="section-marker" style={{ color: "var(--orange)" }}>
-                  [ 02 — DOMAIN-VERTICAL AI MODELS &amp; INTENT ENGINES ]
-                </div>
-                <h2>
-                  Vertical models &amp;
-                  <br />
-                  <em>task execution.</em>
-                </h2>
-                <p
-                  className="section-description"
-                  style={{ marginTop: "12px", color: "var(--muted-ink)", maxWidth: "520px" }}
-                >
-                  Moving past generalist chatbots to specialized vertical models tailored for the exact tasks, routines, and decisions you face.
-                </p>
-              </div>
-              <Link href="/blog/why-vertical-models-beat-general-ai" className="outline-button">
-                Read Vertical AI Thesis <ArrowUpRight size={14} />
-              </Link>
-            </div>
-
-            <div className="models-grid" style={{ marginTop: "4vw" }}>
-              {/* Model 1: Aethel Intent Engine */}
-              <div className="model-showcase-card">
-                <div className="model-head">
-                  <span className="model-badge" style={{ color: "#fbbf24" }}>VERTICAL MODEL</span>
-                  <span className="model-latency">AMBIENT PARSER</span>
-                </div>
-                <h3>Aethel Intent Engine</h3>
-                <p className="model-tagline">Anticipates user workflow goals before explicit verbal prompts.</p>
-                <p style={{ fontSize: "13px", color: "var(--muted-ink)", lineHeight: 1.5, margin: 0 }}>
-                  Synthesizes peripheral desktop telemetry, active workspace context, and recent micro-gestures into direct executable intents.
-                </p>
-                <div className="model-specs-box">
-                  <div className="model-spec-pair">
-                    <span>Target</span>
-                    <span>Zero Prompt UI</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Match Rate</span>
-                    <span>99.1% F1</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Deployment</span>
-                    <span>Hybrid Local/Edge</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Module</span>
-                    <span>Aethel Core v2</span>
-                  </div>
-                </div>
-                <div className="model-actions">
-                  <Link href="/products/aethel" className="outline-button" style={{ width: "100%", justifyContent: "center" }}>
-                    Examine Aethel Protocol <ArrowRight size={13} />
-                  </Link>
-                </div>
-              </div>
-
-              {/* Model 2: SCTM Tensor Memory */}
-              <div className="model-showcase-card">
-                <div className="model-head">
-                  <span className="model-badge">AI MEMORY SYSTEM</span>
-                  <span className="model-latency">&lt; 12ms RETRIEVAL</span>
-                </div>
-                <h3>SCTM Tensor Memory</h3>
-                <p className="model-tagline">Sparse Confident Tensor Memory with Isotropic Whitening.</p>
-                <p style={{ fontSize: "13px", color: "var(--muted-ink)", lineHeight: 1.5, margin: 0 }}>
-                  Maintains 94.2% retrieval precision over 128k context windows by filtering attention distractor pollution
-                  before key-value caching.
-                </p>
-                <div className="model-specs-box">
-                  <div className="model-spec-pair">
-                    <span>Window</span>
-                    <span>128,000 Tokens</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Precision</span>
-                    <span>94.2% Signal</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Framework</span>
-                    <span>PyTorch / CUDA</span>
-                  </div>
-                  <div className="model-spec-pair">
-                    <span>Status</span>
-                    <span>Whitepaper Open</span>
-                  </div>
-                </div>
-                <div className="model-actions">
-                  <Link href="/research/sctm-memory-architecture" className="outline-button" style={{ width: "100%", justifyContent: "center" }}>
-                    Read Architecture Whitepaper <ArrowRight size={13} />
-                  </Link>
-                </div>
-              </div>
-
-
-            </div>
-          </section>
-
-          {/* Section 4: AI Research & Architecture Whitepapers */}
-          <section className="research-preview-section" id="research" style={{ padding: "7vw 9.2vw", background: "var(--card)", borderTop: "1px solid var(--line)" }}>
-            <div className="section-heading compact-heading">
-              <div>
-                <div className="section-marker">[ 03 — RESEARCH &amp; WHITEPAPERS ]</div>
+                <div className="section-marker">[ 03 — THEORETICAL FOUNDATIONS &amp; RESEARCH ]</div>
                 <h2>
                   Theoretical
                   <br />
@@ -1191,6 +997,11 @@ export default function Home({
             </div>
           </section>
         </>
+      ) : (
+        /* =========================================================================
+           AGENCY SPRINT EXPERIENCE (REPLACES AI LAB WITH DEDICATED STUDIO SQUAD)
+           ========================================================================= */
+        <AgencySection />
       )}
 
       {/* =========================================================================
