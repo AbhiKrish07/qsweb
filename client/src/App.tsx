@@ -31,34 +31,34 @@ function ScrollToTop() {
 
 const MEGA_MENUS = {
   services: {
-    lead: "Three disciplines, one",
+    lead: "Four practices, one",
     leadHighlight: "studio",
-    allLink: { text: "All our services", href: "/#expertises" },
+    allLink: { text: "All practices", href: "/#expertises" },
     items: [
       {
-        title: "Branding & Identity",
-        desc: "Strategy, positioning, naming, logo design, typography & brand guidelines.",
+        title: "Product Strategy & Design",
+        desc: "PRDs, UX/UI, wireframes, interaction design, token systems & prototypes.",
         href: "/#expertises",
         shape: "sceau",
         color: "#b4a0e5",
       },
       {
-        title: "Design & Creative",
-        desc: "Presentations, pitch decks, publications, marketing graphics & design systems.",
+        title: "Software & Product Engineering",
+        desc: "Full-stack Next.js 15, TypeScript, PostgreSQL, low-latency APIs & dashboards.",
         href: "/#expertises",
         shape: "fleur",
         color: "#ff5a1f",
       },
       {
-        title: "Writing & Content",
-        desc: "Website copy, brand messaging, articles, newsletters & product descriptions.",
+        title: "Applied AI & Intelligent Systems",
+        desc: "RAG architectures, multi-agent workflows, quantized edge inference & pipelines.",
         href: "/#expertises",
         shape: "etoile-huit",
         color: "#eab308",
       },
       {
-        title: "Creative Production",
-        desc: "AI-assisted workflows, rapid sprint delivery, bespoke components & human craft.",
+        title: "Brand, Experience & Launch",
+        desc: "Product positioning, design systems, narrative, landing pages & conversion.",
         href: "/#expertises",
         shape: "trefle",
         color: "#22c55e",
@@ -66,41 +66,41 @@ const MEGA_MENUS = {
     ],
   },
   work: {
-    lead: "Good work speaks for",
-    leadHighlight: "itself",
+    lead: "Software & systems built to",
+    leadHighlight: "work",
     allLink: { text: "Selected work", href: "/#realisations" },
     items: [
       {
-        title: "Fintech Identity",
-        desc: "Studio concept · Visual identity, typography and system for modern finance.",
+        title: "Capture Desktop",
+        desc: "In-house product · Local-first desktop OS and cognitive workspace.",
         href: "/#realisations",
         shape: "sceau",
         color: "#38bdf8",
       },
       {
-        title: "Product Brand",
-        desc: "Studio concept · Packaging, visual language and consistent identity.",
+        title: "Aethel Runtime",
+        desc: "AI system · Context-aware multi-agent orchestration and discrete authority.",
         href: "/#realisations",
         shape: "fleur",
         color: "#ff5a1f",
       },
       {
-        title: "Startup Presentation",
-        desc: "Studio concept · Clear storytelling, pitch deck slides and visual design.",
+        title: "Resonance OS",
+        desc: "Studio product · Adaptive intelligence and evidence-based learning platform.",
         href: "/#realisations",
         shape: "eclat",
         color: "#f97316",
       },
       {
-        title: "Editorial System",
-        desc: "Studio concept · Publication exploring writing, typography and information design.",
+        title: "Zen AI Engine",
+        desc: "Core technology · Quantized edge inference running on Apple Silicon & WebGPU.",
         href: "/#realisations",
         shape: "soleil",
         color: "#eab308",
       },
       {
-        title: "Brand Voice System",
-        desc: "Studio concept · Messaging framework and consistent voice across touchpoints.",
+        title: "Titan Analytics",
+        desc: "Product build · Real-time financial intelligence dashboard & anomaly detection.",
         href: "/#realisations",
         shape: "etoile-dix",
         color: "#a855f7",
@@ -113,29 +113,29 @@ const MEGA_MENUS = {
     allLink: { text: "About the studio", href: "/#agence" },
     items: [
       {
-        title: "About Quiet Studio",
-        desc: "Independent creative studio focused on branding, design and writing.",
+        title: "Studio Philosophy",
+        desc: "Good products begin with good questions: Strategy, Design, Engineering & AI.",
         href: "/#agence",
         shape: "fleur",
         color: "#ff5a1f",
       },
       {
-        title: "Our Approach",
-        desc: "Human creativity, supported by intelligent technology and brand understanding.",
-        href: "/#agence",
+        title: "The Autonomous Squad",
+        desc: "Dedicated senior squads shipping high-velocity product sprints.",
+        href: "/#squad",
         shape: "etoile-quatre",
         color: "#a855f7",
       },
       {
-        title: "How We Work",
-        desc: "From first conversation to finished work: Discover, Define, Create, Refine, Deliver.",
-        href: "/#agence",
+        title: "The Method",
+        desc: "6-stage product lifecycle: Discover, Define, Design, Engineer, Validate, Launch.",
+        href: "/#method",
         shape: "trefle",
         color: "#22c55e",
       },
       {
         title: "Frequently Asked Questions",
-        desc: "Practical answers about our services, process, timelines and collaboration.",
+        desc: "Answers about product sprints, technology stacks, IP ownership & collaboration.",
         href: "/#faq",
         shape: "soleil",
         color: "#eab308",
@@ -311,6 +311,32 @@ function Header({
             <span>QUIET STUDIO<span className="capsule-dot">.</span></span>
           </Link>
 
+          {/* Studio Mode Switcher: Products vs Agency (Placed right after Logo, per Screenshot 4) */}
+          <div className="capsule-mode-toggle" role="group" aria-label="Studio Mode Switcher">
+            <button
+              type="button"
+              className={`capsule-mode-btn ${studioMode === "human" ? "active mode-products" : ""}`}
+              onClick={() => {
+                playClick();
+                onStudioModeChange("human");
+              }}
+              title="Products: Open Core Apps & Systems"
+            >
+              ✦ Products
+            </button>
+            <button
+              type="button"
+              className={`capsule-mode-btn ${studioMode === "agent" ? "active mode-agency" : ""}`}
+              onClick={() => {
+                playClick();
+                onStudioModeChange("agent");
+              }}
+              title="Agency: Independent Product & AI Studio"
+            >
+              ✱ Agency
+            </button>
+          </div>
+
           {/* Nav Links with Hover Mega Dropdowns */}
           <nav className="capsule-links" onMouseLeave={handleDropdownLeave}>
             {studioMode === "agent" ? (
@@ -406,32 +432,6 @@ function Header({
                 </div>
               </>
             )}
-
-            {/* Studio Mode Switcher: Products vs Agency */}
-            <div className="capsule-mode-toggle" role="group" aria-label="Studio Mode Switcher">
-              <button
-                type="button"
-                className={`capsule-mode-btn ${studioMode === "human" ? "active mode-products" : ""}`}
-                onClick={() => {
-                  playClick();
-                  onStudioModeChange("human");
-                }}
-                title="Products: Open Core Apps & Systems"
-              >
-                ✦ Products
-              </button>
-              <button
-                type="button"
-                className={`capsule-mode-btn ${studioMode === "agent" ? "active mode-agency" : ""}`}
-                onClick={() => {
-                  playClick();
-                  onStudioModeChange("agent");
-                }}
-                title="Agency: Branding, Design & Writing Studio"
-              >
-                ✱ Agency
-              </button>
-            </div>
           </nav>
 
           {/* Action Controls */}
@@ -457,9 +457,9 @@ function Header({
               {dark ? <Sun size={13} /> : <Moon size={13} />}
             </button>
 
-            {/* Bright Orange Contact Button from Screenshot Spec */}
+            {/* Bright Orange Start a Project CTA Button */}
             <button className="capsule-cta-btn" onClick={onOpenContact}>
-              <span>Contact us</span>
+              <span>Start a project</span>
               <ArrowRight size={13} />
             </button>
           </div>
