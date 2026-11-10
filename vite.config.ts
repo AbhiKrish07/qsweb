@@ -332,8 +332,19 @@ function vitePluginBitwipStatic(): Plugin {
           }
 
           if (target) {
+            let html = fs.readFileSync(target, "utf-8");
+            const bridgeHtml = `
+<aside class="quiet-bitwip-bridge" aria-label="Studio Mode Switcher" style="position:fixed;top:18px;right:24px;z-index:99999;display:flex;align-items:center;gap:4px;background:rgba(18,20,20,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.15);border-radius:999px;padding:4px 6px;box-shadow:0 8px 30px rgba(0,0,0,0.45);font-family:'Cabinet Grotesk',sans-serif;">
+  <a href="/#products" onclick="localStorage.setItem('quiet-studio-mode','human');" style="color:rgba(255,255,255,0.75);text-decoration:none;font-size:12px;font-weight:600;padding:6px 14px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;">
+    <span style="color:#ff5a1f;">✦</span> Products
+  </a>
+  <span style="background:#ff5a1f;color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;">
+    <span>✱</span> Agency
+  </span>
+</aside>`;
+            html = html.replace("</body>", `${bridgeHtml}</body>`);
             res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-            fs.createReadStream(target).pipe(res);
+            res.end(html);
             return;
           }
         }
