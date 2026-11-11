@@ -111,6 +111,14 @@ def build_stitched_quiet_studio():
                 cl2.clear()
                 cl2.append(BeautifulSoup('''<span class="mj__m"><span class="mj__c" style="--r:7">B</span><span class="mj__c" style="--r:8">R</span><span class="mj__c" style="--r:9">A</span><span class="mj__c" style="--r:10">N</span><span class="mj__c" style="--r:11">D</span><span class="mj__c" style="--r:12">S</span><span class="mj__c" style="--r:13">.</span></span><span class="etoile mj__etoile"></span>''', 'html.parser'))
 
+        # Update Video Reel to use uploaded MP4
+        reel = hh.find('video', class_='hh__reel')
+        if reel:
+            reel['aria-label'] = 'Quiet Studio: Ideas into intelligent products'
+            reel['poster'] = '/assets/quiet/craft-software-code.jpg'
+            reel.clear()
+            reel.append(BeautifulSoup('<source src="/assets/video/quiet-studio-launch.mp4" type="video/mp4"/>', 'html.parser'))
+
         # Live Clocks: San Francisco, New York, London, Paris, Tokyo
         clocks = hh.find('div', class_='clocks')
         if clocks:
@@ -130,18 +138,22 @@ def build_stitched_quiet_studio():
         if manif:
             manif.clear()
             manif_html = '''<span class="hh__phr" data-mots="">
-              <span class="hh__w">We</span>
-              <span class="hh__w">combine</span>
-              <span class="hh__w">human</span>
-              <span class="hh__w"><span class="baila">creative direction</span></span>
-              <span class="hh__w">with</span>
-              <span class="hh__w">intelligent</span>
-              <span class="hh__w"><span class="baila">AI workflows</span></span>
-              <span class="hh__w">to</span>
-              <span class="hh__w">build</span>
-              <span class="hh__w">brands</span>
-              <span class="hh__w">that</span>
-              <span class="hh__w"><span class="baila">endure</span>.</span>
+              <span class="hh__w">Quiet Studio</span>
+              <span class="hh__w">turns</span>
+              <span class="hh__w">ideas</span>
+              <span class="hh__w">into</span>
+              <span class="hh__w"><span class="baila">intelligent products</span>.</span>
+              <span class="hh__w">Independent</span>
+              <span class="hh__w">product</span>
+              <span class="hh__w">and</span>
+              <span class="hh__w"><span class="baila">AI studio</span></span>
+              <span class="hh__w">for</span>
+              <span class="hh__w">founders</span>
+              <span class="hh__w">and</span>
+              <span class="hh__w">teams</span>
+              <span class="hh__w">building</span>
+              <span class="hh__w">the</span>
+              <span class="hh__w"><span class="baila">future</span>.</span>
             </span>'''
             manif.append(BeautifulSoup(manif_html, 'html.parser'))
 
@@ -216,20 +228,17 @@ def build_stitched_quiet_studio():
             gallery_html = '''
             <div class="ag-vie__bande" role="group">
               <ul class="ag-vie__piste">
-                <li class="ag-vie__ph" style="--ar:800/450">
-                  <img src="/assets/quiet/hero-studio-craft.jpg" alt="Quiet Studio Design System &amp; Brand Tokens" loading="lazy">
+                <li class="ag-vie__ph" style="--ar:1024/576">
+                  <img src="/assets/quiet/quiet-quad-1.jpg" alt="Quiet Studio Design System, API Routes, AI Processing, Brand Systems" loading="lazy">
                 </li>
-                <li class="ag-vie__ph" style="--ar:800/450">
-                  <img src="/assets/quiet/fintech-identity.jpg" alt="Kinetic Typography &amp; Identity Guidelines" loading="lazy">
+                <li class="ag-vie__ph" style="--ar:1024/576">
+                  <img src="/assets/quiet/quiet-quad-2.jpg" alt="Quiet Studio Design Tokens, TypeScript Runtime, Agent Reasoning, Brand Guidelines" loading="lazy">
                 </li>
-                <li class="ag-vie__ph" style="--ar:800/450">
-                  <img src="/assets/quiet/project-atlas.jpg" alt="Autonomous Production Operating Workspace" loading="lazy">
+                <li class="ag-vie__ph" style="--ar:1024/344">
+                  <img src="/assets/quiet/quiet-showcase-strip.jpg" alt="Quiet Studio Ecosystem Multi-device Showcase Strip" loading="lazy">
                 </li>
-                <li class="ag-vie__ph" style="--ar:800/450">
-                  <img src="/assets/quiet/product-brand.jpg" alt="Living Brand Guidelines &amp; Color Architectures" loading="lazy">
-                </li>
-                <li class="ag-vie__ph" style="--ar:800/450">
-                  <img src="/assets/quiet/digital-editorial.jpg" alt="Editorial Narrative &amp; Manifesto Systems" loading="lazy">
+                <li class="ag-vie__ph" style="--ar:1024/576">
+                  <img src="/assets/quiet/quiet-quad-3.jpg" alt="Quiet Studio Component Sandbox, Data Models, AI Agent Search, Brand System" loading="lazy">
                 </li>
               </ul>
             </div>
@@ -413,7 +422,7 @@ def build_stitched_quiet_studio():
                   <span class="tag tag--metier"><span class="forme forme--etoile-huit forme--citron" aria-hidden="true"></span>Rust / C++</span>
                 </p>
                 <div class="qr__media">
-                  <img src="/assets/quiet/hero-brand-card.jpg" alt="Zen AI Runtime Architecture" width="1440" height="1050" loading="lazy">
+                  <img src="/assets/quiet/craft-software-code.jpg" alt="Zen AI Runtime Architecture" width="1440" height="1050" loading="lazy">
                 </div>
                 <div class="qr__corps">
                   <h3 class="qr__q"><a class="qr__lien" href="/products/zen-ai" data-verbe="Explore runtime">Zen AI</a></h3>
@@ -433,7 +442,7 @@ def build_stitched_quiet_studio():
                   <span class="tag tag--metier"><span class="forme forme--fleur forme--papaye" aria-hidden="true"></span>Adaptive AI</span>
                 </p>
                 <div class="qr__media">
-                  <img src="/assets/quiet/hero-typography.jpg" alt="LearnLoop Cognitive Typography" width="1440" height="1280" loading="lazy">
+                  <img src="/assets/quiet/craft-ai-agents.jpg" alt="LearnLoop Cognitive AI Agent Flow" width="1440" height="1280" loading="lazy">
                 </div>
                 <div class="qr__corps">
                   <h3 class="qr__q"><a class="qr__lien" href="/products/learnloop" data-verbe="View product">LearnLoop</a></h3>
@@ -469,7 +478,7 @@ def build_stitched_quiet_studio():
                   <span class="tag tag--metier"><span class="forme forme--sceau forme--lavande" aria-hidden="true"></span>Living Tokens</span>
                 </p>
                 <div class="qr__media">
-                  <img src="/assets/quiet/project-atlas.jpg" alt="Aethel Autonomous Swarm Runtime" width="1600" height="1152" loading="lazy">
+                  <img src="/assets/quiet/craft-design-system.jpg" alt="Aethel Design Systems & Token Engine" width="1600" height="1152" loading="lazy">
                 </div>
                 <div class="qr__corps">
                   <h3 class="qr__q"><a class="qr__lien" href="/products/aethel" data-verbe="Explore research">Aethel Runtime</a></h3>
@@ -489,7 +498,7 @@ def build_stitched_quiet_studio():
                   <span class="tag tag--metier"><span class="forme forme--etoile-huit forme--citron" aria-hidden="true"></span>Zero Cloud</span>
                 </p>
                 <div class="qr__media">
-                  <img src="/assets/quiet/digital-editorial.jpg" alt="Capture Desktop macOS Assistant" width="1600" height="1200" loading="lazy">
+                  <img src="/assets/quiet/craft-brand-system.jpg" alt="Capture Desktop macOS Assistant" width="1600" height="1200" loading="lazy">
                 </div>
                 <div class="qr__corps">
                   <h3 class="qr__q"><a class="qr__lien" href="/products/capture" data-verbe="View app">Capture Desktop</a></h3>
@@ -723,7 +732,7 @@ def build_stitched_quiet_studio():
                 </div>
 
                 <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);height:260px;">
-                  <img src="/assets/quiet/hero-studio-craft.jpg" alt="Quiet Studio Interactive Creative OS" style="width:100%;height:100%;object-fit:cover;">
+                  <img src="/assets/quiet/quiet-quad-2.jpg" alt="Quiet Studio Interactive Creative OS" style="width:100%;height:100%;object-fit:cover;">
                 </div>
               </div>
             </div>
@@ -856,29 +865,32 @@ def build_stitched_quiet_studio():
             k.clear()
             k.append(BeautifulSoup('<span class="head__n">05</span>FAQ', 'html.parser'))
 
-        faq_bloc = faq.find('div', class_='faq--bloc')
-        if faq_bloc:
-            faq_bloc.clear()
+        # Replace the entire FAQ container so no old questions or French text survive
+        faq_container = faq.find('div', class_='faq') or faq.find('div', class_='faq__list') or faq.find('div', class_='faq-accueil')
+        if faq_container:
+            faq_container.clear()
             faq_html = '''
             <div class="faq__accordeon">
-              <details class="qa" name="faq"><summary>What exactly is Quiet Studio?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>Quiet Studio is an independent AI-native creative and product studio. We work at the intersection of branding, product design, full-stack software engineering and applied AI. We build digital products, living brand systems, and intelligent tools with obsessive human craft and zero agency ceremony.</p></div></details>
-              
-              <details class="qa" name="faq"><summary>How do you combine human direction with AI workflows?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>We believe human creative direction is irreplaceable for taste, judgment, strategy and empathy. AI handles the repetitive, high-volume mechanics: variation generation, asset resizing, preliminary code scaffolding, and fatigue telemetry. A senior director guides every concept, every token, and every release.</p></div></details>
+              <div class="faq__list">
+                <details class="qa" name="faq"><summary>What exactly is Quiet Studio?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>Quiet Studio is an independent AI-native product and creative studio. We work at the intersection of product strategy, experience design, full-stack software engineering, and applied AI. We build digital products, living brand systems, and intelligent tools with obsessive human craft and zero agency ceremony.</p></div></details>
+                
+                <details class="qa" name="faq"><summary>How do you combine human direction with AI workflows?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>We believe human creative direction is irreplaceable for taste, judgment, strategy, and empathy. AI handles the repetitive, high-volume mechanics: variation generation, asset resizing, preliminary code scaffolding, and fatigue telemetry. A senior director guides every concept, every token, and every release.</p></div></details>
 
-              <details class="qa" name="faq"><summary>Who owns the intellectual property and code?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>You do. 100%. Upon completion and payment, all custom design files, Figma libraries, source code, neural checkpoints, and brand assets are transferred entirely to your ownership with zero ongoing licensing fees or vendor lock-in.</p></div></details>
+                <details class="qa" name="faq"><summary>Who owns the intellectual property and code?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>You do. 100%. Upon completion and payment, all custom design files, Figma libraries, source code, neural checkpoints, and brand assets are transferred entirely to your ownership with zero ongoing licensing fees or vendor lock-in.</p></div></details>
 
-              <details class="qa" name="faq"><summary>How fast are your delivery turnarounds?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>Our managed creative sprints typically deliver live assets within 48 to 72 hours. Comprehensive full-stack software builds and product launches operate on rapid 2-to-4 week milestones, eliminating bloated agency timelines.</p></div></details>
+                <details class="qa" name="faq"><summary>How fast are your delivery turnarounds?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>Our managed creative sprints typically deliver live assets within 48 to 72 hours. Comprehensive full-stack software builds and product launches operate on rapid 2-to-4 week milestones, eliminating bloated agency timelines.</p></div></details>
 
-              <details class="qa" name="faq"><summary>Can we work with Quiet Studio as a managed service or software?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>Both. We operate an Adside-inspired dual model: you can engage our senior team directly as a managed service for turnkey design and engineering sprints, or utilize our proprietary operating systems and tools to accelerate your in-house teams.</p></div></details>
+                <details class="qa" name="faq"><summary>Can we work with Quiet Studio as a managed service or software?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>Both. We operate an Adside-inspired dual model: you can engage our senior team directly as a managed service for turnkey design and engineering sprints, or utilize our proprietary operating systems and tools to accelerate your in-house teams.</p></div></details>
 
-              <details class="qa" name="faq"><summary>What technology stack do you build with?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>We engineer with modern, production-grade stacks: TypeScript, React, Next.js, Node.js, Python, Rust, and Tailwind CSS. For local intelligence, we compile models for Apple Silicon and edge NPUs, ensuring zero latency and uncompromising security.</p></div></details>
+                <details class="qa" name="faq"><summary>What technology stack do you build with?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>We engineer with modern, production-grade stacks: TypeScript, React, Next.js, Node.js, Python, Rust, and Tailwind CSS. For local intelligence, we compile models for Apple Silicon and edge NPUs, ensuring zero latency and uncompromising security.</p></div></details>
 
-              <details class="qa" name="faq"><summary>How do we get started on a project?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>Reach out through our contact form or email hello@thequietstudio.space. We schedule a concise 20-minute discovery session to understand your requirements, agree on scope and deliverables, and begin your first sprint within days.</p></div></details>
+                <details class="qa" name="faq"><summary>How do we get started on a project?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>Reach out through our contact form or email hello@thequietstudio.space. We schedule a concise 20-minute discovery session to understand your requirements, agree on scope and deliverables, and begin your first sprint within days.</p></div></details>
 
-              <details class="qa" name="faq"><summary>Why choose Quiet Studio over a traditional agency or internal hire?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>Traditional agencies carry heavy overhead, endless account-management bloat, and slow execution. An in-house senior engineer and designer costs $300k+/year before benefits. Quiet Studio gives you dedicated senior talent and proprietary AI acceleration at transparent, flat-rate monthly pricing.</p></div></details>
+                <details class="qa" name="faq"><summary>Why choose Quiet Studio over a traditional agency or internal hire?<span class="qa__ico" aria-hidden="true"></span></summary><div class="qa__a"><p>Traditional agencies carry heavy overhead, endless account-management bloat, and slow execution. An in-house senior engineer and designer costs $300k+/year before benefits. Quiet Studio gives you dedicated senior talent and proprietary AI acceleration at transparent, flat-rate monthly pricing.</p></div></details>
+              </div>
             </div>
             '''
-            faq_bloc.append(BeautifulSoup(faq_html, 'html.parser'))
+            faq_container.append(BeautifulSoup(faq_html, 'html.parser'))
 
     # 9. CLOSING CTA & FOOTER (#contact & .pied)
     # Remove old .pied-revele wrapper if present and replace with a stunning, mathematically aligned Apple/Google grade closing section
@@ -1025,7 +1037,35 @@ def build_stitched_quiet_studio():
 
     content = content.strip()
 
-    ts_path = '/Users/abhivalo360gmail.com/Downloads/quiet-studio/client/src/components/bitwip-html.ts'
+    # Exhaustive scrub for any residual old names or French territory terms
+    scrub_pairs = [
+        ('Bitwip', 'Quiet Studio'),
+        ('bitwip', 'quiet-studio'),
+        ('BITWIP', 'QUIET STUDIO'),
+        ('Overseas France', 'Worldwide'),
+        ('overseas France', 'worldwide'),
+        ('French Guiana', 'San Francisco'),
+        ('Guyane', 'San Francisco'),
+        ('Occitanie', 'New York'),
+        ('Guadeloupe', 'London'),
+        ('Martinique', 'Paris'),
+        ('Mayotte', 'Berlin'),
+        ('Réunion', 'Tokyo'),
+        ('Reunion', 'Tokyo'),
+        ('French-speaking world', 'global market'),
+        ('overseas market', 'modern digital product market'),
+        ('in the territory where you operate', 'in your product domain'),
+        ('In territories this', 'In fast-moving markets this'),
+        ('communications consulting agency', 'AI-native product studio'),
+        ('communications agency', 'product and AI studio'),
+        ('communication agency', 'product and AI studio'),
+        ('communications and marketing', 'product design and software engineering'),
+        ('One agency for all the French overseas territories.', 'Independent AI-native product and creative studio.'),
+    ]
+    for old_s, new_s in scrub_pairs:
+        content = content.replace(old_s, new_s)
+
+    ts_path = '/Users/abhivalo360gmail.com/Downloads/quiet-studio/client/src/components/bitwip-html.ts' 
     with open(ts_path, 'w', encoding='utf-8') as f:
         f.write('export const BITWIP_BODY_HTML = ' + json.dumps(content) + ';\n')
 
