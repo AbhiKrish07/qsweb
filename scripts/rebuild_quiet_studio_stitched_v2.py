@@ -1136,9 +1136,6 @@ def build_stitched_quiet_studio():
               <p style="color:rgba(255,255,255,0.68);font-size:0.95rem;line-height:1.65;margin-bottom:20px;">
                 Independent AI-native design &amp; software product studio. We combine human creative direction with intelligent workflows to build enduring digital products.
               </p>
-              <div style="font:600 12px/1 'DM Mono',monospace;color:#ff5a1f;letter-spacing:0.04em;">
-                SAN FRANCISCO · NEW YORK · LONDON · PARIS · TOKYO
-              </div>
             </div>
 
             <!-- Col 2: Studio Navigation -->
