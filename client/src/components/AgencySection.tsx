@@ -28,9 +28,56 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           }
         }
       };
+
+      const handleInteractiveChipClicks = (e: MouseEvent) => {
+        const chip = (e.target as HTMLElement)?.closest('.qs-interactive-chip') as HTMLElement | null;
+        if (chip) {
+          e.preventDefault();
+          playClick();
+          const parent = chip.closest('.qs-interactive-console');
+          if (parent) {
+            parent.querySelectorAll('.qs-interactive-chip').forEach((c) => c.classList.remove('is-active'));
+            chip.classList.add('is-active');
+
+            const titleEl = parent.querySelector('.qs-telemetry-title');
+            const descEl = parent.querySelector('.qs-telemetry-desc');
+            const chipType = chip.getAttribute('data-chip');
+
+            const contentMap: Record<string, { title: string; desc: string }> = {
+              branding: {
+                title: 'Autonomous Brand Engine',
+                desc: 'High-fidelity design tokens, font metrics, and interaction physics synchronizing across Figma and production codebases in real time.',
+              },
+              typography: {
+                title: 'Kinetic Grotesque Type System',
+                desc: 'Variable font axes, dynamic micro-letter spacing, and responsive tabular coordinates built for high-craft digital identities.',
+              },
+              agents: {
+                title: 'Multi-Agent Production Swarms',
+                desc: 'Context-engineered agent networks generating production-ready creative variations and ad assets with strict brand guardrails.',
+              },
+              tokens: {
+                title: 'Living Token Architecture',
+                desc: 'Centralized JSON token contracts powering styles, dark/light modes, spacing units, and physical audio triggers across all platforms.',
+              },
+              latency: {
+                title: 'Zero-Latency Edge Reaction',
+                desc: 'Hardware-accelerated CSS animations and local-first physics running smoothly at 60 FPS with zero cloud dependency.',
+              },
+            };
+
+            const data = contentMap[chipType || 'branding'] || contentMap.branding;
+            if (titleEl) titleEl.textContent = data.title;
+            if (descEl) descEl.textContent = data.desc;
+          }
+        }
+      };
+
       container.addEventListener('click', handleContactClicks);
+      container.addEventListener('click', handleInteractiveChipClicks);
       return () => {
         container.removeEventListener('click', handleContactClicks);
+        container.removeEventListener('click', handleInteractiveChipClicks);
       };
     }
   }, [onOpenContact]);
@@ -227,82 +274,70 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           display: none !important;
         }
 
-        /* High-Contrast Typography & Accessibility Overrides */
+        /* Pure Black & Signal Orange Studio Colorway */
         .bitwip-unified-container {
           --txt: #ffffff !important;
           --txt-2: rgba(255, 255, 255, 0.94) !important;
           --txt-3: rgba(255, 255, 255, 0.85) !important;
-          --encre: #111111 !important;
+          --encre: #0e0e0d !important;
+          background: #0e0e0d !important;
+          color: #ffffff !important;
         }
 
-        /* Dark Sections */
-        .bitwip-unified-container .sec:not(.papier) h1,
-        .bitwip-unified-container .sec:not(.papier) h2,
-        .bitwip-unified-container .sec:not(.papier) h3,
-        .bitwip-unified-container .sec:not(.papier) h4,
-        .bitwip-unified-container .cta h2,
-        .bitwip-unified-container .hh h1 {
+        /* All Sections Unified to Deep Black */
+        .bitwip-unified-container .sec,
+        .bitwip-unified-container .sec.papier,
+        .bitwip-unified-container .papier,
+        .bitwip-unified-container .qs-dark-section,
+        .bitwip-unified-container .qs-before-after-sec,
+        .bitwip-unified-container .qs-workspace-sec,
+        .bitwip-unified-container .qs-pricing-sec,
+        .bitwip-unified-container .qs-kinetic-lab-sec,
+        .bitwip-unified-container .cta,
+        .bitwip-unified-container .pied {
+          background: #0e0e0d !important;
+          color: #ffffff !important;
+        }
+
+        .bitwip-unified-container h1,
+        .bitwip-unified-container h2,
+        .bitwip-unified-container h3,
+        .bitwip-unified-container h4,
+        .bitwip-unified-container .head__t {
           color: #ffffff !important;
           font-weight: 700 !important;
           letter-spacing: -0.02em !important;
         }
 
-        .bitwip-unified-container .sec:not(.papier) p,
-        .bitwip-unified-container .sec:not(.papier) .qr__a,
-        .bitwip-unified-container .sec:not(.papier) .xep__d,
-        .bitwip-unified-container .cta p {
-          color: rgba(255, 255, 255, 0.88) !important;
-          line-height: 1.6 !important;
+        .bitwip-unified-container p,
+        .bitwip-unified-container .head__i,
+        .bitwip-unified-container .sensee__lead,
+        .bitwip-unified-container .sensee__p,
+        .bitwip-unified-container .qa__a p {
+          color: rgba(255, 255, 255, 0.85) !important;
+          line-height: 1.65 !important;
         }
 
-        .bitwip-unified-container .label {
+        .bitwip-unified-container .label,
+        .bitwip-unified-container .head__n,
+        .bitwip-unified-container .sc__plus {
           color: #ff5a1f !important;
           font-weight: 700 !important;
           letter-spacing: 0.08em !important;
         }
 
-        /* Paper / Light Sections (.papier) */
-        .bitwip-unified-container .sec.papier,
-        .bitwip-unified-container .papier {
-          background: #f7f5f1 !important;
-          color: #111111 !important;
-        }
-
-        .bitwip-unified-container .sec.papier h2,
-        .bitwip-unified-container .sec.papier h3,
-        .bitwip-unified-container .sec.papier h4,
-        .bitwip-unified-container .sec.papier .head__t {
-          color: #111111 !important;
+        .bitwip-unified-container summary {
+          color: #ffffff !important;
           font-weight: 700 !important;
+          cursor: pointer;
         }
 
-        .bitwip-unified-container .sec.papier p,
-        .bitwip-unified-container .sec.papier .sensee__lead,
-        .bitwip-unified-container .sec.papier .sensee__p,
-        .bitwip-unified-container .sec.papier .head__i,
-        .bitwip-unified-container .sec.papier .actu__ex,
-        .bitwip-unified-container .sec.papier .qa__a p {
-          color: #1d1d1f !important;
-          line-height: 1.65 !important;
-        }
-
-        .bitwip-unified-container .sec.papier .actu__t a,
-        .bitwip-unified-container .sec.papier summary {
-          color: #111111 !important;
-          font-weight: 700 !important;
-        }
-
-        .bitwip-unified-container .sec.papier .actu__t a:hover {
+        .bitwip-unified-container summary:hover {
           color: #ff5a1f !important;
         }
 
-        .bitwip-unified-container .sec.papier .qa__ico {
+        .bitwip-unified-container .qa__ico {
           color: #ff5a1f !important;
-        }
-
-        .bitwip-unified-container .actu__meta {
-          color: #52525b !important;
-          font-weight: 500 !important;
         }
 
         .bitwip-unified-container .clocks .clock {
@@ -311,6 +346,11 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
 
         .bitwip-unified-container .clocks .clock:hover {
           color: #ff5a1f !important;
+        }
+
+        .bitwip-unified-container .clocks .c-time {
+          color: #ff5a1f !important;
+          font-weight: 700 !important;
         }
 
         /* Quiet Studio Services Accordion */
@@ -344,15 +384,7 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           color: #ff5a1f !important;
         }
 
-        /* Quiet Studio Before & After Section */
-        .qs-before-after-sec {
-          background: #faf9f5 !important;
-        }
-
-        /* Quiet Studio Workspace Section */
-        .qs-workspace-sec {
-          background: #0f0f0e !important;
-        }
+        /* Workspace sticker interaction */
         .qs-mockup-container [style*="position:absolute"] {
           transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease;
           cursor: pointer;
@@ -362,9 +394,121 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45) !important;
         }
 
-        /* Quiet Studio Pricing Section */
-        .qs-pricing-sec {
-          background: #faf9f5 !important;
+        /* Dual Infinite Kinetic Tickers */
+        @keyframes tickerLeft {
+          0% { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
+        }
+        @keyframes tickerRight {
+          0% { transform: translate3d(-50%, 0, 0); }
+          100% { transform: translate3d(0, 0, 0); }
+        }
+        .qs-ticker-left {
+          display: flex;
+          width: max-content;
+          animation: tickerLeft 35s linear infinite;
+        }
+        .qs-ticker-right {
+          display: flex;
+          width: max-content;
+          animation: tickerRight 35s linear infinite;
+        }
+        .qs-ticker-container:hover .qs-ticker-row {
+          animation-play-state: paused;
+        }
+        .qs-ticker-item {
+          font: 800 13px/1 'Cabinet Grotesk', -apple-system, sans-serif;
+          letter-spacing: 0.08em;
+          color: rgba(255, 255, 255, 0.7);
+          text-transform: uppercase;
+          flex-shrink: 0;
+        }
+
+        /* 3D Kinetic Wireframe Cube */
+        .qs-kinetic-cube-wrap {
+          width: 130px;
+          height: 130px;
+          perspective: 800px;
+        }
+        .qs-kinetic-cube {
+          width: 100%;
+          height: 100%;
+          position: relative;
+          transform-style: preserve-3d;
+          animation: rotateCube 14s linear infinite;
+        }
+        @keyframes rotateCube {
+          0% { transform: rotateX(0deg) rotateY(0deg); }
+          50% { transform: rotateX(180deg) rotateY(180deg); }
+          100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+        .qs-cube-face {
+          position: absolute;
+          width: 130px;
+          height: 130px;
+          border: 1.5px solid #ff5a1f;
+          background: rgba(255, 90, 31, 0.08);
+          backdrop-filter: blur(4px);
+          color: #ffffff;
+          font: 800 15px/130px 'Cabinet Grotesk', sans-serif;
+          text-align: center;
+          letter-spacing: 0.06em;
+          box-shadow: inset 0 0 20px rgba(255, 90, 31, 0.18);
+        }
+        .qs-face-front  { transform: translateZ(65px); }
+        .qs-face-back   { transform: rotateY(180deg) translateZ(65px); }
+        .qs-face-right  { transform: rotateY(90deg) translateZ(65px); }
+        .qs-face-left   { transform: rotateY(-90deg) translateZ(65px); }
+        .qs-face-top    { transform: rotateX(90deg) translateZ(65px); }
+        .qs-face-bottom { transform: rotateX(-90deg) translateZ(65px); }
+
+        /* Interactive Chips */
+        .qs-interactive-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 18px;
+          border-radius: 9999px;
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          color: rgba(255, 255, 255, 0.8);
+          font: 700 11.5px/1 'DM Mono', monospace;
+          letter-spacing: 0.04em;
+          cursor: pointer;
+          transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .qs-interactive-chip:hover {
+          background: rgba(255, 90, 31, 0.15);
+          border-color: #ff5a1f;
+          color: #ffffff;
+          transform: translateY(-2px);
+        }
+        .qs-interactive-chip.is-active {
+          background: #ff5a1f !important;
+          border-color: #ff5a1f !important;
+          color: #ffffff !important;
+          box-shadow: 0 4px 16px rgba(255, 90, 31, 0.45);
+        }
+        .qs-chip-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: currentColor;
+        }
+
+        /* Pulsing Waveform Bars */
+        .qs-wave-bar {
+          flex: 1;
+          background: #ff5a1f;
+          border-radius: 4px;
+          height: var(--h, 60%);
+          animation: wavePulse 1.2s ease-in-out infinite alternate;
+          animation-delay: var(--d, 0s);
+          transform-origin: bottom;
+        }
+        @keyframes wavePulse {
+          0% { transform: scaleY(0.4); opacity: 0.6; }
+          100% { transform: scaleY(1.1); opacity: 1; }
         }
       `}</style>
 
