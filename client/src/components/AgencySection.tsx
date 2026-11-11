@@ -388,6 +388,14 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
 
         linkTags.forEach((link) => link.remove());
         scriptTags.forEach((script) => script.remove());
+
+        // Remove any global elements appended to document.body by bitwip.js
+        const bitwipGlobals = document.querySelectorAll(
+          '.curseur, .jonctions, .portail, .sillage, .eclat, .visionneuse'
+        );
+        bitwipGlobals.forEach((el) => el.remove());
+
+        document.documentElement.classList.remove('has-curseur', 'curseur-tenu', 'js');
       };
     }
   }, []);

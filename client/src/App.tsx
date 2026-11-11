@@ -776,6 +776,14 @@ function AppShell() {
     if (typeof window !== "undefined") {
       localStorage.setItem("quiet-studio-mode", nextMode);
       document.documentElement.setAttribute("data-studio-mode", nextMode);
+
+      if (nextMode === "human") {
+        const bitwipGlobals = document.querySelectorAll(
+          '.curseur, .jonctions, .portail, .sillage, .eclat, .visionneuse'
+        );
+        bitwipGlobals.forEach((el) => el.remove());
+        document.documentElement.classList.remove('has-curseur', 'curseur-tenu', 'js');
+      }
     }
   };
 

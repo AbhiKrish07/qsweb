@@ -4420,9 +4420,17 @@
   align-items: center;
   gap: 14px;
   position: relative;
-  z-index: 4;
+  z-index: 30 !important;
   flex-wrap: wrap;
   justify-content: center;
+  pointer-events: auto !important;
+}
+
+.human-hero-cta-btn,
+.human-hero-secondary-btn {
+  position: relative;
+  z-index: 31 !important;
+  pointer-events: auto !important;
 }
 
 .human-hero-cta-btn {
@@ -4819,7 +4827,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: auto;
+  pointer-events: none !important;
 }
 
 .hero-textloop-bridge .text-loop {
@@ -4829,6 +4837,16 @@
   width: 100%;
   transform: translateY(-50%);
   filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.18));
+  pointer-events: none !important;
+}
+
+.hero-textloop-bridge .text-loop-svg {
+  pointer-events: none !important;
+}
+
+.hero-textloop-bridge .text-loop-svg path,
+.hero-textloop-bridge .text-loop-svg text {
+  pointer-events: auto;
 }
 
 @keyframes floatNote {
@@ -4946,6 +4964,16 @@
     justify-content: center;
     gap: 6px;
     max-width: clamp(240px, 64vw, 360px);
+    position: relative;
+    z-index: 30 !important;
+    pointer-events: auto !important;
+  }
+
+  .human-hero-cta-btn,
+  .human-hero-secondary-btn {
+    position: relative;
+    z-index: 31 !important;
+    pointer-events: auto !important;
   }
 
   .human-hero-cta-btn {
@@ -7293,4 +7321,21 @@
 .agency-bento-container {
   width: 100%;
   position: relative;
+}
+
+/* Safety isolation: prevent any Bitwip cursor or canvas elements from leaking below footer or capturing clicks */
+html[data-studio-mode="human"] .curseur,
+html[data-studio-mode="human"] .jonctions,
+html[data-studio-mode="human"] .portail,
+html[data-studio-mode="human"] .sillage,
+html[data-studio-mode="human"] .eclat,
+html[data-studio-mode="human"] .visionneuse {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.curseur {
+  position: fixed !important;
+  pointer-events: none !important;
 }
