@@ -533,6 +533,24 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           padding-top: 32px !important;
           padding-bottom: 40px !important;
         }
+
+        /* 5. Eliminate Blank Space & Guarantee Section Reveal Visibility */
+        .bitwip-unified-container [data-reveal] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        .bitwip-unified-container #expertises {
+          padding-bottom: 20px !important;
+        }
+        .bitwip-unified-container #expertises .wrap {
+          padding-bottom: 20px !important;
+        }
+        .bitwip-unified-container #realisations {
+          padding-top: 32px !important;
+        }
+        .bitwip-unified-container .piste__intro {
+          margin-bottom: 28px !important;
+        }
       `}</style>
 
       {/* Bitwip Agency Stitched Content */}

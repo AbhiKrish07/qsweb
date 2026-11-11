@@ -228,17 +228,17 @@ def build_stitched_quiet_studio():
             gallery_html = '''
             <div class="ag-vie__bande" role="group">
               <ul class="ag-vie__piste">
-                <li class="ag-vie__ph" style="--ar:1024/576">
-                  <img src="/assets/quiet/quiet-quad-1.jpg" alt="Quiet Studio Design System, API Routes, AI Processing, Brand Systems" loading="lazy">
+                <li class="ag-vie__ph" style="--ar:16/9">
+                  <img src="/assets/quiet/craft-design-system.jpg" alt="Quiet Studio Design System & Component Architecture" loading="lazy">
                 </li>
-                <li class="ag-vie__ph" style="--ar:1024/576">
-                  <img src="/assets/quiet/quiet-quad-2.jpg" alt="Quiet Studio Design Tokens, TypeScript Runtime, Agent Reasoning, Brand Guidelines" loading="lazy">
+                <li class="ag-vie__ph" style="--ar:16/9">
+                  <img src="/assets/quiet/craft-software-code.jpg" alt="Quiet Studio High-Velocity Software Engineering" loading="lazy">
                 </li>
-                <li class="ag-vie__ph" style="--ar:1024/344">
-                  <img src="/assets/quiet/quiet-showcase-strip.jpg" alt="Quiet Studio Ecosystem Multi-device Showcase Strip" loading="lazy">
+                <li class="ag-vie__ph" style="--ar:16/9">
+                  <img src="/assets/quiet/craft-ai-agents.jpg" alt="Quiet Studio Applied AI Agent Architecture" loading="lazy">
                 </li>
-                <li class="ag-vie__ph" style="--ar:1024/576">
-                  <img src="/assets/quiet/quiet-quad-3.jpg" alt="Quiet Studio Component Sandbox, Data Models, AI Agent Search, Brand System" loading="lazy">
+                <li class="ag-vie__ph" style="--ar:16/9">
+                  <img src="/assets/quiet/craft-brand-system.jpg" alt="Quiet Studio Brand Identity & Guidelines" loading="lazy">
                 </li>
               </ul>
             </div>
@@ -251,7 +251,7 @@ def build_stitched_quiet_studio():
         exp.clear()
         exp['class'] = ['sec']
         services_section_html = '''
-        <div class="wrap" style="padding:100px 0 120px;">
+        <div class="wrap" style="padding:60px 0 24px;">
           <header class="head" style="margin-bottom:60px;">
             <p class="head__k label" style="color:#ff5a1f;font:700 12px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;"><span class="head__n" style="color:#ff5a1f;">02</span>Services</p>
             <h2 class="head__t" id="t-services" style="font-family:'Epure Titres',serif,sans-serif;font-size:clamp(3.5rem,7vw,6.5rem);font-weight:400;letter-spacing:-0.03em;color:#ffffff;display:flex;align-items:center;gap:12px;">
@@ -395,18 +395,20 @@ def build_stitched_quiet_studio():
         real['aria-labelledby'] = 't-cases'
         work_html = '''
         <div class="piste__scene" data-piste-scene>
-          <header class="piste__intro">
+          <header class="piste__intro" style="margin-bottom:32px;padding-top:16px;">
             <div class="piste__haut">
-              <p class="head__k label"><span class="head__n">03</span>Work</p>
-              <h2 class="head__t piste__t" id="t-cases" data-reveal>
-                Conceived, designed and <span class="baila">engineered</span>.<span class="etoile" aria-hidden="true"></span>
+              <p class="head__k label" style="color:#ff5a1f;font:700 12px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;"><span class="head__n" style="color:#ff5a1f;">03</span>Work</p>
+              <h2 class="head__t piste__t" id="t-cases" style="font-family:'Epure Titres',serif,sans-serif;font-size:clamp(2.8rem,5.5vw,5rem);font-weight:400;letter-spacing:-0.03em;color:#ffffff;line-height:1.08;max-width:16ch;opacity:1 !important;transform:none !important;">
+                Conceived, designed and <span class="baila" style="font-family:'Baila',Georgia,serif;font-style:italic;color:#ff5a1f;">engineered</span>.<span class="etoile" aria-hidden="true" style="display:inline-block;width:28px;height:28px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/etoile-huit.svg);mask-image:url(/assets/img/formes/etoile-huit.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;vertical-align:middle;margin-left:8px;"></span>
               </h2>
             </div>
-            <div class="piste__bas">
-              <p class="piste__i">Quiet Studio's active products, open-source runtimes, and living brand architectures.</p>
-              <a class="lnk" href="/#apps">
+            <div class="piste__bas" style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:16px;">
+              <p class="piste__i" style="color:rgba(255,255,255,0.7);font-size:clamp(1.05rem,1.4vw,1.25rem);max-width:540px;line-height:1.6;margin:0;">
+                Quiet Studio's active products, open-source runtimes, and living brand architectures.
+              </p>
+              <a class="lnk" href="/#apps" style="color:#ff5a1f;font-weight:600;display:inline-flex;align-items:center;gap:8px;text-decoration:none;">
                 <span>Explore all products</span>
-                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg>
+                <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" style="width:14px;height:14px;"><path d="M1 8h13M9 3l5 5-5 5" stroke="#ff5a1f" stroke-width="1.6"/></svg>
               </a>
             </div>
           </header>
@@ -784,7 +786,7 @@ def build_stitched_quiet_studio():
                     </div>
                   </div>
                   <div style="margin-top:14px;border-radius:8px;overflow:hidden;height:120px;border:1px solid rgba(255,255,255,0.08);">
-                    <img src="/assets/quiet/quiet-quad-2.jpg" alt="Active Sprints Overview" style="width:100%;height:100%;object-fit:cover;">
+                    <img src="/assets/quiet/craft-software-code.jpg" alt="Active Sprints Overview" style="width:100%;height:100%;object-fit:cover;">
                   </div>
                 </div>
 
