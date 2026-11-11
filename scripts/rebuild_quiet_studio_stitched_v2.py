@@ -1058,11 +1058,7 @@ def build_stitched_quiet_studio():
         cta['class'] = ['sec', 'qs-closing-cta-sec']
         cta.clear()
         closing_cta_html = '''
-        <div class="wrap" style="padding:60px 24px 44px;max-width:1120px;margin:0 auto;text-align:center;">
-          <p class="head__k label" style="color:#ff5a1f;font:700 12px/1 'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;">
-            <span class="head__n" style="color:#ff5a1f;">06</span>Get in touch
-          </p>
-
+        <div class="wrap" style="padding:48px 24px 44px;max-width:1120px;margin:0 auto;text-align:center;">
           <h2 style="font:800 clamp(3.2rem,6.5vw,5.8rem)/1.04 'Cabinet Grotesk',sans-serif;letter-spacing:-0.03em;color:#ffffff;margin:0 auto 24px;max-width:920px;">
             We build brands that <span style="font-family:'Baila',serif;font-style:italic;color:#ff5a1f;">endure</span>.
             <span aria-hidden="true" class="etoile" style="display:inline-block;width:32px;height:32px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/etoile-huit.svg);mask-image:url(/assets/img/formes/etoile-huit.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;vertical-align:middle;margin-left:8px;"></span>
