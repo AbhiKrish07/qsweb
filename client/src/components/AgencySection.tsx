@@ -160,7 +160,32 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         window.dispatchEvent(new Event('resize'));
       })();
 
+      // 5. Live Studio Clocks ticker for San Francisco, New York, London, Tokyo, Bengaluru
+      const updateClocks = () => {
+        const clockNodes = document.querySelectorAll('.clock__time[data-tz]');
+        const now = new Date();
+        clockNodes.forEach((node: any) => {
+          const tz = node.getAttribute('data-tz');
+          if (!tz) return;
+          try {
+            const formatter = new Intl.DateTimeFormat('en-GB', {
+              timeZone: tz,
+              hour: '2-digit',
+              minute: '2-digit',
+              hourCycle: 'h23',
+            });
+            const parts = formatter.formatToParts(now);
+            const h = parts.find((p) => p.type === 'hour')?.value || '12';
+            const m = parts.find((p) => p.type === 'minute')?.value || '00';
+            node.innerHTML = `<span aria-hidden="true">${h}<span class="c">:</span>${m}</span><span class="sr-only"> ${h}:${m}</span>`;
+          } catch {}
+        });
+      };
+      updateClocks();
+      const clockInterval = setInterval(updateClocks, 1000);
+
       return () => {
+        clearInterval(clockInterval);
         // Clean up body attributes and injected assets on unmount
         document.documentElement.classList.remove('js');
         document.documentElement.removeAttribute('data-gdifilm');

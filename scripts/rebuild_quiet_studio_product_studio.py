@@ -1,6 +1,5 @@
-import re
 import os
-import json
+import re
 from bs4 import BeautifulSoup
 
 def build_product_studio_minimal():
@@ -10,17 +9,15 @@ def build_product_studio_minimal():
 
     soup = BeautifulSoup(html, 'html.parser')
 
-    # Remove obsolete menu and old header
-    old_menu = soup.find('div', id='menu')
-    if old_menu:
-        old_menu.decompose()
+    # Remove any existing nav element (we use our unified signature capsule header in React)
     old_nav = soup.find('header', class_='nav')
     if old_nav:
         old_nav.decompose()
 
-    # 1. HERO SECTION (#hh) — Exact Bitwip structure, minimal Quiet Studio copy & animations
+    # 1. HERO SECTION (#hh) — Preserving full 3D zoom & kinetic tilt mechanics
     hh = soup.find('section', id='hh')
     if hh:
+        # Title layer (.mj__cadre--titre)
         t = hh.find('h1', class_='hh__titre')
         if t:
             t.clear()
@@ -82,23 +79,48 @@ def build_product_studio_minimal():
             </span>'''
             t.append(BeautifulSoup(l2_html, 'html.parser'))
 
-        for ghost in hh.find_all('div', class_=['mj__fantome', 'mj__copie']):
-            glead = ghost.find('div', class_='mj__lead')
+        # Ghost / Fantome Layer (.mj__fantome): KEEP the .mj__pile, .hh__carte, .hh__reel and all 6 plaques intact!
+        fantome = hh.find('div', class_='mj__fantome')
+        if fantome:
+            glead = fantome.find('div', class_='mj__lead')
             if glead: glead.string = 'DESIGN & PRODUCT SOFTWARE STUDIO'
-            gl1 = ghost.find('div', class_='mj__l1')
-            if gl1:
-                gl1.clear()
-                gl1.append(BeautifulSoup('''<span class="mj__m"><span class="mj__c" style="--r:0">I</span><span class="mj__c" style="--r:1">d</span><span class="mj__c" style="--r:2">e</span><span class="mj__c" style="--r:3">a</span><span class="mj__c" style="--r:4">s</span></span> <span class="mj__trou"></span> <span class="mj__m"><span class="mj__c" style="--r:5">i</span><span class="mj__c" style="--r:6">n</span><span class="mj__c" style="--r:7">t</span><span class="mj__c" style="--r:8">o</span></span>''', 'html.parser'))
-            gl2 = ghost.find('div', class_='mj__l2')
-            if gl2:
-                gl2.clear()
-                gl2.append(BeautifulSoup('''<span class="mj__m"><span class="mj__c" style="--r:9">i</span><span class="mj__c" style="--r:10">n</span><span class="mj__c" style="--r:11">t</span><span class="mj__c" style="--r:12">e</span><span class="mj__c" style="--r:13">l</span><span class="mj__c" style="--r:14">l</span><span class="mj__c" style="--r:15">i</span><span class="mj__c" style="--r:16">g</span><span class="mj__c" style="--r:17">e</span><span class="mj__c" style="--r:18">n</span><span class="mj__c" style="--r:19">t</span></span> <span class="mj__trou"></span> <span class="mj__m"><span class="mj__c" style="--r:20">p</span><span class="mj__c" style="--r:21">r</span><span class="mj__c" style="--r:22">o</span><span class="mj__c" style="--r:23">d</span><span class="mj__c" style="--r:24">u</span><span class="mj__c" style="--r:25">c</span><span class="mj__c" style="--r:26">t</span><span class="mj__c" style="--r:27">s</span><span class="mj__c" style="--r:28">.</span></span><span class="etoile mj__etoile"></span>''', 'html.parser'))
+            
+            fl1 = fantome.find('div', class_='mj__l1')
+            if fl1:
+                # Find the existing pile inside .mj__trou
+                pile = fl1.find('span', class_='mj__pile')
+                # Reconstruct fl1 while keeping pile inside .mj__trou
+                fl1.clear()
+                m1 = BeautifulSoup('<span aria-hidden="true" class="mj__m"><span class="mj__c" style="--r:0">I</span><span class="mj__c" style="--r:1">d</span><span class="mj__c" style="--r:2">e</span><span class="mj__c" style="--r:3">a</span><span class="mj__c" style="--r:4">s</span></span>', 'html.parser')
+                trou = soup.new_tag('span', **{'class': 'mj__trou'})
+                if pile:
+                    trou.append(pile)
+                m2 = BeautifulSoup('<span aria-hidden="true" class="mj__m"><span class="mj__c" style="--r:5">i</span><span class="mj__c" style="--r:6">n</span><span class="mj__c" style="--r:7">t</span><span class="mj__c" style="--r:8">o</span></span>', 'html.parser')
+                fl1.append(m1)
+                fl1.append(trou)
+                fl1.append(m2)
 
-        vid = hh.find('video')
-        if vid:
-            vid['poster'] = '/assets/quiet/hero-holum.jpg'
-            vid['aria-label'] = 'Quiet Studio showreel: turning ideas into intelligent digital products'
+            fl2 = fantome.find('div', class_='mj__l2')
+            if fl2:
+                fl2.clear()
+                l2_ghost = BeautifulSoup('''<span aria-hidden="true" class="mj__m"><span class="mj__c" style="--r:9">i</span><span class="mj__c" style="--r:10">n</span><span class="mj__c" style="--r:11">t</span><span class="mj__c" style="--r:12">e</span><span class="mj__c" style="--r:13">l</span><span class="mj__c" style="--r:14">l</span><span class="mj__c" style="--r:15">i</span><span class="mj__c" style="--r:16">g</span><span class="mj__c" style="--r:17">e</span><span class="mj__c" style="--r:18">n</span><span class="mj__c" style="--r:19">t</span></span> <span class="mj__trou"></span> <span aria-hidden="true" class="mj__m"><span class="mj__c" style="--r:20">p</span><span class="mj__c" style="--r:21">r</span><span class="mj__c" style="--r:22">o</span><span class="mj__c" style="--r:23">d</span><span class="mj__c" style="--r:24">u</span><span class="mj__c" style="--r:25">c</span><span class="mj__c" style="--r:26">t</span><span class="mj__c" style="--r:27">s</span><span class="mj__c" style="--r:28">.</span></span><span class="etoile mj__etoile"></span>''', 'html.parser')
+                fl2.append(l2_ghost)
 
+        # Curtain Layer (.mj__copie in .hh__rideau)
+        copie = hh.find('div', class_='mj__copie')
+        if copie:
+            clead = copie.find('div', class_='mj__lead')
+            if clead: clead.string = 'DESIGN & PRODUCT SOFTWARE STUDIO'
+            cl1 = copie.find('div', class_='mj__l1')
+            if cl1:
+                cl1.clear()
+                cl1.append(BeautifulSoup('''<span class="mj__m"><span class="mj__c" style="--r:0">I</span><span class="mj__c" style="--r:1">d</span><span class="mj__c" style="--r:2">e</span><span class="mj__c" style="--r:3">a</span><span class="mj__c" style="--r:4">s</span></span> <span class="mj__trou"></span> <span class="mj__m"><span class="mj__c" style="--r:5">i</span><span class="mj__c" style="--r:6">n</span><span class="mj__c" style="--r:7">t</span><span class="mj__c" style="--r:8">o</span></span>''', 'html.parser'))
+            cl2 = copie.find('div', class_='mj__l2')
+            if cl2:
+                cl2.clear()
+                cl2.append(BeautifulSoup('''<span class="mj__m"><span class="mj__c" style="--r:9">i</span><span class="mj__c" style="--r:10">n</span><span class="mj__c" style="--r:11">t</span><span class="mj__c" style="--r:12">e</span><span class="mj__c" style="--r:13">l</span><span class="mj__c" style="--r:14">l</span><span class="mj__c" style="--r:15">i</span><span class="mj__c" style="--r:16">g</span><span class="mj__c" style="--r:17">e</span><span class="mj__c" style="--r:18">n</span><span class="mj__c" style="--r:19">t</span></span> <span class="mj__trou"></span> <span class="mj__m"><span class="mj__c" style="--r:20">p</span><span class="mj__c" style="--r:21">r</span><span class="mj__c" style="--r:22">o</span><span class="mj__c" style="--r:23">d</span><span class="mj__c" style="--r:24">u</span><span class="mj__c" style="--r:25">c</span><span class="mj__c" style="--r:26">t</span><span class="mj__c" style="--r:27">s</span><span class="mj__c" style="--r:28">.</span></span><span class="etoile mj__etoile"></span>''', 'html.parser'))
+
+        # Global Studio Clocks with live timezone bindings
         clocks = hh.find('div', class_='clocks')
         if clocks:
             clocks['aria-label'] = 'Global Engineering & Design Time Zones'
@@ -134,7 +156,7 @@ def build_product_studio_minimal():
             </span>'''
             manif.append(BeautifulSoup(manif_html, 'html.parser'))
 
-    # 2. STUDIO PHILOSOPHY (#agence) — Section 01 in Bitwip
+    # 2. STUDIO PHILOSOPHY (#agence) — Section 01: Spacious, uncluttered, 2-column layout
     ag = soup.find('section', id='agence')
     if ag:
         t = ag.find('h2', id='t-agence')
@@ -147,33 +169,63 @@ def build_product_studio_minimal():
             k.clear()
             k.append(BeautifulSoup('<span class="head__n">01</span>About the Studio', 'html.parser'))
 
-        side = ag.find('div', class_='head__side')
-        if side:
-            p = side.find('p', class_='head__i')
-            if p:
-                p.clear()
-                p.append(BeautifulSoup('Quiet Studio is an independent design and software product studio helping founders turn ideas and complex problems into useful software.', 'html.parser'))
-
-        # Replace sensee container with Quiet Studio's design & software manifesto
+        # Replace .sensee container with the full 2-column Bitwip structure (.sensee__txt + .sensee__chiffres)
         sensee = ag.find('div', class_='sensee')
         if sensee:
             sensee.clear()
             sensee_html = '''
-            <p class="sensee__lead" style="color:#111111;font-size:clamp(1.25rem,2.2vw,1.75rem);font-weight:600;line-height:1.55;max-width:860px;margin-bottom:28px;">
-              Quiet Studio is an independent design and software product studio. We conceive, design and engineer digital products, open-core software, and applied AI systems with obsessive craft and zero ceremony.
-            </p>
-            <div class="sensee__p" style="color:#27272a;font-size:1.05rem;line-height:1.7;max-width:800px;margin-bottom:36px;">
-              <p>We believe the best digital products happen when product thinking, high-craft interface design, and deep software engineering happen together under one roof. No handoff walls, no bloated agency meetings—just senior builders shipping working software.</p>
+            <div class="sensee__txt" data-reveal="">
+              <p class="sensee__lead" style="color:#111111;font-size:clamp(1.25rem,2vw,1.65rem);font-weight:600;line-height:1.55;margin-bottom:24px;">
+                Quiet Studio is an independent design and software product studio. We conceive, design and engineer digital products, open-core software, and applied AI systems with obsessive craft and zero ceremony.
+              </p>
+              <p class="sensee__p" style="color:#27272a;font-size:1.05rem;line-height:1.7;margin-bottom:28px;">
+                We believe the best digital products happen when product thinking, high-craft interface design, and deep software engineering happen together under one roof. No handoff walls, no bloated agency meetings—just senior builders shipping working software.
+              </p>
+              <a class="lnk sensee__btn" href="#expertises" style="font-weight:600;display:inline-flex;align-items:center;gap:8px;">
+                Explore our practices
+                <svg fill="none" viewbox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"></path></svg>
+              </a>
             </div>
+
+            <dl class="sensee__chiffres" data-counts="" data-reveal="" style="--d:.1s">
+              <div class="sc">
+                <dt class="sr-only">Products &amp; Tools</dt>
+                <dd>
+                  <span class="sc__n"><span aria-hidden="true" class="sc__plus">+</span><span data-count="12">12</span></span>
+                  <span aria-hidden="true" class="sc__l label">Products &amp; Tools</span>
+                </dd>
+              </div>
+              <div class="sc">
+                <dt class="sr-only">Production Uptime</dt>
+                <dd>
+                  <span class="sc__n"><span data-count="99">99</span><span aria-hidden="true" class="sc__plus">.9%</span></span>
+                  <span aria-hidden="true" class="sc__l label">Telemetry Uptime</span>
+                </dd>
+              </div>
+              <div class="sc">
+                <dt class="sr-only">Edge Latency</dt>
+                <dd>
+                  <span class="sc__n"><span aria-hidden="true" class="sc__plus">&lt;</span><span data-count="50">50</span><span aria-hidden="true" class="sc__plus">ms</span></span>
+                  <span aria-hidden="true" class="sc__l label">Edge Inference</span>
+                </dd>
+              </div>
+              <div class="sc">
+                <dt class="sr-only">Senior Builders</dt>
+                <dd>
+                  <span class="sc__n"><span aria-hidden="true" class="sc__plus">+</span><span data-count="8">8</span></span>
+                  <span aria-hidden="true" class="sc__l label">Senior Builders</span>
+                </dd>
+              </div>
+            </dl>
             '''
             sensee.append(BeautifulSoup(sensee_html, 'html.parser'))
 
-        # Horizontal photo strip (.ag-vie): replace Cayenne photos with Quiet Studio software & craft assets
+        # Horizontal photo strip (.ag-vie): software & craft assets
         ag_vie = ag.find('div', class_='ag-vie')
         if ag_vie:
             ag_vie.clear()
             gallery_html = '''
-            <div class="ag-vie__bande" role="group" style="padding:20px 0 10px;">
+            <div class="ag-vie__bande" role="group" style="padding:24px 0 12px;">
               <ul class="ag-vie__piste" style="display:flex;gap:20px;list-style:none;padding:0;margin:0;overflow-x:auto;">
                 <li class="ag-vie__ph" style="--ar:800/450;flex:0 0 380px;height:240px;border-radius:20px;overflow:hidden;border:1px solid rgba(0,0,0,0.1);box-shadow:0 8px 24px rgba(0,0,0,0.06);">
                   <img src="/assets/quiet/hero-studio-craft.jpg" alt="Quiet Studio Design System &amp; Component Library" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
@@ -198,7 +250,7 @@ def build_product_studio_minimal():
             '''
             ag_vie.append(BeautifulSoup(gallery_html, 'html.parser'))
 
-    # 3. PRACTICES (#expertises) — Section 02 in Bitwip
+    # 3. PRACTICES (#expertises) — Section 02: Four core engineering and design disciplines
     exp = soup.find('section', id='expertises')
     if exp:
         t = exp.find('h2', id='t-expertises')
@@ -218,73 +270,58 @@ def build_product_studio_minimal():
                 p.clear()
                 p.append(BeautifulSoup('From initial product PRD to deployed software: interface design, software engineering, applied AI, and brand systems.', 'html.parser'))
 
-        # Decompose old Bitwip client case study drawers (.xvit)
-        for vit in exp.find_all('div', class_='xvit'):
-            vit.decompose()
-
-        # Update each details.xep__item accordion with Quiet Studio Design & Software Practices!
-        details_items = exp.find_all('details', class_='xep__item')
+        # Practice accordions: replace communications agency copy with software practices
+        items = exp.find_all('details', class_='xep__item')
         practices_data = [
             {
-                'num': '01',
-                'title': 'Product Design & Systems',
-                'desc': 'We design thoughtful, high-craft digital interfaces, frictionless user flows, and tokenized design systems that scale effortlessly from mobile to 4K displays.',
-                'deliverables': ['UX/UI & Interface Architecture', 'Design Systems & Token Libraries', 'Interaction Physics & Micro-interactions', 'Tactile Click & Audio Feedback', 'Interactive Figma & React Prototypes']
+                'title': 'Product Strategy & Interface Design',
+                'desc': 'PRDs, product architecture, tactile UX/UI, token-driven design systems, micro-interactions, and high-fidelity interactive prototypes.',
+                'tags': ['PRD Architecture', 'Tactile UI/UX', 'Design Tokens', 'Interaction Prototyping']
             },
             {
-                'num': '02',
-                'title': 'Full-Stack Software Engineering',
-                'desc': 'Production-grade web apps, local-first architectures, low-latency APIs, and modular frontends built with Next.js 15, TypeScript, WebGPU, and PostgreSQL.',
-                'deliverables': ['Next.js 15 App Router & React 19', 'TypeScript & High-Throughput APIs', 'Database Architecture & PostgreSQL', 'WebGPU & Client Canvas Acceleration', 'CI/CD & Sub-50ms Edge Deployment']
+                'title': 'Software & Product Engineering',
+                'desc': 'Full-stack TypeScript, Next.js 15 App Router, PostgreSQL, Tailwind, robust backend architectures, low-latency APIs, and production deployments.',
+                'tags': ['Next.js 15 & React 19', 'PostgreSQL & ORMs', 'Low-Latency APIs', 'Local-First Architecture']
             },
             {
-                'num': '03',
                 'title': 'Applied AI & Intelligent Systems',
-                'desc': 'We build intelligent software with genuine utility: local on-device inference, semantic vector retrieval (RAG), autonomous multi-agent pipelines, and context threading.',
-                'deliverables': ['Local-First On-Device AI Runtimes', 'RAG & High-Accuracy Vector Search', 'Autonomous Multi-Agent Orchestration', 'Model Fine-Tuning & Quantization', 'Document Intelligence & Synthetic Workflows']
+                'desc': 'Multi-agent orchestration, custom RAG architectures, local ONNX/WebGPU inference, discreet context windows, and automated synthesis pipelines.',
+                'tags': ['Multi-Agent Systems', 'Quantized Inference', 'Hybrid RAG Engines', 'Context Engineering']
             },
             {
-                'num': '04',
-                'title': 'Brand Identity & Product Narrative',
-                'desc': 'A great product deserves an iconic visual identity and compelling story. We craft distinctive wordmarks, typography systems, launch narrative, and conversion-engineered landing pages.',
-                'deliverables': ['Brand Strategy & Positioning', 'Typography & Visual Identity Systems', 'High-Converting Product Pages', 'Product Narrative & Micro-copy', 'Launch Kits & Pitch Decks']
+                'title': 'Brand Systems & Product Launch',
+                'desc': 'Product positioning, brand narrative, interactive launch landing pages, developer documentation, and telemetry-backed conversion optimization.',
+                'tags': ['Launch Architecture', 'Brand Positioning', 'Documentation Systems', 'Growth Engineering']
             }
         ]
 
-        for i, d in enumerate(details_items[:4]):
+        for i, item in enumerate(items[:4]):
             data = practices_data[i]
-            # Summary title
-            summary = d.find('summary')
-            if summary:
-                t_el = summary.find('h3', class_='xep__t')
-                if t_el:
-                    t_el.string = data['title']
-                else:
-                    h = soup.new_tag('h3', **{'class': 'xep__t'})
-                    h.string = data['title']
-                    summary.append(h)
-
-            # Description paragraph
-            d_el = d.find('p', class_='xep__d')
-            if d_el:
-                d_el.string = data['desc']
-
-            # Deliverables bullet list
-            ul = d.find('ul', class_='xep__p')
+            summ = item.find('summary')
+            if summ:
+                h3 = summ.find('h3')
+                if h3:
+                    h3.string = data['title']
+            
+            d_p = item.find('p', class_='xep__d')
+            if d_p:
+                d_p.string = data['desc']
+            
+            ul = item.find('ul', class_='xep__p')
             if ul:
                 ul.clear()
-                for item in data['deliverables']:
+                for tag in data['tags']:
                     li = soup.new_tag('li')
-                    li.string = item
+                    li.string = tag
                     ul.append(li)
 
-    # 4. PORTFOLIO / SELECTED WORK (#realisations) — Section 03 in Bitwip
+    # 4. SELECTED WORK (#realisations) — Section 03: Quiet Studio software products
     real = soup.find('section', id='realisations')
     if real:
         t = real.find('h2', id='t-realisations')
         if t:
             t.clear()
-            t.append(BeautifulSoup('Software and products <span class="baila">built to work</span>.<span aria-hidden="true" class="etoile"></span>', 'html.parser'))
+            t.append(BeautifulSoup('Software and systems built to <span class="baila">work</span>.<span aria-hidden="true" class="etoile"></span>', 'html.parser'))
 
         k = real.find('p', class_='head__k')
         if k:
@@ -296,160 +333,187 @@ def build_product_studio_minimal():
             p = side.find('p', class_='head__i')
             if p:
                 p.clear()
-                p.append(BeautifulSoup('A selection of software platforms, AI systems, and digital products conceived, designed and engineered by Quiet Studio.', 'html.parser'))
+                p.append(BeautifulSoup('In-house tools, client software platforms, and applied intelligence systems engineered and shipped by Quiet Studio.', 'html.parser'))
 
-        cartes = real.find('div', class_='piste__cartes') or real.find('div', class_='qr-grille')
-        if cartes:
-            # 5 Real Quiet Studio Software Products & Systems
-            products_work = [
-                {
-                    'title': 'Zen AI Engine',
-                    'tag': 'Core Runtime',
-                    'cat': 'Quantized Inference',
-                    'desc': 'High-throughput quantized edge inference engine running large multimodal models directly on Apple Silicon and browser WebGPU with sub-0.2ms latency and zero cloud telemetry.',
-                    'img': '/assets/quiet/fintech-identity.jpg'
-                },
-                {
-                    'title': 'Capture Desktop',
-                    'tag': 'In-House Product',
-                    'cat': 'Cognitive Workspace',
-                    'desc': 'A local-first desktop OS and cognitive workspace designed for deep work. Features offline-first vector storage, sub-50ms fuzzy recall, and semantic context threading.',
-                    'img': '/assets/quiet/hero-studio-craft.jpg'
-                },
-                {
-                    'title': 'LearnLoop',
-                    'tag': 'Flagship Web App',
-                    'cat': 'Adaptive Learning',
-                    'desc': 'An adaptive spaced-repetition and concept-mapping engine that turns curiosity into durable understanding through active-recall feedback loops.',
-                    'img': '/assets/quiet/product-brand.jpg'
-                },
-                {
-                    'title': 'Aethel Runtime',
-                    'tag': 'AI System',
-                    'cat': 'Autonomous Agents',
-                    'desc': 'A context-aware multi-agent orchestration runtime with discrete authority gating, cryptographic audit logs, and deterministic verification protocols.',
-                    'img': '/assets/quiet/startup-presentation.jpg'
-                },
-                {
-                    'title': 'Titan Analytics',
-                    'tag': 'Product Build',
-                    'cat': 'Financial Intelligence',
-                    'desc': 'Real-time financial intelligence dashboard providing streaming anomaly detection, portfolio telemetry, and institutional-grade predictive risk models.',
-                    'img': '/assets/quiet/hero-typography.jpg'
-                }
-            ]
+        # Replace project cards with Quiet Studio in-house software
+        projects = real.find_all('article', class_='case')
+        software_list = [
+            {
+                'title': 'Capture Desktop',
+                'tag': 'LOCAL-FIRST OS · ELECTRON & RUST',
+                'desc': 'A distraction-free desktop operating workspace designed for cognitive flow, instant local file retrieval, and low-latency local model inference.',
+                'tags': ['Local-First', 'Rust Runtime', 'Desktop OS'],
+                'img': '/assets/quiet/fintech-identity.jpg'
+            },
+            {
+                'title': 'Aethel Runtime',
+                'tag': 'APPLIED AI · AGENT ORCHESTRATION',
+                'desc': 'Context-aware multi-agent runtime with discreet authority boundaries, verifiable execution trees, and streaming telemetry dashboards.',
+                'tags': ['Multi-Agent', 'Streaming Graph', 'TypeScript SDK'],
+                'img': '/assets/quiet/project-atlas.jpg'
+            },
+            {
+                'title': 'Resonance OS',
+                'tag': 'STUDIO PLATFORM · ADAPTIVE LEARNING',
+                'desc': 'Adaptive intelligence engine and cognitive training environment built for senior technical squads and researchers.',
+                'tags': ['Cognitive UX', 'Edge Inference', 'Telemetry'],
+                'img': '/assets/quiet/product-brand.jpg'
+            },
+            {
+                'title': 'Zen AI Engine',
+                'tag': 'CORE TECHNOLOGY · QUANTIZED INFERENCE',
+                'desc': 'Quantized on-device AI runtime running fully private on Apple Silicon and modern WebGPU browsers with zero cloud dependency.',
+                'tags': ['Apple Silicon', 'WebGPU', 'Quantized Models'],
+                'img': '/assets/quiet/digital-editorial.jpg'
+            },
+            {
+                'title': 'Titan Analytics',
+                'tag': 'ENTERPRISE SYSTEM · HIGH-FREQUENCY DATA',
+                'desc': 'Real-time financial telemetry dashboard with streaming WebSocket anomaly detection, custom canvas graphs, and millisecond latency.',
+                'tags': ['Canvas 2D', 'WebSockets', 'Real-Time Telemetry'],
+                'img': '/assets/quiet/startup-presentation.jpg'
+            }
+        ]
 
-            cartes.clear()
-            for p in products_work:
-                card_html = f'''
-                <article class="qr" data-metier="studio-product">
-                  <p class="qr__client">
-                    <span class="label" style="color:var(--papaye);font-weight:700;">{p['tag']}</span>
-                    <span class="tag">{p['cat']}</span>
-                    <span class="tag tag--metier"><span aria-hidden="true" class="forme forme--sceau forme--lavande"></span>Product</span>
-                  </p>
-                  <div class="qr__media">
-                    <img alt="{p['title']}" src="{p['img']}" decoding="async" height="1280" loading="lazy" width="1440" style="object-fit:cover;width:100%;height:100%;border-radius:18px;"/>
-                  </div>
-                  <div class="qr__corps">
-                    <h3 class="qr__q"><a class="qr__lien" data-verbe="Inspect system" href="#contact">{p['title']}</a></h3>
-                    <p class="qr__a" style="color:rgba(255,255,255,0.88);line-height:1.55;font-size:0.95rem;">{p['desc']}</p>
-                  </div>
-                </article>
-                '''
-                cartes.append(BeautifulSoup(card_html, 'html.parser'))
+        for i, card in enumerate(projects[:5]):
+            data = software_list[i]
+            
+            # Title
+            t_tag = card.find('h3', class_='case__t')
+            if t_tag:
+                a_tag = t_tag.find('a')
+                if a_tag:
+                    a_tag.string = data['title']
+                    a_tag['href'] = '#realisations'
+                else:
+                    t_tag.string = data['title']
 
-    # 5. COLLABORATION (#confiance) — Section 04 in Bitwip
+            # Label / kicker
+            k_tag = card.find('p', class_='case__k')
+            if k_tag:
+                k_tag.string = data['tag']
+
+            # Description
+            d_tag = card.find('p', class_='case__d')
+            if d_tag:
+                d_tag.string = data['desc']
+
+            # Tags list
+            ul = card.find('ul', class_='case__tags')
+            if ul:
+                ul.clear()
+                for tag in data['tags']:
+                    li = soup.new_tag('li')
+                    li.string = tag
+                    ul.append(li)
+
+            # Image
+            img = card.find('img')
+            if img:
+                img['src'] = data['img']
+                img['alt'] = data['title']
+                if img.has_attr('srcset'): del img['srcset']
+                if img.has_attr('data-src'): del img['data-src']
+                if img.has_attr('data-srcset'): del img['data-srcset']
+
+    # 5. CREDENTIALS / STANDARDS (#confiance) — Section 04 in Bitwip
     conf = soup.find('section', id='confiance')
     if conf:
         t = conf.find('h2', id='t-confiance')
         if t:
             t.clear()
-            t.append(BeautifulSoup('A good process makes <span class="baila">good collaboration</span>.<span aria-hidden="true" class="etoile"></span>', 'html.parser'))
+            t.append(BeautifulSoup('Built with <span class="baila">engineering discipline</span> and craft.<span aria-hidden="true" class="etoile"></span>', 'html.parser'))
 
         k = conf.find('p', class_='head__k')
         if k:
             k.clear()
-            k.append(BeautifulSoup('<span class="head__n">04</span>Principles', 'html.parser'))
+            k.append(BeautifulSoup('<span class="head__n">04</span>Standards', 'html.parser'))
 
-        wrap = conf.find('div', class_='wrap')
-        if wrap:
-            head = wrap.find('header', class_='head')
-            wrap.clear()
-            wrap.append(head)
+        side = conf.find('div', class_='head__side')
+        if side:
+            p = side.find('p', class_='head__i')
+            if p:
+                p.clear()
+                p.append(BeautifulSoup('Quiet Studio products adhere to strict craftsmanship standards: zero unmotivated aesthetics, full TypeScript safety, and evidence over claims.', 'html.parser'))
 
-            collab_html = '''
-            <div class="nouvelles" data-reveal style="--d:.08s;margin-top:40px;">
-              <p style="font-size:1.25rem;line-height:1.6;color:#111111;max-width:760px;margin-bottom:36px;font-weight:500;">
-                We run high-velocity sprints with complete transparency. Direct access to builders, visible git milestones, and structured feedback ensure frictionless execution.
-              </p>
-              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;width:100%;">
-                <div style="padding:32px 28px;background:rgba(255,255,255,0.92);border:1px solid rgba(0,0,0,0.08);border-radius:24px;box-shadow:0 4px 20px rgba(0,0,0,0.04);">
-                  <span class="label" style="color:var(--papaye);font-size:12px;letter-spacing:0.08em;font-weight:700;">01 — SCOPE CLARITY</span>
-                  <h4 style="margin:14px 0 8px;font-size:1.35rem;font-weight:700;color:#111111;">Explicit Sprints</h4>
-                  <p style="font-size:0.95rem;line-height:1.55;color:#27272a;">Every sprint starts with defined deliverables, explicit time allocations, and agreed acceptance criteria before code is written.</p>
-                </div>
-                <div style="padding:32px 28px;background:rgba(255,255,255,0.92);border:1px solid rgba(0,0,0,0.08);border-radius:24px;box-shadow:0 4px 20px rgba(0,0,0,0.04);">
-                  <span class="label" style="color:var(--papaye);font-size:12px;letter-spacing:0.08em;font-weight:700;">02 — CONTINUOUS DEMOS</span>
-                  <h4 style="margin:14px 0 8px;font-size:1.35rem;font-weight:700;color:#111111;">Weekly Deployments</h4>
-                  <p style="font-size:0.95rem;line-height:1.55;color:#27272a;">Live preview URLs on every branch. You test and interact with actual running software continuously, catching nuances early.</p>
-                </div>
-                <div style="padding:32px 28px;background:rgba(255,255,255,0.92);border:1px solid rgba(0,0,0,0.08);border-radius:24px;box-shadow:0 4px 20px rgba(0,0,0,0.04);">
-                  <span class="label" style="color:var(--papaye);font-size:12px;letter-spacing:0.08em;font-weight:700;">03 — DIRECT FOUNDER ACCESS</span>
-                  <h4 style="margin:14px 0 8px;font-size:1.35rem;font-weight:700;color:#111111;">Zero Middlemen</h4>
-                  <p style="font-size:0.95rem;line-height:1.55;color:#27272a;">You communicate directly with senior product designers and software architects—no account managers or distorted relay chains.</p>
-                </div>
-                <div style="padding:32px 28px;background:rgba(255,255,255,0.92);border:1px solid rgba(0,0,0,0.08);border-radius:24px;box-shadow:0 4px 20px rgba(0,0,0,0.04);">
-                  <span class="label" style="color:var(--papaye);font-size:12px;letter-spacing:0.08em;font-weight:700;">04 — OWNERSHIP &amp; CODE</span>
-                  <h4 style="margin:14px 0 8px;font-size:1.35rem;font-weight:700;color:#111111;">Clean Repository</h4>
-                  <p style="font-size:0.95rem;line-height:1.55;color:#27272a;">Complete IP ownership from day one. You receive thoroughly documented, typed, linted, and production-ready source code.</p>
-                </div>
-              </div>
-            </div>
-            '''
-            wrap.append(BeautifulSoup(collab_html, 'html.parser'))
+        # Replace rail text (.piste__i)
+        piste_i = conf.find('p', class_='piste__i')
+        if piste_i:
+            piste_i.string = 'Architected and engineered for founders, researchers, and senior product squads worldwide.'
 
-    # 6. GLOBAL OPERATIONS / THE METHOD (#territoires) — Section 05 in Bitwip
-    terr = soup.find('section', id='territoires')
-    if terr:
-        wrap = terr.find('div', class_='wrap')
+        # Replace testimonial quotes with Quiet Studio software engineering reviews
+        quotes = conf.find_all('blockquote', class_='avis')
+        reviews = [
+            {
+                'text': 'Quiet Studio turned our complex multi-agent architecture into a production-grade system in record time. Their design precision is extraordinary.',
+                'author': 'Lead Architect · Resonance Labs'
+            },
+            {
+                'text': 'The level of craftsmanship in their interface tokens and local-first runtime is rare. No fluff, no bloated agency meetings, just high-velocity delivery.',
+                'author': 'Founder & CEO · Aethel Core'
+            },
+            {
+                'text': 'Quiet Studio bridges deep software engineering and world-class visual design effortlessly. They ship what other agencies only talk about.',
+                'author': 'VP Engineering · Capture Desktop'
+            }
+        ]
+
+        for i, q in enumerate(quotes[:3]):
+            data = reviews[i]
+            p_text = q.find('p', class_='avis__p')
+            if p_text:
+                p_text.string = f'“{data["text"]}”'
+            cite = q.find('cite', class_='avis__auteur')
+            if cite:
+                cite.string = data['author']
+
+    # 6. PRODUCT SPRINT LIFECYCLE (#territoires) — Section 05 in Bitwip
+    ter = soup.find('section', id='territoires')
+    if ter:
+        wrap = ter.find('div', class_='wrap')
         if wrap:
             wrap.clear()
             method_html = '''
-            <header class="head head--seul">
+            <header class="head">
               <p class="head__k label"><span class="head__n">05</span>The Method</p>
-              <h2 class="head__t" data-reveal="" id="t-terr">From first sprint to <span class="baila">production release</span>.<span aria-hidden="true" class="etoile"></span></h2>
-              <p class="head__i head__perimetre" data-reveal="" style="--d:.05s;max-width:760px;font-size:1.15rem;line-height:1.6;color:rgba(255,255,255,0.85);margin-top:16px;">
-                We follow a rigorous, 6-stage engineering and design lifecycle. Clear milestones, continuous integration, and rapid sprint velocity ensure ambitious software ships on time.
-              </p>
+              <h2 class="head__t" id="t-method">From concept to <span class="baila">production release</span>.<span aria-hidden="true" class="etoile"></span></h2>
+              <div class="head__side" data-reveal="" style="--d:.1s">
+                <p class="head__i" style="font-size:1.15rem;line-height:1.55;color:#27272a;">A battle-tested 6-stage product lifecycle engineered to eliminate ambiguity and deliver working software fast.</p>
+              </div>
             </header>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-top:48px;">
-              <article style="padding:32px 28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:24px;margin-top:40px;">
+              <article style="padding:28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
                 <span class="label" style="color:var(--papaye);font-size:12px;letter-spacing:0.08em;font-weight:700;">STAGE 01</span>
-                <h3 style="margin:14px 0 10px;font-size:1.45rem;color:#ffffff;font-weight:700;">Discover</h3>
-                <p style="line-height:1.6;color:rgba(255,255,255,0.82);font-size:0.95rem;">Deconstruct the core problem, interview stakeholders, analyze competitive workflows, and evaluate architectural feasibility before design begins.</p>
+                <h3 style="margin:14px 0 10px;font-size:1.45rem;color:#ffffff;font-weight:700;">Discover &amp; Interrogate</h3>
+                <p style="line-height:1.6;color:rgba(255,255,255,0.82);font-size:0.95rem;">Uncovering root user needs, identifying core technical constraints, interrogating assumptions, and defining crisp success criteria.</p>
               </article>
-              <article style="padding:32px 28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
+
+              <article style="padding:28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
                 <span class="label" style="color:var(--papaye);font-size:12px;letter-spacing:0.08em;font-weight:700;">STAGE 02</span>
-                <h3 style="margin:14px 0 10px;font-size:1.45rem;color:#ffffff;font-weight:700;">Define</h3>
-                <p style="line-height:1.6;color:rgba(255,255,255,0.82);font-size:0.95rem;">Author unambiguous PRDs, map user journeys, define data contracts and database schemas, and lock in the modern technology stack.</p>
+                <h3 style="margin:14px 0 10px;font-size:1.45rem;color:#ffffff;font-weight:700;">Architecture &amp; PRD</h3>
+                <p style="line-height:1.6;color:rgba(255,255,255,0.82);font-size:0.95rem;">Drafting exhaustive product requirement documents, system data schemas, state machine diagrams, and tech stack boundaries.</p>
               </article>
-              <article style="padding:32px 28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
+
+              <article style="padding:28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
                 <span class="label" style="color:var(--papaye);font-size:12px;letter-spacing:0.08em;font-weight:700;">STAGE 03</span>
-                <h3 style="margin:14px 0 10px;font-size:1.45rem;color:#ffffff;font-weight:700;">Design</h3>
-                <p style="line-height:1.6;color:rgba(255,255,255,0.82);font-size:0.95rem;">Craft complete design systems, high-density token architectures, responsive layouts, and interactive micro-prototypes with tactile feedback.</p>
+                <h3 style="margin:14px 0 10px;font-size:1.45rem;color:#ffffff;font-weight:700;">Tactile UI &amp; Prototyping</h3>
+                <p style="line-height:1.6;color:rgba(255,255,255,0.82);font-size:0.95rem;">Creating bespoke design tokens, interactive micro-states, keyboard mechanics, and functional prototypes that feel alive.</p>
               </article>
-              <article style="padding:32px 28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
+
+              <article style="padding:28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
                 <span class="label" style="color:var(--papaye);font-size:12px;letter-spacing:0.08em;font-weight:700;">STAGE 04</span>
-                <h3 style="margin:14px 0 10px;font-size:1.45rem;color:#ffffff;font-weight:700;">Engineer</h3>
-                <p style="line-height:1.6;color:rgba(255,255,255,0.82);font-size:0.95rem;">Implement full-stack Next.js 15 App Router applications, low-latency TypeScript APIs, PostgreSQL models, and native AI integrations.</p>
+                <h3 style="margin:14px 0 10px;font-size:1.45rem;color:#ffffff;font-weight:700;">Full-Stack Engineering</h3>
+                <p style="line-height:1.6;color:rgba(255,255,255,0.82);font-size:0.95rem;">Writing clean, zero-warning TypeScript, setting up database migrations, API routes, and applied AI pipelines with high test coverage.</p>
               </article>
-              <article style="padding:32px 28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
+
+              <article style="padding:28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
                 <span class="label" style="color:var(--papaye);font-size:12px;letter-spacing:0.08em;font-weight:700;">STAGE 05</span>
-                <h3 style="margin:14px 0 10px;font-size:1.45rem;color:#ffffff;font-weight:700;">Validate</h3>
-                <p style="line-height:1.6;color:rgba(255,255,255,0.82);font-size:0.95rem;">Rigorous end-to-end testing, sub-50ms latency benchmarking, 100% Lighthouse audit compliance, and multi-device usability verification.</p>
+                <h3 style="margin:14px 0 10px;font-size:1.45rem;color:#ffffff;font-weight:700;">Verification &amp; Hardening</h3>
+                <p style="line-height:1.6;color:rgba(255,255,255,0.82);font-size:0.95rem;">Multi-device layout testing (390px to 4K), automated load benchmarks, edge-case hardening, and security audits.</p>
               </article>
-              <article style="padding:32px 28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
+
+              <article style="padding:28px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:24px;">
                 <span class="label" style="color:var(--papaye);font-size:12px;letter-spacing:0.08em;font-weight:700;">STAGE 06</span>
                 <h3 style="margin:14px 0 10px;font-size:1.45rem;color:#ffffff;font-weight:700;">Launch &amp; Evolve</h3>
                 <p style="line-height:1.6;color:rgba(255,255,255,0.82);font-size:0.95rem;">Zero-downtime production deployment, telemetry integration, analytics tracking, and continuous sprint cycles to adapt to user feedback.</p>
@@ -472,30 +536,24 @@ def build_product_studio_minimal():
                 <p class="head__i" style="font-size:1.15rem;line-height:1.55;color:#27272a;">Thoughts on product engineering, applied AI architectures, and craft from the Quiet Studio team.</p>
               </div>
             </header>
-            <div class="jca" id="jca-rail" data-carrousel style="margin-top:40px;">
-              <article class="actu" data-cat="product" data-reveal>
-                <div class="actu__media">
-                  <img src="/assets/quiet/hero-minimalist.jpg" alt="Product Thinking" width="1200" height="800" loading="lazy">
-                </div>
-                <p class="actu__meta"><span class="actu__cat" style="color:var(--papaye);font-weight:700;">Product</span><span>5 min read</span><time datetime="2026-11-01">Nov 2026</time></p>
-                <h3 class="actu__t"><a href="#contact" style="color:#111111;font-weight:700;">Why AI-native products need better product thinking.</a></h3>
-                <p class="actu__ex" style="color:#27272a;line-height:1.6;">Wrapping an LLM in a chatbot modal isn't product design. Real intelligence must solve user friction inside the primary loop.</p>
+
+            <div class="actu" style="margin-top:36px;display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:24px;">
+              <article class="actu__item" style="padding:24px;border:1px solid var(--line);border-radius:18px;background:#ffffff;">
+                <p class="actu__meta" style="font-size:0.85rem;color:#71717a;margin-bottom:10px;">OCTOBER 2026 · APPLIED AI</p>
+                <h3 class="actu__t" style="font-size:1.25rem;font-weight:700;margin-bottom:12px;"><a href="/blog" style="color:#111111;text-decoration:none;">Building Local-First AI: Quantization, Privacy &amp; WebGPU</a></h3>
+                <p class="actu__ex" style="font-size:0.95rem;line-height:1.6;color:#52525b;">How to ship AI products that execute entirely on-device with sub-50ms latency and absolute user privacy.</p>
               </article>
-              <article class="actu" data-cat="engineering" data-reveal>
-                <div class="actu__media">
-                  <img src="/assets/quiet/hero-holum.jpg" alt="Engineering" width="1200" height="800" loading="lazy">
-                </div>
-                <p class="actu__meta"><span class="actu__cat" style="color:var(--papaye);font-weight:700;">Engineering</span><span>6 min read</span><time datetime="2026-11-03">Nov 2026</time></p>
-                <h3 class="actu__t"><a href="#contact" style="color:#111111;font-weight:700;">The death of the Figma handoff: design engineering in 2026.</a></h3>
-                <p class="actu__ex" style="color:#27272a;line-height:1.6;">Why the most resilient software teams eliminate static mockups in favor of live code prototypes and tokenized design systems.</p>
+
+              <article class="actu__item" style="padding:24px;border:1px solid var(--line);border-radius:18px;background:#ffffff;">
+                <p class="actu__meta" style="font-size:0.85rem;color:#71717a;margin-bottom:10px;">SEPTEMBER 2026 · INTERFACE DESIGN</p>
+                <h3 class="actu__t" style="font-size:1.25rem;font-weight:700;margin-bottom:12px;"><a href="/blog" style="color:#111111;text-decoration:none;">The Anti-Slop Manifesto: Why Modern Software Feels Generic</a></h3>
+                <p class="actu__ex" style="font-size:0.95rem;line-height:1.6;color:#52525b;">Rejecting cookie-cutter templates, unmotivated gradients, and bloated cards in favor of purposeful interface craft.</p>
               </article>
-              <article class="actu" data-cat="ai" data-reveal>
-                <div class="actu__media">
-                  <img src="/assets/quiet/fintech-identity.jpg" alt="Applied AI" width="1200" height="800" loading="lazy">
-                </div>
-                <p class="actu__meta"><span class="actu__cat" style="color:var(--papaye);font-weight:700;">Applied AI</span><span>4 min read</span><time datetime="2026-11-05">Nov 2026</time></p>
-                <h3 class="actu__t"><a href="#contact" style="color:#111111;font-weight:700;">Building local-first software with quantized LLM runtimes.</a></h3>
-                <p class="actu__ex" style="color:#27272a;line-height:1.6;">How running quantized models on client hardware unlocks zero latency, total privacy, and offline cognitive workspaces.</p>
+
+              <article class="actu__item" style="padding:24px;border:1px solid var(--line);border-radius:18px;background:#ffffff;">
+                <p class="actu__meta" style="font-size:0.85rem;color:#71717a;margin-bottom:10px;">AUGUST 2026 · SYSTEM ARCHITECTURE</p>
+                <h3 class="actu__t" style="font-size:1.25rem;font-weight:700;margin-bottom:12px;"><a href="/blog" style="color:#111111;text-decoration:none;">Orchestrating Autonomous Squads: From PRD to Shipped Code</a></h3>
+                <p class="actu__ex" style="font-size:0.95rem;line-height:1.6;color:#52525b;">Practical lessons from deploying hybrid human-agent squads on mission-critical software codebases.</p>
               </article>
             </div>
             '''
@@ -507,7 +565,7 @@ def build_product_studio_minimal():
         t = faq.find('h2', id='t-faq')
         if t:
             t.clear()
-            t.append(BeautifulSoup('A few things you <span class="baila">might want to know</span>.<span aria-hidden="true" class="etoile"></span>', 'html.parser'))
+            t.append(BeautifulSoup('Everything you <span class="baila">might want to know</span>.<span aria-hidden="true" class="etoile"></span>', 'html.parser'))
 
         k = faq.find('p', class_='head__k')
         if k:
@@ -518,30 +576,11 @@ def build_product_studio_minimal():
         if faq_list:
             faq_list.clear()
             faq_html = '''
-            <details class="qa" name="faq" open="">
-              <summary style="font-weight:700;color:#111111;font-size:1.15rem;">What is Quiet Studio?<span aria-hidden="true" class="qa__ico"></span></summary>
-              <div class="qa__a"><p style="color:#27272a;line-height:1.65;font-size:1rem;">Quiet Studio is an independent design and software product studio. We partner with founders and engineering leaders to conceive, design, and build digital products, custom web applications, and applied AI software.</p></div>
-            </details>
-            <details class="qa" name="faq">
-              <summary style="font-weight:700;color:#111111;font-size:1.15rem;">Are you an advertising or communications agency?<span aria-hidden="true" class="qa__ico"></span></summary>
-              <div class="qa__a"><p style="color:#27272a;line-height:1.65;font-size:1rem;">No. We are not a communications agency, ad agency, or social media manager. We are a design and software product studio. Our core output is working software, design systems, applied AI runtimes, and high-craft user interfaces.</p></div>
-            </details>
-            <details class="qa" name="faq">
-              <summary style="font-weight:700;color:#111111;font-size:1.15rem;">How do product sprints work?<span aria-hidden="true" class="qa__ico"></span></summary>
-              <div class="qa__a"><p style="color:#27272a;line-height:1.65;font-size:1rem;">We operate in structured weekly sprints with clear milestone deliverables, continuous live staging URLs, and daily updates. You collaborate directly with principal designers and engineers.</p></div>
-            </details>
-            <details class="qa" name="faq">
-              <summary style="font-weight:700;color:#111111;font-size:1.15rem;">What technology stacks do you specialize in?<span aria-hidden="true" class="qa__ico"></span></summary>
-              <div class="qa__a"><p style="color:#27272a;line-height:1.65;font-size:1rem;">Our primary engineering stack is TypeScript, Next.js 15, React, Tailwind CSS, PostgreSQL, and Node.js. For applied AI and edge systems, we leverage Python, PyTorch, local quantized models (GGUF/ONNX), WebGPU, and vector databases.</p></div>
-            </details>
-            <details class="qa" name="faq">
-              <summary style="font-weight:700;color:#111111;font-size:1.15rem;">How does Quiet Studio integrate AI into products?<span aria-hidden="true" class="qa__ico"></span></summary>
-              <div class="qa__a"><p style="color:#27272a;line-height:1.65;font-size:1rem;">We prioritize genuine utility over novelty. This includes autonomous agent pipelines, context-aware retrieval (RAG), automated data transformation, and private on-device intelligence that reduces user toil.</p></div>
-            </details>
-            <details class="qa" name="faq">
-              <summary style="font-weight:700;color:#111111;font-size:1.15rem;">Who owns the intellectual property and code?<span aria-hidden="true" class="qa__ico"></span></summary>
-              <div class="qa__a"><p style="color:#27272a;line-height:1.65;font-size:1rem;">You retain 100% ownership of all code, assets, schemas, design files, and IP produced during our partnership. Everything is transferred to your repositories upon sprint completion.</p></div>
-            </details>
+            <details class="qa" name="faq"><summary>What kind of products does Quiet Studio build?<span aria-hidden="true" class="qa__ico"></span></summary><div class="qa__a"><p>We build production digital products, SaaS applications, local-first developer tools, applied AI pipelines, and high-conversion brand platforms. We work with both early-stage founders building v1 from scratch and mature companies overhauling core software experiences.</p></div></details>
+            <details class="qa" name="faq"><summary>How do product sprints work?<span aria-hidden="true" class="qa__ico"></span></summary><div class="qa__a"><p>Our sprints run in focused 2-week to 6-week cycles. Each sprint begins with an exhaustive technical PRD and ends with functional, tested code deployed to production. You work directly with senior builders—no account managers or communication bottlenecks.</p></div></details>
+            <details class="qa" name="faq"><summary>Who owns the intellectual property and code?<span aria-hidden="true" class="qa__ico"></span></summary><div class="qa__a"><p>You do. You retain 100% full ownership of all code, designs, tokens, database schemas, and assets created during our engagement. Everything is handed over in clean, documented repositories.</p></div></details>
+            <details class="qa" name="faq"><summary>What technology stacks do you use?<span aria-hidden="true" class="qa__ico"></span></summary><div class="qa__a"><p>We specialize in modern TypeScript, Next.js 15, React 19, Tailwind CSS, PostgreSQL, Node.js, Rust for high-performance desktop runtimes, and WebGPU / ONNX for on-device applied intelligence.</p></div></details>
+            <details class="qa" name="faq"><summary>Do you work with teams outside our time zone?<span aria-hidden="true" class="qa__ico"></span></summary><div class="qa__a"><p>Yes. Quiet Studio operates as a remote-first studio across San Francisco, New York, London, Tokyo, and Bengaluru, enabling continuous asynchronous development with daily video and code updates.</p></div></details>
             '''
             faq_list.append(BeautifulSoup(faq_html, 'html.parser'))
 
@@ -550,10 +589,13 @@ def build_product_studio_minimal():
     if cta:
         cta.clear()
         cta_html = '''
-        <div class="wrap cta__in">
-          <h2 class="cta__t" data-reveal="" id="t-cta">
-            Ideas into <span class="baila">intelligent software</span>.<span aria-hidden="true" class="etoile"></span>
-          </h2>
+        <div class="wrap">
+          <header class="head head--seul">
+            <p class="head__k label"><span class="head__n">08</span>Let's Build</p>
+            <h2 class="head__t" data-reveal="" id="t-contact">
+              Turn your ambitious idea into <span class="baila">intelligent software</span>.<span aria-hidden="true" class="etoile"></span>
+            </h2>
+          </header>
           <div class="cta__side" data-reveal="" style="--d:.1s">
             <p class="lead" style="color:rgba(255,255,255,0.85);font-size:1.15rem;line-height:1.55;">
               Ready to ship? Tell us about your product vision, technical requirements and target timeline.
@@ -602,7 +644,7 @@ def build_product_studio_minimal():
                   <li><a href="#faq" style="color:rgba(255,255,255,0.85);text-decoration:none;">FAQ</a></li>
                 </ul>
               </div>
-
+              
               <div>
                 <h4 style="color:var(--papaye);font:700 12px/1 monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;">Products Mode</h4>
                 <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:0.95rem;">
@@ -623,50 +665,33 @@ def build_product_studio_minimal():
               </div>
             </div>
           </div>
-
+          
           <div style="padding-top:32px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;color:rgba(255,255,255,0.5);font-size:0.88rem;">
             <span>Thoughtfully conceived. Carefully designed. Intelligently built.</span>
-            <span>&copy; 2026 Quiet Studio. All rights reserved.</span>
+            <span>© 2026 Quiet Studio. All rights reserved.</span>
           </div>
         </div>
         '''
         pied.append(BeautifulSoup(footer_html, 'html.parser'))
 
-    # Extract cleaned body content
+    # Extract body content
     body = soup.find('body')
-    content = "".join([str(c) for c in body.children if str(c).strip()])
+    content = "".join([str(c) for c in body.children]) if body else str(soup)
 
-    # Comprehensive purge of Bitwip, communication agency jargon, and French territories
-    content = content.replace('Bitwip', 'Quiet Studio')
-    content = content.replace('bitwip', 'quietstudio')
-    content = content.replace('communications agency', 'design & software product studio')
-    content = content.replace('Communications agency', 'Design & software product studio')
-    content = content.replace('communication strategy', 'product & design strategy')
-    content = content.replace('Communication strategy', 'Product & design strategy')
-    content = content.replace('communication', 'design & software engineering')
-    content = content.replace('Communication', 'Design & Software Engineering')
-    content = content.replace('media plan', 'software architecture')
-    content = content.replace('Media plan', 'Software Architecture')
-    content = content.replace('Media buying', 'Full-Stack Architecture')
-    content = content.replace('Social ads', 'Product Design Systems')
+    # Clean any stray French agency terms
+    content = content.replace('Communications agency', 'Design & Product Software Studio')
+    content = content.replace('communications agency', 'product software studio')
     content = content.replace('Overseas France', 'Worldwide')
-    content = content.replace('overseas France', 'worldwide')
-    content = content.replace('French-speaking world', 'Global Ecosystem')
     content = content.replace('French Guiana', 'San Francisco')
-    content = content.replace('French-speaking', 'International')
-    content = content.replace('French', 'Universal')
-    content = content.replace('Guyane', 'Studio')
-    content = content.replace('guyane', 'studio')
-    content = content.replace('Martinique', 'New York')
-    content = content.replace('Guadeloupe', 'London')
-    content = content.replace('Réunion', 'Tokyo')
-    content = content.replace('09 80 80 82 42', '')
+    content = content.replace('Guyane', 'California')
 
     # Export to client/src/components/bitwip-html.ts
-    escaped = json.dumps(content)
-    ts_code = f'export const BITWIP_BODY_HTML = {escaped};\n'
+    escaped = content.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n').replace('\r', '')
+    ts_code = f'export const BITWIP_BODY_HTML = "{escaped}";\n'
+
     with open('client/src/components/bitwip-html.ts', 'w', encoding='utf-8') as f:
         f.write(ts_code)
+
     print(f"Generated client/src/components/bitwip-html.ts ({len(ts_code)} bytes)")
 
 if __name__ == '__main__':

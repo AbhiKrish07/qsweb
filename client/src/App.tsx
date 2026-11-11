@@ -559,12 +559,6 @@ function Header({
             >
               {dark ? <Sun size={13} /> : <Moon size={13} />}
             </button>
-
-            {/* Bright Orange Start a Project CTA Button */}
-            <button className="capsule-cta-btn" onClick={onOpenContact}>
-              <span>Start a project</span>
-              <ArrowRight size={13} />
-            </button>
           </div>
 
           {/* Mega-Menu Dropdown Panel */}
