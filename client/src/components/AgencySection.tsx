@@ -655,11 +655,24 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           opacity: 1 !important;
           transform: none !important;
         }
+        .bitwip-unified-container #agence {
+          padding-bottom: 0 !important;
+          margin-bottom: 0 !important;
+        }
+        .bitwip-unified-container .ag-vie {
+          padding-bottom: 24px !important;
+        }
         .bitwip-unified-container #expertises {
+          padding-top: 24px !important;
           padding-bottom: 20px !important;
+          scroll-margin-top: 80px !important;
         }
         .bitwip-unified-container #expertises .wrap {
+          padding-top: 0 !important;
           padding-bottom: 20px !important;
+        }
+        .bitwip-unified-container #expertises .head {
+          margin-bottom: 36px !important;
         }
         .bitwip-unified-container #realisations {
           padding-top: 32px !important;

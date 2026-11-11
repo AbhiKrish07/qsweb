@@ -251,8 +251,8 @@ def build_stitched_quiet_studio():
         exp.clear()
         exp['class'] = ['sec']
         services_section_html = '''
-        <div class="wrap" style="padding:60px 0 24px;">
-          <header class="head" style="margin-bottom:60px;">
+        <div class="wrap" style="padding:0 0 24px;">
+          <header class="head" style="margin-bottom:36px;">
             <p class="head__k label" style="color:#ff5a1f;font:700 12px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;"><span class="head__n" style="color:#ff5a1f;">02</span>Services</p>
             <h2 class="head__t" id="t-services" style="font-family:'Epure Titres',serif,sans-serif;font-size:clamp(3.5rem,7vw,6.5rem);font-weight:400;letter-spacing:-0.03em;color:#ffffff;display:flex;align-items:center;gap:12px;">
               Our services<span style="font-family:'Cabinet Grotesk',sans-serif;color:#ffffff;">.</span>
