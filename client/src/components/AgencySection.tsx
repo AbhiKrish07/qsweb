@@ -41,6 +41,89 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
     }
   }, [onOpenContact]);
 
+  // Interactive Workspace Screen Controller (Tabs, Token Copy, Telemetry Diagnostics)
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleWorkspaceInteractions = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+
+      // 1. Tab switches
+      const tabBtn = target.closest<HTMLButtonElement>('.qs-ws-tab');
+      if (tabBtn) {
+        e.preventDefault();
+        playClick();
+        const tabId = tabBtn.getAttribute('data-tab');
+        if (!tabId) return;
+
+        // Toggle active tab button
+        container.querySelectorAll('.qs-ws-tab').forEach((b) => {
+          b.classList.remove('is-active');
+          (b as HTMLElement).style.background = 'transparent';
+          (b as HTMLElement).style.borderColor = 'transparent';
+          (b as HTMLElement).style.color = 'rgba(255,255,255,0.7)';
+        });
+        tabBtn.classList.add('is-active');
+        tabBtn.style.background = 'rgba(255,90,31,0.22)';
+        tabBtn.style.borderColor = '#ff5a1f';
+        tabBtn.style.color = '#ffffff';
+
+        // Toggle pane visibility
+        container.querySelectorAll('.qs-tab-content').forEach((p) => {
+          (p as HTMLElement).style.display = 'none';
+        });
+        const activePane = container.querySelector<HTMLElement>(`#pane-${tabId}`);
+        if (activePane) {
+          activePane.style.display = 'block';
+        }
+      }
+
+      // 2. Token Swatch click to copy
+      const swatch = target.closest<HTMLElement>('.qs-token-swatch');
+      if (swatch) {
+        e.preventDefault();
+        playClick();
+        const hex = swatch.getAttribute('data-hex');
+        if (hex && navigator.clipboard) {
+          navigator.clipboard.writeText(hex);
+          const firstSpan = swatch.querySelector('span');
+          if (firstSpan) {
+            firstSpan.textContent = 'COPIED!';
+            setTimeout(() => {
+              firstSpan.textContent = hex;
+            }, 1200);
+          }
+        }
+      }
+
+      // 3. Telemetry scan button
+      const scanBtn = target.closest<HTMLButtonElement>('.qs-refresh-telemetry-btn');
+      if (scanBtn) {
+        e.preventDefault();
+        playClick();
+        scanBtn.textContent = 'SCANNING...';
+        setTimeout(() => {
+          scanBtn.textContent = '✓ LIVE (0.2ms)';
+          setTimeout(() => {
+            scanBtn.textContent = '↻ RUN SCAN';
+          }, 2000);
+        }, 600);
+      }
+
+      // 4. Floating sticker bouncy click
+      const sticker = target.closest<HTMLButtonElement>('.qs-sticker');
+      if (sticker) {
+        playClick();
+      }
+    };
+
+    container.addEventListener('click', handleWorkspaceInteractions);
+    return () => {
+      container.removeEventListener('click', handleWorkspaceInteractions);
+    };
+  }, []);
+
   useEffect(() => {
     // 1. Initialize global helper functions required by Bitwip before scripts run
     if (typeof window !== 'undefined') {
@@ -343,6 +426,82 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         }
         .bitwip-unified-container footer.pied a:hover {
           color: #ff5a1f !important;
+        }
+
+        /* 1. High contrast on Before & After dark card and bottom pill */
+        .bitwip-unified-container .qs-before-after-sec .qs-dark-card,
+        .bitwip-unified-container .qs-before-after-sec .qs-dark-card * {
+          color: #ffffff !important;
+        }
+        .bitwip-unified-container .qs-before-after-sec .qs-dark-card h3,
+        .bitwip-unified-container .qs-before-after-sec .qs-dark-card h4 {
+          color: #ffffff !important;
+        }
+        .bitwip-unified-container .qs-before-after-sec .qs-dark-card .qs-card-sub {
+          color: #ff5a1f !important;
+        }
+        .bitwip-unified-container .qs-before-after-sec .qs-dark-card p,
+        .bitwip-unified-container .qs-before-after-sec .qs-dark-card .qs-card-desc {
+          color: rgba(255, 255, 255, 0.95) !important;
+        }
+        .bitwip-unified-container .qs-before-after-sec .qs-dark-pill,
+        .bitwip-unified-container .qs-before-after-sec .qs-dark-pill * {
+          color: #ffffff !important;
+        }
+
+        /* 2. Pricing Centered Header: Title UP, Subtitle BELOW */
+        .qs-pricing-centered-header {
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: center !important;
+          text-align: center !important;
+          margin: 0 auto 56px !important;
+          max-width: 960px !important;
+          width: 100% !important;
+        }
+        .qs-pricing-centered-header h2 {
+          color: #141413 !important;
+        }
+        .qs-pricing-centered-header p {
+          color: #71717a !important;
+        }
+
+        /* 3. Workspace Interactive Tabs & Swatches */
+        .qs-ws-tab {
+          outline: none;
+        }
+        .qs-ws-tab:hover {
+          background: rgba(255, 90, 31, 0.1) !important;
+          color: #ffffff !important;
+        }
+        .qs-token-swatch {
+          transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .qs-token-swatch:hover {
+          transform: translateY(-2px) scale(1.03);
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 4. Tighten Footer & Closing Section Spacing - Eliminate Big Gap */
+        .bitwip-unified-container .sec.qs-closing-cta-sec,
+        .qs-closing-cta-sec {
+          padding-top: 50px !important;
+          padding-bottom: 24px !important;
+          margin-top: 0 !important;
+          margin-bottom: 0 !important;
+        }
+        .bitwip-unified-container .qs-closing-cta-sec .wrap {
+          padding-top: 24px !important;
+          padding-bottom: 24px !important;
+        }
+        .bitwip-unified-container footer.pied,
+        .bitwip-unified-container .pied {
+          padding-top: 0 !important;
+          margin-top: 0 !important;
+        }
+        .bitwip-unified-container footer.pied .wrap {
+          padding-top: 32px !important;
+          padding-bottom: 40px !important;
         }
       `}</style>
 

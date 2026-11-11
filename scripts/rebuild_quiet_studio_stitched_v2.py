@@ -613,21 +613,21 @@ def build_stitched_quiet_studio():
             </div>
 
             <!-- Right Card: After Quiet Studio (Bold Charcoal & Orange) -->
-            <div style="background:#141413;border:1px solid #ff5a1f;border-radius:28px;padding:44px 38px;color:#ffffff;box-shadow:0 20px 50px rgba(0,0,0,0.25);display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;">
+            <div class="qs-dark-card" style="background:#141413;border:1px solid #ff5a1f;border-radius:28px;padding:44px 38px;color:#ffffff;box-shadow:0 20px 50px rgba(0,0,0,0.25);display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;">
               <div style="position:absolute;top:28px;right:28px;width:72px;height:72px;border-radius:50%;background:rgba(255,90,31,0.15);border:1px solid #ff5a1f;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(255,90,31,0.3);">
                 <span style="font:900 18px/1 'Cabinet Grotesk',sans-serif;color:#ff5a1f;letter-spacing:-0.05em;">QS✦</span>
               </div>
 
               <div>
                 <h3 style="font:800 28px/1.1 'Cabinet Grotesk',sans-serif;color:#ffffff;margin:0 0 6px;">After Quiet Studio</h3>
-                <p style="font-size:15px;color:#ff5a1f;margin:0 0 36px;font-weight:600;">The new AI-native studio way</p>
+                <p class="qs-card-sub" style="font-size:15px;color:#ff5a1f !important;margin:0 0 36px;font-weight:700;">The new AI-native studio way</p>
 
                 <div style="display:flex;flex-direction:column;gap:24px;border-top:1px solid rgba(255,90,31,0.25);padding-top:24px;">
                   <div style="display:grid;grid-template-columns:85px 1fr;gap:16px;align-items:start;">
                     <span style="display:inline-block;padding:6px 10px;border-radius:9999px;background:#ff5a1f;color:#ffffff;font:700 12px/1 'DM Mono',monospace;text-align:center;">Automatic</span>
                     <div>
                       <h4 style="font:700 16px/1.3 'Cabinet Grotesk',sans-serif;color:#ffffff;margin:0 0 4px;">Spot the fatigue</h4>
-                      <p style="font-size:13.5px;color:rgba(255,255,255,0.8);line-height:1.5;margin:0;">Top Creatives telemetry flags degradation before performance slips.</p>
+                      <p class="qs-card-desc" style="font-size:13.5px;color:#ffffff !important;line-height:1.5;margin:0;">Top Creatives telemetry flags degradation before performance slips.</p>
                     </div>
                   </div>
 
@@ -635,7 +635,7 @@ def build_stitched_quiet_studio():
                     <span style="display:inline-block;padding:6px 10px;border-radius:9999px;background:#ff5a1f;color:#ffffff;font:700 12px/1 'DM Mono',monospace;text-align:center;">1 minute</span>
                     <div>
                       <h4 style="font:700 16px/1.3 'Cabinet Grotesk',sans-serif;color:#ffffff;margin:0 0 4px;">Generate replacements</h4>
-                      <p style="font-size:13.5px;color:rgba(255,255,255,0.8);line-height:1.5;margin:0;">Fresh on-brand variations generated with agent workflows.</p>
+                      <p class="qs-card-desc" style="font-size:13.5px;color:#ffffff !important;line-height:1.5;margin:0;">Fresh on-brand variations generated with agent workflows.</p>
                     </div>
                   </div>
 
@@ -643,7 +643,7 @@ def build_stitched_quiet_studio():
                     <span style="display:inline-block;padding:6px 10px;border-radius:9999px;background:#ff5a1f;color:#ffffff;font:700 12px/1 'DM Mono',monospace;text-align:center;">Automatic</span>
                     <div>
                       <h4 style="font:700 16px/1.3 'Cabinet Grotesk',sans-serif;color:#ffffff;margin:0 0 4px;">Swap them in</h4>
-                      <p style="font-size:13.5px;color:rgba(255,255,255,0.8);line-height:1.5;margin:0;">Tired ads retired, new creative rotated in automatically.</p>
+                      <p class="qs-card-desc" style="font-size:13.5px;color:#ffffff !important;line-height:1.5;margin:0;">Tired ads retired, new creative rotated in automatically.</p>
                     </div>
                   </div>
                 </div>
@@ -656,44 +656,50 @@ def build_stitched_quiet_studio():
             </div>
           </div>
 
-          <div style="background:#141413;border-radius:20px;padding:22px 32px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.12);">
-            <p style="font:700 clamp(1.1rem,1.8vw,1.4rem)/1.4 'Cabinet Grotesk',sans-serif;color:#ffffff;margin:0;">
-              3.5 hours of creative refresh becomes a glance and a click.
+          <!-- Bottom High-Contrast Insight Pill -->
+          <div class="qs-dark-pill" style="background:#141413;border:1px solid rgba(255,90,31,0.4);border-radius:20px;padding:22px 32px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,0.25);">
+            <p style="font:700 clamp(1.1rem,1.8vw,1.4rem)/1.4 'Cabinet Grotesk',sans-serif;color:#ffffff !important;margin:0;letter-spacing:-0.01em;">
+              3.5 hours of creative refresh becomes <span style="color:#ff5a1f;font-weight:800;">a glance and a click.</span>
             </p>
           </div>
         </div>
         '''
         conf.append(BeautifulSoup(before_after_html, 'html.parser'))
 
-    # 6. CENTRALIZED WORKSPACE MOCKUP (Replaces #territoires)
+        # 6. CENTRALIZED WORKSPACE MOCKUP (Replaces #territoires)
     ter = soup.find('section', id='territoires')
     if ter:
         ter['id'] = 'workspace'
         ter['class'] = ['sec', 'qs-workspace-sec']
         ter.clear()
-        workspace_html = '''
-        <div class="wrap" style="padding:100px 0 120px;max-width:1160px;margin:0 auto;text-align:center;">
+        workspace_html = '''        <div class="wrap" style="padding:90px 0 110px;max-width:1160px;margin:0 auto;text-align:center;">
+          <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:9999px;background:rgba(255,90,31,0.12);color:#ff5a1f;border:1px solid rgba(255,90,31,0.25);font:700 11px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;">
+            <span>CREATIVE OPERATING SYSTEM</span>
+          </div>
+
           <h2 style="font:800 clamp(3.2rem,6vw,5.5rem)/1 'Cabinet Grotesk',sans-serif;letter-spacing:-0.03em;color:#ffffff;margin-bottom:18px;">
             Every brand's creative, in one place
           </h2>
-          <p style="color:rgba(255,255,255,0.7);font-size:clamp(1.1rem,1.8vw,1.35rem);max-width:680px;margin:0 auto 50px;line-height:1.6;">
-            The centralized operating system for creative production and software delivery.
+          <p style="color:rgba(255,255,255,0.75);font-size:clamp(1.1rem,1.8vw,1.35rem);max-width:680px;margin:0 auto 46px;line-height:1.6;">
+            The centralized operating system for creative production, software delivery, and live telemetry.
           </p>
 
           <div class="qs-mockup-container" style="position:relative;background:#18181b;border:1px solid rgba(255,90,31,0.3);border-radius:28px;padding:32px;box-shadow:0 36px 80px rgba(0,0,0,0.7);margin:0 auto;">
-            <div style="position:absolute;top:-18px;left:40px;background:#ff5a1f;color:#ffffff;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(-4deg);box-shadow:0 8px 20px rgba(255,90,31,0.4);letter-spacing:0.04em;z-index:10;">
+            <!-- Interactive Floating Badges -->
+            <button type="button" class="qs-sticker qs-sticker-rotation" style="position:absolute;top:-18px;left:40px;background:#ff5a1f;color:#ffffff;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(-4deg);box-shadow:0 8px 20px rgba(255,90,31,0.4);letter-spacing:0.04em;z-index:10;border:none;cursor:pointer;">
               AD ROTATION ⚡
-            </div>
-            <div style="position:absolute;top:-18px;right:60px;background:#ffffff;color:#18181b;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(5deg);box-shadow:0 8px 20px rgba(255,255,255,0.3);letter-spacing:0.04em;z-index:10;">
+            </button>
+            <button type="button" class="qs-sticker qs-sticker-bulk" style="position:absolute;top:-18px;right:60px;background:#ffffff;color:#18181b;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(5deg);box-shadow:0 8px 20px rgba(255,255,255,0.3);letter-spacing:0.04em;z-index:10;border:none;cursor:pointer;">
               BULK UPLOAD ☁
-            </div>
-            <div style="position:absolute;bottom:40px;left:-20px;background:#ff5a1f;color:#ffffff;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(-8deg);box-shadow:0 8px 20px rgba(255,90,31,0.4);letter-spacing:0.04em;z-index:10;">
+            </button>
+            <button type="button" class="qs-sticker qs-sticker-top" style="position:absolute;bottom:40px;left:-20px;background:#ff5a1f;color:#ffffff;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(-8deg);box-shadow:0 8px 20px rgba(255,90,31,0.4);letter-spacing:0.04em;z-index:10;border:none;cursor:pointer;">
               TOP CREATIVES ✦
-            </div>
-            <div style="position:absolute;bottom:40px;right:-20px;background:#ffffff;color:#18181b;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(6deg);box-shadow:0 8px 20px rgba(255,255,255,0.3);letter-spacing:0.04em;z-index:10;">
+            </button>
+            <button type="button" class="qs-sticker qs-sticker-brand" style="position:absolute;bottom:40px;right:-20px;background:#ffffff;color:#18181b;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(6deg);box-shadow:0 8px 20px rgba(255,255,255,0.3);letter-spacing:0.04em;z-index:10;border:none;cursor:pointer;">
               BRAND KITS ✦
-            </div>
+            </button>
 
+            <!-- Window Header Bar -->
             <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:18px;margin-bottom:24px;">
               <div style="display:flex;align-items:center;gap:10px;">
                 <span style="width:12px;height:12px;border-radius:50%;background:#ff5a1f;display:inline-block;"></span>
@@ -702,21 +708,40 @@ def build_stitched_quiet_studio():
                 <span style="margin-left:14px;font:700 13px 'DM Mono',monospace;color:rgba(255,255,255,0.7);">app.thequietstudio.space / workspace</span>
               </div>
               <div style="display:flex;gap:12px;">
-                <span style="padding:4px 10px;border-radius:6px;background:rgba(255,90,31,0.15);border:1px solid rgba(255,90,31,0.3);font:600 11px 'DM Mono',monospace;color:#ff5a1f;">CONNECTED · 5 AGENTS ACTIVE</span>
+                <span class="qs-agent-status-pill" style="padding:4px 12px;border-radius:9999px;background:rgba(255,90,31,0.15);border:1px solid rgba(255,90,31,0.3);font:700 11px 'DM Mono',monospace;color:#ff5a1f;display:flex;align-items:center;gap:6px;">
+                  <span style="width:6px;height:6px;border-radius:50%;background:#ff5a1f;display:inline-block;animation:pulse 2s infinite;"></span>
+                  CONNECTED · 5 AGENTS ACTIVE
+                </span>
               </div>
             </div>
 
-            <div style="display:grid;grid-template-columns:220px 1fr;gap:24px;text-align:left;">
-              <div style="border-right:1px solid rgba(255,255,255,0.08);padding-right:18px;display:flex;flex-direction:column;gap:14px;">
-                <span style="font:700 11px 'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;">WORKSPACE</span>
-                <div style="padding:8px 12px;border-radius:8px;background:rgba(255,90,31,0.15);color:#ff5a1f;font:700 13px sans-serif;">✦ Active Campaigns</div>
-                <div style="padding:8px 12px;border-radius:8px;color:rgba(255,255,255,0.7);font:500 13px sans-serif;">Routines &amp; Pipelines</div>
-                <div style="padding:8px 12px;border-radius:8px;color:rgba(255,255,255,0.7);font:500 13px sans-serif;">Brand Kits &amp; Guidelines</div>
-                <div style="padding:8px 12px;border-radius:8px;color:rgba(255,255,255,0.7);font:500 13px sans-serif;">Telemetry &amp; Reports</div>
+            <!-- Workspace Body: Sidebar + Main Canvas -->
+            <div style="display:grid;grid-template-columns:230px 1fr;gap:24px;text-align:left;">
+              <!-- Interactive Navigation Sidebar -->
+              <div class="qs-workspace-tabs" style="border-right:1px solid rgba(255,255,255,0.08);padding-right:18px;display:flex;flex-direction:column;gap:10px;">
+                <span style="font:700 11px 'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">NAVIGATE SUITE</span>
+                <button type="button" class="qs-ws-tab is-active" data-tab="campaigns" style="padding:10px 14px;border-radius:10px;background:rgba(255,90,31,0.18);border:1px solid rgba(255,90,31,0.4);color:#ffffff;font:700 13px sans-serif;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s;">
+                  <span>✦ Active Sprints</span>
+                  <span style="font:700 10px 'DM Mono',monospace;background:#ff5a1f;color:#fff;padding:2px 6px;border-radius:4px;">3 LIVE</span>
+                </button>
+                <button type="button" class="qs-ws-tab" data-tab="pipelines" style="padding:10px 14px;border-radius:10px;background:transparent;border:1px solid transparent;color:rgba(255,255,255,0.7);font:500 13px sans-serif;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s;">
+                  <span>⚡ Agent Pipelines</span>
+                  <span style="font:600 10px 'DM Mono',monospace;color:rgba(255,255,255,0.4);">FLOWS</span>
+                </button>
+                <button type="button" class="qs-ws-tab" data-tab="brandkits" style="padding:10px 14px;border-radius:10px;background:transparent;border:1px solid transparent;color:rgba(255,255,255,0.7);font:500 13px sans-serif;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s;">
+                  <span>◈ Brand Tokens</span>
+                  <span style="font:600 10px 'DM Mono',monospace;color:#ff5a1f;">ACTIVE</span>
+                </button>
+                <button type="button" class="qs-ws-tab" data-tab="telemetry" style="padding:10px 14px;border-radius:10px;background:transparent;border:1px solid transparent;color:rgba(255,255,255,0.7);font:500 13px sans-serif;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s;">
+                  <span>📈 Live Telemetry</span>
+                  <span style="font:600 10px 'DM Mono',monospace;color:#10b981;">0.2ms</span>
+                </button>
               </div>
 
-              <div>
-                <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:16px;margin-bottom:24px;">
+              <!-- Interactive Dynamic Canvas -->
+              <div class="qs-workspace-canvas">
+                <!-- Top Key Metrics Cards -->
+                <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:16px;margin-bottom:20px;">
                   <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;">
                     <span style="font:600 11px 'DM Mono',monospace;color:rgba(255,255,255,0.5);">LIVE VELOCITY</span>
                     <p style="font:800 24px/1 'Cabinet Grotesk',sans-serif;color:#ffffff;margin:8px 0 0;">48h Sprints</p>
@@ -727,18 +752,135 @@ def build_stitched_quiet_studio():
                   </div>
                   <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;">
                     <span style="font:600 11px 'DM Mono',monospace;color:rgba(255,255,255,0.5);">COMPLIANCE SCORE</span>
-                    <p style="font:800 24px/1 'Cabinet Grotesk',sans-serif;color:#ff5a1f;margin:8px 0 0;">100% On-Brand</p>
+                    <p style="font:800 24px/1 'Cabinet Grotesk',sans-serif;color:#ffffff;margin:8px 0 0;">100% On-Brand</p>
                   </div>
                 </div>
 
-                <div style="border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);height:260px;">
-                  <img src="/assets/quiet/quiet-quad-2.jpg" alt="Quiet Studio Interactive Creative OS" style="width:100%;height:100%;object-fit:cover;">
+                <!-- Tab Pane 1: Active Sprints (Default) -->
+                <div class="qs-tab-content is-active" id="pane-campaigns" style="border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);background:#121214;padding:20px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                    <span style="font:700 13px 'DM Mono',monospace;color:#ffffff;">SPRINT DEPLOYMENTS · REAL-TIME</span>
+                    <span style="font:600 11px 'DM Mono',monospace;color:#ff5a1f;">UPDATED 2s AGO</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:14px;">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <span style="font:700 13px sans-serif;color:#fff;">Ad Variation Swarm v4</span>
+                        <span style="font:600 10px 'DM Mono',monospace;color:#ff5a1f;">94%</span>
+                      </div>
+                      <div style="width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;margin-bottom:10px;">
+                        <div style="width:94%;height:100%;background:#ff5a1f;"></div>
+                      </div>
+                      <p style="font-size:12px;color:rgba(255,255,255,0.6);margin:0;">12 live social & web variations generated and brand-verified.</p>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:14px;">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <span style="font:700 13px sans-serif;color:#fff;">Design System Token Sync</span>
+                        <span style="font:600 10px 'DM Mono',monospace;color:#10b981;">SYNCED</span>
+                      </div>
+                      <div style="width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;margin-bottom:10px;">
+                        <div style="width:100%;height:100%;background:#10b981;"></div>
+                      </div>
+                      <p style="font-size:12px;color:rgba(255,255,255,0.6);margin:0;">Figma tokens translated into production Next.js code.</p>
+                    </div>
+                  </div>
+                  <div style="margin-top:14px;border-radius:8px;overflow:hidden;height:120px;border:1px solid rgba(255,255,255,0.08);">
+                    <img src="/assets/quiet/quiet-quad-2.jpg" alt="Active Sprints Overview" style="width:100%;height:100%;object-fit:cover;">
+                  </div>
                 </div>
+
+                <!-- Tab Pane 2: Agent Pipelines -->
+                <div class="qs-tab-content" id="pane-pipelines" style="display:none;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);background:#121214;padding:20px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+                    <span style="font:700 13px 'DM Mono',monospace;color:#ffffff;">MULTI-AGENT AUTOMATION PIPELINE</span>
+                    <span style="font:600 11px 'DM Mono',monospace;color:#10b981;">● RUNNING SMOOTHLY</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:10px;overflow-x:auto;padding-bottom:12px;">
+                    <div style="flex:1;background:rgba(255,90,31,0.1);border:1px solid #ff5a1f;border-radius:8px;padding:12px;text-align:center;">
+                      <span style="font:700 11px 'DM Mono',monospace;color:#ff5a1f;">STEP 01</span>
+                      <p style="font:700 12px sans-serif;color:#fff;margin:4px 0 0;">Product Brief</p>
+                    </div>
+                    <span style="color:#ff5a1f;font-weight:700;">→</span>
+                    <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px;text-align:center;">
+                      <span style="font:700 11px 'DM Mono',monospace;color:rgba(255,255,255,0.5);">STEP 02</span>
+                      <p style="font:700 12px sans-serif;color:#fff;margin:4px 0 0;">AI Swarm</p>
+                    </div>
+                    <span style="color:rgba(255,255,255,0.4);font-weight:700;">→</span>
+                    <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px;text-align:center;">
+                      <span style="font:700 11px 'DM Mono',monospace;color:rgba(255,255,255,0.5);">STEP 03</span>
+                      <p style="font:700 12px sans-serif;color:#fff;margin:4px 0 0;">Brand Check</p>
+                    </div>
+                    <span style="color:rgba(255,255,255,0.4);font-weight:700;">→</span>
+                    <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px;text-align:center;">
+                      <span style="font:700 11px 'DM Mono',monospace;color:#10b981;">STEP 04</span>
+                      <p style="font:700 12px sans-serif;color:#fff;margin:4px 0 0;">Deploy Code</p>
+                    </div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.1);border-radius:8px;padding:12px;font:500 12px 'DM Mono',monospace;color:rgba(255,255,255,0.7);">
+                    Telemetry: 0 syntax errors · 100% test coverage · Latency 0.2ms edge execution
+                  </div>
+                </div>
+
+                <!-- Tab Pane 3: Brand Tokens -->
+                <div class="qs-tab-content" id="pane-brandkits" style="display:none;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);background:#121214;padding:20px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                    <span style="font:700 13px 'DM Mono',monospace;color:#ffffff;">LIVING DESIGN SYSTEM TOKENS</span>
+                    <span style="font:600 11px 'DM Mono',monospace;color:#ff5a1f;">CLICK TO COPY</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:12px;margin-bottom:14px;">
+                    <div class="qs-token-swatch" data-hex="#ff5a1f" style="background:#ff5a1f;height:70px;border-radius:8px;padding:8px;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;">
+                      <span style="font:700 11px 'DM Mono',monospace;color:#fff;">#ff5a1f</span>
+                      <span style="font:500 9px sans-serif;color:rgba(255,255,255,0.85);">Signal Orange</span>
+                    </div>
+                    <div class="qs-token-swatch" data-hex="#141413" style="background:#141413;border:1px solid rgba(255,255,255,0.2);height:70px;border-radius:8px;padding:8px;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;">
+                      <span style="font:700 11px 'DM Mono',monospace;color:#fff;">#141413</span>
+                      <span style="font:500 9px sans-serif;color:rgba(255,255,255,0.6);">Charcoal Noir</span>
+                    </div>
+                    <div class="qs-token-swatch" data-hex="#faf9f5" style="background:#faf9f5;height:70px;border-radius:8px;padding:8px;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;">
+                      <span style="font:700 11px 'DM Mono',monospace;color:#141413;">#faf9f5</span>
+                      <span style="font:500 9px sans-serif;color:rgba(20,20,19,0.7);">Warm Paper</span>
+                    </div>
+                    <div class="qs-token-swatch" data-hex="#71717a" style="background:#71717a;height:70px;border-radius:8px;padding:8px;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;">
+                      <span style="font:700 11px 'DM Mono',monospace;color:#fff;">#71717a</span>
+                      <span style="font:500 9px sans-serif;color:rgba(255,255,255,0.85);">Muted Ink</span>
+                    </div>
+                  </div>
+                  <div style="font:500 12px 'DM Mono',monospace;color:rgba(255,255,255,0.65);">
+                    Typography: 'Cabinet Grotesk' (Display) · 'DM Sans' (Body) · 'DM Mono' (Telemetry)
+                  </div>
+                </div>
+
+                <!-- Tab Pane 4: Live Telemetry -->
+                <div class="qs-tab-content" id="pane-telemetry" style="display:none;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);background:#121214;padding:20px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                    <span style="font:700 13px 'DM Mono',monospace;color:#ffffff;">REAL-TIME SYSTEM DIAGNOSTIC</span>
+                    <button type="button" class="qs-refresh-telemetry-btn" style="padding:4px 10px;border-radius:6px;background:rgba(255,90,31,0.2);border:1px solid #ff5a1f;color:#ff5a1f;font:700 11px 'DM Mono',monospace;cursor:pointer;">
+                      ↻ RUN SCAN
+                    </button>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+                    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;">
+                      <span style="font:600 10px 'DM Mono',monospace;color:rgba(255,255,255,0.5);">AD FATIGUE</span>
+                      <p style="font:800 20px/1 sans-serif;color:#10b981;margin:6px 0 2px;">12%</p>
+                      <span style="font:500 10px sans-serif;color:rgba(255,255,255,0.6);">Optimal health</span>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;">
+                      <span style="font:600 10px 'DM Mono',monospace;color:rgba(255,255,255,0.5);">EDGE LATENCY</span>
+                      <p style="font:800 20px/1 sans-serif;color:#ff5a1f;margin:6px 0 2px;">0.2 ms</p>
+                      <span style="font:500 10px sans-serif;color:rgba(255,255,255,0.6);">Apple Silicon</span>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;">
+                      <span style="font:600 10px 'DM Mono',monospace;color:rgba(255,255,255,0.5);">CONSISTENCY</span>
+                      <p style="font:800 20px/1 sans-serif;color:#ffffff;margin:6px 0 2px;">100%</p>
+                      <span style="font:500 10px sans-serif;color:rgba(255,255,255,0.6);">Brand compliant</span>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
-        </div>
-        '''
+        </div>'''
         ter.append(BeautifulSoup(workspace_html, 'html.parser'))
 
     # 7. TRANSPARENT PRICING (#pricing - Replaces #actualites) — Warm Paper Background (#faf9f5)
@@ -750,12 +892,15 @@ def build_stitched_quiet_studio():
         act.clear()
         pricing_html = '''
         <div class="wrap" style="padding:100px 0 120px;max-width:1160px;margin:0 auto;">
-          <header class="head" style="text-align:center;margin-bottom:60px;">
-            <p class="head__k label" style="color:#ff5a1f;font:700 12px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;"><span class="head__n">04</span>Investment</p>
-            <h2 class="head__t" style="font:800 clamp(3.2rem,6vw,5.5rem)/1 'Cabinet Grotesk',sans-serif;letter-spacing:-0.03em;color:#141413;margin:0 0 16px;">
+          <!-- Perfectly formatted centered column: Eyebrow -> Title UP -> Subtitle BELOW -->
+          <header class="qs-pricing-centered-header" style="display:flex;flex-direction:column;align-items:center;text-align:center;margin:0 auto 56px;max-width:960px;width:100%;">
+            <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:9999px;background:rgba(255,90,31,0.1);color:#ff5a1f;border:1px solid rgba(255,90,31,0.25);font:700 11px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:20px;">
+              <span>04 / INVESTMENT</span>
+            </div>
+            <h2 style="font:800 clamp(3rem,5.6vw,5.2rem)/1.06 'Cabinet Grotesk',sans-serif;letter-spacing:-0.03em;color:#141413;margin:0 auto 18px;max-width:920px;">
               Transparent pricing. No agency markup<span style="color:#ff5a1f;">.</span>
             </h2>
-            <p style="color:#71717a;font-size:clamp(1.1rem,1.8vw,1.35rem);max-width:680px;margin:0 auto;line-height:1.6;">
+            <p style="color:#71717a;font-size:clamp(1.1rem,1.8vw,1.32rem);max-width:640px;margin:0 auto;line-height:1.65;font-weight:450;">
               Simple monthly partnerships. Zero long-term lock-in. Full intellectual property ownership.
             </p>
           </header>
@@ -911,7 +1056,7 @@ def build_stitched_quiet_studio():
         cta['class'] = ['sec', 'qs-closing-cta-sec']
         cta.clear()
         closing_cta_html = '''
-        <div class="wrap" style="padding:120px 24px 100px;max-width:1120px;margin:0 auto;text-align:center;">
+        <div class="wrap" style="padding:60px 24px 44px;max-width:1120px;margin:0 auto;text-align:center;">
           <p class="head__k label" style="color:#ff5a1f;font:700 12px/1 'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;">
             <span class="head__n" style="color:#ff5a1f;">06</span>Get in touch
           </p>
@@ -963,7 +1108,7 @@ def build_stitched_quiet_studio():
     if pied:
         pied.clear()
         footer_html = '''
-        <div class="wrap" style="padding:70px 24px 50px;max-width:1160px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);">
+        <div class="wrap" style="padding:36px 24px 40px;max-width:1160px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);">
           <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:48px;padding-bottom:50px;border-bottom:1px solid rgba(255,255,255,0.08);">
             <!-- Col 1: Identity -->
             <div>
