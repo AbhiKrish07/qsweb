@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, Route, Switch, useLocation } from "wouter";
 import { ArrowRight, ArrowUpRight, ChevronDown, Github, Menu, Moon, Search, Sun, Volume2, VolumeX, X } from "lucide-react";
 import { Toaster } from "sonner";
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 import Home from "./pages/Home";
 import ProductPage from "./pages/ProductPage";
 import NotFound from "./pages/NotFound";
@@ -302,34 +304,38 @@ function Header({
       const targetId = href.replace("/#", "");
       const findElement = (id: string) => {
         if (id === "engagements") {
-          return document.getElementById("engagements") || document.getElementById("confiance") || document.getElementById("actualites");
+          return document.getElementById("pricing") || document.getElementById("confiance") || document.getElementById("workspace");
         }
         return document.getElementById(id);
+      };
+
+      const scrollToTarget = (id: string) => {
+        if (id === "overview" || id === "hh") {
+          if ((window as any).lenis) {
+            (window as any).lenis.scrollTo(0, { duration: 1.2 });
+          } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+          return;
+        }
+        const target = findElement(id);
+        if (target) {
+          if ((window as any).lenis) {
+            (window as any).lenis.scrollTo(target, { offset: -80, duration: 1.2 });
+          } else {
+            const top = target.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({ top: top - 80, behavior: "smooth" });
+          }
+        }
       };
 
       if (location !== "/") {
         setLocation("/");
         setTimeout(() => {
-          if (targetId === "overview" || targetId === "hh") {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          } else {
-            const target = findElement(targetId);
-            if (target) {
-              const top = target.getBoundingClientRect().top + window.scrollY;
-              window.scrollTo({ top: top - 80, behavior: "smooth" });
-            }
-          }
+          scrollToTarget(targetId);
         }, 150);
       } else {
-        if (targetId === "overview" || targetId === "hh") {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        } else {
-          const target = findElement(targetId);
-          if (target) {
-            const top = target.getBoundingClientRect().top + window.scrollY;
-            window.scrollTo({ top: top - 80, behavior: "smooth" });
-          }
-        }
+        scrollToTarget(targetId);
       }
       return;
     }
@@ -558,6 +564,17 @@ function Header({
               aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
             >
               {dark ? <Sun size={13} /> : <Moon size={13} />}
+            </button>
+
+            <button
+              className="capsule-cta-btn"
+              onClick={() => {
+                playClick();
+                onOpenContact();
+              }}
+            >
+              <span>Contact us</span>
+              <ArrowRight size={13} />
             </button>
           </div>
 
@@ -793,6 +810,33 @@ function AppShell() {
     return () => {
       window.removeEventListener("open-command-palette", handleOpenCommand);
       window.removeEventListener("open-contact-modal", handleOpenContact);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Initialize Lenis smooth scroll for butter-smooth momentum scrolling
+    const lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
+    });
+
+    (window as any).lenis = lenis;
+
+    let rafId: number;
+    function raf(time: number) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+      delete (window as any).lenis;
     };
   }, []);
 

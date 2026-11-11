@@ -312,6 +312,60 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         .bitwip-unified-container .clocks .clock:hover {
           color: #ff5a1f !important;
         }
+
+        /* Quiet Studio Services Accordion */
+        .qs-service-row summary::-webkit-details-marker {
+          display: none !important;
+        }
+        .qs-service-row {
+          list-style: none !important;
+        }
+        .qs-service-row[open] .qs-acc-toggle {
+          background: #ff5a1f !important;
+          border-color: #ff5a1f !important;
+        }
+        .qs-service-row[open] .qs-acc-toggle .qs-icon-plus {
+          display: none !important;
+        }
+        .qs-service-row[open] .qs-acc-toggle .qs-icon-minus {
+          display: block !important;
+        }
+        .qs-service-row:not([open]) .qs-acc-toggle {
+          background: rgba(255, 255, 255, 0.08) !important;
+          border: 1px solid rgba(255, 255, 255, 0.16) !important;
+        }
+        .qs-service-row:not([open]) .qs-acc-toggle .qs-icon-plus {
+          display: block !important;
+        }
+        .qs-service-row:not([open]) .qs-acc-toggle .qs-icon-minus {
+          display: none !important;
+        }
+        .qs-service-cta:hover {
+          color: #ff5a1f !important;
+        }
+
+        /* Quiet Studio Before & After Section */
+        .qs-before-after-sec {
+          background: #faf9f5 !important;
+        }
+
+        /* Quiet Studio Workspace Section */
+        .qs-workspace-sec {
+          background: #0f0f0e !important;
+        }
+        .qs-mockup-container [style*="position:absolute"] {
+          transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease;
+          cursor: pointer;
+        }
+        .qs-mockup-container [style*="position:absolute"]:hover {
+          transform: scale(1.08) rotate(0deg) !important;
+          box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45) !important;
+        }
+
+        /* Quiet Studio Pricing Section */
+        .qs-pricing-sec {
+          background: #faf9f5 !important;
+        }
       `}</style>
 
       {/* Bitwip Agency Original Content */}
