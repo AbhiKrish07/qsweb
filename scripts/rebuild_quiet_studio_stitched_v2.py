@@ -687,16 +687,16 @@ def build_stitched_quiet_studio():
           <div class="qs-mockup-container" style="position:relative;background:#18181b;border:1px solid rgba(255,90,31,0.3);border-radius:28px;padding:32px;box-shadow:0 36px 80px rgba(0,0,0,0.7);margin:0 auto;">
             <!-- Interactive Floating Badges -->
             <button type="button" class="qs-sticker qs-sticker-rotation" style="position:absolute;top:-18px;left:40px;background:#ff5a1f;color:#ffffff;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(-4deg);box-shadow:0 8px 20px rgba(255,90,31,0.4);letter-spacing:0.04em;z-index:10;border:none;cursor:pointer;">
-              AD ROTATION ⚡
+              AD ROTATION
             </button>
             <button type="button" class="qs-sticker qs-sticker-bulk" style="position:absolute;top:-18px;right:60px;background:#ffffff;color:#18181b;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(5deg);box-shadow:0 8px 20px rgba(255,255,255,0.3);letter-spacing:0.04em;z-index:10;border:none;cursor:pointer;">
-              BULK UPLOAD ☁
+              BULK UPLOAD
             </button>
             <button type="button" class="qs-sticker qs-sticker-top" style="position:absolute;bottom:40px;left:-20px;background:#ff5a1f;color:#ffffff;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(-8deg);box-shadow:0 8px 20px rgba(255,90,31,0.4);letter-spacing:0.04em;z-index:10;border:none;cursor:pointer;">
-              TOP CREATIVES ✦
+              TOP CREATIVES
             </button>
             <button type="button" class="qs-sticker qs-sticker-brand" style="position:absolute;bottom:40px;right:-20px;background:#ffffff;color:#18181b;font:800 11px/1 'Cabinet Grotesk',sans-serif;padding:8px 14px;border-radius:8px;transform:rotate(6deg);box-shadow:0 8px 20px rgba(255,255,255,0.3);letter-spacing:0.04em;z-index:10;border:none;cursor:pointer;">
-              BRAND KITS ✦
+              BRAND KITS
             </button>
 
             <!-- Window Header Bar -->
@@ -717,24 +717,23 @@ def build_stitched_quiet_studio():
 
             <!-- Workspace Body: Sidebar + Main Canvas -->
             <div style="display:grid;grid-template-columns:230px 1fr;gap:24px;text-align:left;">
-              <!-- Interactive Navigation Sidebar -->
-              <div class="qs-workspace-tabs" style="border-right:1px solid rgba(255,255,255,0.08);padding-right:18px;display:flex;flex-direction:column;gap:10px;">
-                <span style="font:700 11px 'DM Mono',monospace;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:4px;">NAVIGATE SUITE</span>
-                <button type="button" class="qs-ws-tab is-active" data-tab="campaigns" style="padding:10px 14px;border-radius:10px;background:rgba(255,90,31,0.18);border:1px solid rgba(255,90,31,0.4);color:#ffffff;font:700 13px sans-serif;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s;">
-                  <span>✦ Active Sprints</span>
-                  <span style="font:700 10px 'DM Mono',monospace;background:#ff5a1f;color:#fff;padding:2px 6px;border-radius:4px;">3 LIVE</span>
+              <!-- Clean, High-Craft Navigation Sidebar (SVG Icons, Zero Extra Labels, Pure Spacing) -->
+              <div class="qs-workspace-tabs" style="border-right:1px solid rgba(255,255,255,0.08);padding-right:16px;display:flex;flex-direction:column;gap:6px;">
+                <button type="button" class="qs-ws-tab is-active" data-tab="campaigns">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 10 5-10 5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
+                  <span>Active Sprints</span>
                 </button>
-                <button type="button" class="qs-ws-tab" data-tab="pipelines" style="padding:10px 14px;border-radius:10px;background:transparent;border:1px solid transparent;color:rgba(255,255,255,0.7);font:500 13px sans-serif;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s;">
-                  <span>⚡ Agent Pipelines</span>
-                  <span style="font:600 10px 'DM Mono',monospace;color:rgba(255,255,255,0.4);">FLOWS</span>
+                <button type="button" class="qs-ws-tab" data-tab="pipelines">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+                  <span>Agent Pipelines</span>
                 </button>
-                <button type="button" class="qs-ws-tab" data-tab="brandkits" style="padding:10px 14px;border-radius:10px;background:transparent;border:1px solid transparent;color:rgba(255,255,255,0.7);font:500 13px sans-serif;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s;">
-                  <span>◈ Brand Tokens</span>
-                  <span style="font:600 10px 'DM Mono',monospace;color:#ff5a1f;">ACTIVE</span>
+                <button type="button" class="qs-ws-tab" data-tab="brandkits">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                  <span>Brand Tokens</span>
                 </button>
-                <button type="button" class="qs-ws-tab" data-tab="telemetry" style="padding:10px 14px;border-radius:10px;background:transparent;border:1px solid transparent;color:rgba(255,255,255,0.7);font:500 13px sans-serif;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:all 0.2s;">
-                  <span>📈 Live Telemetry</span>
-                  <span style="font:600 10px 'DM Mono',monospace;color:#10b981;">0.2ms</span>
+                <button type="button" class="qs-ws-tab" data-tab="telemetry">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                  <span>Live Telemetry</span>
                 </button>
               </div>
 
@@ -800,17 +799,17 @@ def build_stitched_quiet_studio():
                       <span style="font:700 11px 'DM Mono',monospace;color:#ff5a1f;">STEP 01</span>
                       <p style="font:700 12px sans-serif;color:#fff;margin:4px 0 0;">Product Brief</p>
                     </div>
-                    <span style="color:#ff5a1f;font-weight:700;">→</span>
+                    <span style="color:#ff5a1f;display:inline-flex;align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></span>
                     <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px;text-align:center;">
                       <span style="font:700 11px 'DM Mono',monospace;color:rgba(255,255,255,0.5);">STEP 02</span>
                       <p style="font:700 12px sans-serif;color:#fff;margin:4px 0 0;">AI Swarm</p>
                     </div>
-                    <span style="color:rgba(255,255,255,0.4);font-weight:700;">→</span>
+                    <span style="color:rgba(255,255,255,0.35);display:inline-flex;align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></span>
                     <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px;text-align:center;">
                       <span style="font:700 11px 'DM Mono',monospace;color:rgba(255,255,255,0.5);">STEP 03</span>
                       <p style="font:700 12px sans-serif;color:#fff;margin:4px 0 0;">Brand Check</p>
                     </div>
-                    <span style="color:rgba(255,255,255,0.4);font-weight:700;">→</span>
+                    <span style="color:rgba(255,255,255,0.35);display:inline-flex;align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></span>
                     <div style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px;text-align:center;">
                       <span style="font:700 11px 'DM Mono',monospace;color:#10b981;">STEP 04</span>
                       <p style="font:700 12px sans-serif;color:#fff;margin:4px 0 0;">Deploy Code</p>
@@ -854,8 +853,9 @@ def build_stitched_quiet_studio():
                 <div class="qs-tab-content" id="pane-telemetry" style="display:none;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);background:#121214;padding:20px;">
                   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
                     <span style="font:700 13px 'DM Mono',monospace;color:#ffffff;">REAL-TIME SYSTEM DIAGNOSTIC</span>
-                    <button type="button" class="qs-refresh-telemetry-btn" style="padding:4px 10px;border-radius:6px;background:rgba(255,90,31,0.2);border:1px solid #ff5a1f;color:#ff5a1f;font:700 11px 'DM Mono',monospace;cursor:pointer;">
-                      ↻ RUN SCAN
+                    <button type="button" class="qs-refresh-telemetry-btn" style="padding:5px 12px;border-radius:6px;background:rgba(255,90,31,0.15);border:1px solid #ff5a1f;color:#ff5a1f;font:700 11px 'DM Mono',monospace;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+                      <span>RUN SCAN</span>
                     </button>
                   </div>
                   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">

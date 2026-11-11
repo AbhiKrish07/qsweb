@@ -60,14 +60,8 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         // Toggle active tab button
         container.querySelectorAll('.qs-ws-tab').forEach((b) => {
           b.classList.remove('is-active');
-          (b as HTMLElement).style.background = 'transparent';
-          (b as HTMLElement).style.borderColor = 'transparent';
-          (b as HTMLElement).style.color = 'rgba(255,255,255,0.7)';
         });
         tabBtn.classList.add('is-active');
-        tabBtn.style.background = 'rgba(255,90,31,0.22)';
-        tabBtn.style.borderColor = '#ff5a1f';
-        tabBtn.style.color = '#ffffff';
 
         // Toggle pane visibility
         container.querySelectorAll('.qs-tab-content').forEach((p) => {
@@ -467,12 +461,48 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         }
 
         /* 3. Workspace Interactive Tabs & Swatches */
+        .qs-workspace-tabs {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
         .qs-ws-tab {
-          outline: none;
+          display: flex !important;
+          align-items: center !important;
+          gap: 12px !important;
+          padding: 11px 16px !important;
+          border-radius: 10px !important;
+          width: 100% !important;
+          border: 1px solid transparent !important;
+          background: transparent !important;
+          color: rgba(255, 255, 255, 0.65) !important;
+          font: 600 13.5px/1 'Cabinet Grotesk', sans-serif !important;
+          letter-spacing: -0.01em !important;
+          text-align: left !important;
+          cursor: pointer !important;
+          outline: none !important;
+          transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .qs-ws-tab svg {
+          color: rgba(255, 255, 255, 0.45) !important;
+          transition: color 0.18s ease, transform 0.18s ease !important;
+          flex-shrink: 0 !important;
         }
         .qs-ws-tab:hover {
-          background: rgba(255, 90, 31, 0.1) !important;
+          background: rgba(255, 255, 255, 0.05) !important;
           color: #ffffff !important;
+        }
+        .qs-ws-tab:hover svg {
+          color: #ffffff !important;
+          transform: scale(1.05);
+        }
+        .qs-ws-tab.is-active {
+          background: rgba(255, 90, 31, 0.12) !important;
+          border-color: rgba(255, 90, 31, 0.35) !important;
+          color: #ffffff !important;
+        }
+        .qs-ws-tab.is-active svg {
+          color: #ff5a1f !important;
         }
         .qs-token-swatch {
           transition: transform 0.18s ease, box-shadow 0.18s ease;
