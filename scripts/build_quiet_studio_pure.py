@@ -8,10 +8,13 @@ def clean_pure():
 
     soup = BeautifulSoup(html, 'html.parser')
 
-    # Remove obsolete menu
+    # Remove obsolete menu and old header
     old_menu = soup.find('div', id='menu')
     if old_menu:
         old_menu.decompose()
+    old_nav = soup.find('header', class_='nav')
+    if old_nav:
+        old_nav.decompose()
 
     # 1. HERO (#hh)
     hh = soup.find('section', id='hh')
