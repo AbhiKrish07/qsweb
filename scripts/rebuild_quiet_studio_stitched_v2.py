@@ -914,11 +914,8 @@ def build_stitched_quiet_studio():
         act.clear()
         pricing_html = '''
         <div class="wrap" style="padding:100px 0 120px;max-width:1160px;margin:0 auto;">
-          <!-- Perfectly formatted centered column: Eyebrow -> Title UP -> Subtitle BELOW -->
+          <!-- Centered column: Title UP -> Subtitle BELOW -->
           <header class="qs-pricing-centered-header" style="display:flex;flex-direction:column;align-items:center;text-align:center;margin:0 auto 56px;max-width:960px;width:100%;">
-            <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:9999px;background:rgba(255,90,31,0.1);color:#ff5a1f;border:1px solid rgba(255,90,31,0.25);font:700 11px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:20px;">
-              <span>04 / INVESTMENT</span>
-            </div>
             <h2 style="font:800 clamp(3rem,5.6vw,5.2rem)/1.06 'Cabinet Grotesk',sans-serif;letter-spacing:-0.03em;color:#141413;margin:0 auto 18px;max-width:920px;">
               Transparent pricing. No agency markup<span style="color:#ff5a1f;">.</span>
             </h2>
