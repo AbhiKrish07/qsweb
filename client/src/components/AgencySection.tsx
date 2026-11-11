@@ -591,47 +591,56 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           margin-bottom: 28px !important;
         }
 
-        /* 6. Service Dropdown Two-Column Layout & Visual Preview Cards */
+        /* 6. Service Dropdown Balanced Two-Column Grid & Prominent Showcase Cards */
         .bitwip-unified-container .qs-service-body {
-          display: flex !important;
+          display: grid !important;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1.22fr) !important;
           align-items: center !important;
-          justify-content: space-between !important;
-          gap: 36px !important;
-          padding: 28px 0 16px 40px !important;
-          flex-wrap: wrap !important;
+          gap: clamp(32px, 5vw, 60px) !important;
+          padding: 36px 0 24px 0 !important;
+          width: 100% !important;
+        }
+        .bitwip-unified-container .qs-service-info {
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 24px !important;
+          padding-left: 40px !important;
+        }
+        .bitwip-unified-container .qs-service-info p {
+          color: rgba(255, 255, 255, 0.88) !important;
+          font-size: clamp(1.1rem, 1.8vw, 1.35rem) !important;
+          line-height: 1.8 !important;
+          margin: 0 !important;
         }
         .bitwip-unified-container .qs-service-media-card {
-          flex: 0 0 390px !important;
-          max-width: 100% !important;
-          border-radius: 14px !important;
+          width: 100% !important;
+          border-radius: 18px !important;
           overflow: hidden !important;
-          border: 1px solid rgba(255, 255, 255, 0.12) !important;
-          background: #09090b !important;
-          box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5) !important;
-          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease !important;
+          border: 1px solid rgba(255, 255, 255, 0.16) !important;
+          background: #0c0c0e !important;
+          box-shadow: 0 24px 56px rgba(0, 0, 0, 0.65), 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+          transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease, box-shadow 0.28s ease !important;
         }
         .bitwip-unified-container .qs-service-media-card:hover {
-          transform: translateY(-3px) scale(1.02) !important;
-          border-color: rgba(255, 90, 31, 0.45) !important;
-          box-shadow: 0 20px 48px rgba(255, 90, 31, 0.18) !important;
+          transform: translateY(-4px) scale(1.015) !important;
+          border-color: rgba(255, 90, 31, 0.5) !important;
+          box-shadow: 0 28px 64px rgba(255, 90, 31, 0.2), 0 8px 24px rgba(0, 0, 0, 0.6) !important;
         }
         .bitwip-unified-container .qs-service-media-card img {
           width: 100% !important;
           height: auto !important;
-          aspect-ratio: 16 / 9 !important;
+          aspect-ratio: 16 / 10 !important;
           object-fit: cover !important;
           display: block !important;
         }
         @media (max-width: 960px) {
           .bitwip-unified-container .qs-service-body {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
             padding-left: 0 !important;
-            flex-direction: column !important;
-            align-items: flex-start !important;
           }
-          .bitwip-unified-container .qs-service-media-card {
-            flex: 1 1 100% !important;
-            width: 100% !important;
-            margin-top: 14px !important;
+          .bitwip-unified-container .qs-service-info {
+            padding-left: 0 !important;
           }
         }
       `}</style>
