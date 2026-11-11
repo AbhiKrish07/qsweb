@@ -275,19 +275,24 @@ def build_stitched_quiet_studio():
                   <span class="icon-closed">+</span>
                 </div>
               </summary>
-              <div style="padding:28px 0 12px 40px;max-width:820px;">
-                <p style="color:rgba(255,255,255,0.85);font-size:clamp(1.1rem,1.8vw,1.35rem);line-height:1.7;margin-bottom:28px;">
-                  UX/UI &amp; Interface Architecture /<br>
-                  Design Systems &amp; Token Libraries /<br>
-                  Interaction Physics &amp; Micro-interactions /<br>
-                  Tactile Click &amp; Audio Feedback /<br>
-                  Interactive Figma &amp; React Prototypes
-                </p>
-                <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
-                  <span>Give your design &amp; software engineering a clear structure</span>
-                  <span>→</span>
-                  <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
-                </a>
+              <div class="qs-service-body" style="display:flex;align-items:center;justify-content:space-between;gap:36px;padding:28px 0 16px 40px;flex-wrap:wrap;">
+                <div style="flex:1 1 480px;max-width:640px;">
+                  <p style="color:rgba(255,255,255,0.85);font-size:clamp(1.05rem,1.7vw,1.3rem);line-height:1.75;margin-bottom:28px;">
+                    UX/UI &amp; Interface Architecture /<br>
+                    Design Systems &amp; Token Libraries /<br>
+                    Interaction Physics &amp; Micro-interactions /<br>
+                    Tactile Click &amp; Audio Feedback /<br>
+                    Interactive Figma &amp; React Prototypes
+                  </p>
+                  <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
+                    <span>Give your design &amp; software engineering a clear structure</span>
+                    <span>→</span>
+                    <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
+                  </a>
+                </div>
+                <div class="qs-service-media-card" style="flex:0 0 380px;max-width:100%;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.12);background:#09090b;box-shadow:0 16px 36px rgba(0,0,0,0.5);">
+                  <img src="/assets/quiet/service-design-system.jpg" alt="Product Design & Systems Preview" style="width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;" loading="lazy">
+                </div>
               </div>
             </details>
 
@@ -305,19 +310,24 @@ def build_stitched_quiet_studio():
                   <span class="icon-closed">+</span>
                 </div>
               </summary>
-              <div style="padding:28px 0 12px 40px;max-width:820px;">
-                <p style="color:rgba(255,255,255,0.85);font-size:clamp(1.1rem,1.8vw,1.35rem);line-height:1.7;margin-bottom:28px;">
-                  High-Performance Web &amp; Mobile Applications /<br>
-                  Next.js, React, Node.js, TypeScript &amp; Rust /<br>
-                  Cloud &amp; Local-First Architecture /<br>
-                  API Integrations, Real-Time Sync &amp; Database Design /<br>
-                  Production Infrastructure &amp; CI/CD Pipelines
-                </p>
-                <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
-                  <span>Ship production software that scales with your ambition</span>
-                  <span>→</span>
-                  <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
-                </a>
+              <div class="qs-service-body" style="display:flex;align-items:center;justify-content:space-between;gap:36px;padding:28px 0 16px 40px;flex-wrap:wrap;">
+                <div style="flex:1 1 480px;max-width:640px;">
+                  <p style="color:rgba(255,255,255,0.85);font-size:clamp(1.05rem,1.7vw,1.3rem);line-height:1.75;margin-bottom:28px;">
+                    High-Performance Web &amp; Mobile Applications /<br>
+                    Next.js, React, Node.js, TypeScript &amp; Rust /<br>
+                    Cloud &amp; Local-First Architecture /<br>
+                    API Integrations, Real-Time Sync &amp; Database Design /<br>
+                    Production Infrastructure &amp; CI/CD Pipelines
+                  </p>
+                  <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
+                    <span>Ship production software that scales with your ambition</span>
+                    <span>→</span>
+                    <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
+                  </a>
+                </div>
+                <div class="qs-service-media-card" style="flex:0 0 380px;max-width:100%;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.12);background:#09090b;box-shadow:0 16px 36px rgba(0,0,0,0.5);">
+                  <img src="/assets/quiet/service-fullstack-code.jpg" alt="Full-Stack Software Engineering Preview" style="width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;" loading="lazy">
+                </div>
               </div>
             </details>
 
@@ -335,19 +345,24 @@ def build_stitched_quiet_studio():
                   <span class="icon-closed">+</span>
                 </div>
               </summary>
-              <div style="padding:28px 0 12px 40px;max-width:820px;">
-                <p style="color:rgba(255,255,255,0.85);font-size:clamp(1.1rem,1.8vw,1.35rem);line-height:1.7;margin-bottom:28px;">
-                  Custom Agentic Workflows &amp; Multi-Agent Swarms /<br>
-                  LLM Fine-Tuning &amp; Local On-Device Models (Apple Silicon/NPU) /<br>
-                  Retrieval-Augmented Generation (RAG) &amp; Semantic Search /<br>
-                  Intelligent Automation Pipelines &amp; Workspaces /<br>
-                  Autonomous Research, Synthesis &amp; Code Synthesis
-                </p>
-                <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
-                  <span>Turn complex AI capabilities into simple, useful software</span>
-                  <span>→</span>
-                  <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
-                </a>
+              <div class="qs-service-body" style="display:flex;align-items:center;justify-content:space-between;gap:36px;padding:28px 0 16px 40px;flex-wrap:wrap;">
+                <div style="flex:1 1 480px;max-width:640px;">
+                  <p style="color:rgba(255,255,255,0.85);font-size:clamp(1.05rem,1.7vw,1.3rem);line-height:1.75;margin-bottom:28px;">
+                    Custom Agentic Workflows &amp; Multi-Agent Swarms /<br>
+                    LLM Fine-Tuning &amp; Local On-Device Models (Apple Silicon/NPU) /<br>
+                    Retrieval-Augmented Generation (RAG) &amp; Semantic Search /<br>
+                    Intelligent Automation Pipelines &amp; Workspaces /<br>
+                    Autonomous Research, Synthesis &amp; Code Synthesis
+                  </p>
+                  <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
+                    <span>Turn complex AI capabilities into simple, useful software</span>
+                    <span>→</span>
+                    <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
+                  </a>
+                </div>
+                <div class="qs-service-media-card" style="flex:0 0 380px;max-width:100%;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.12);background:#09090b;box-shadow:0 16px 36px rgba(0,0,0,0.5);">
+                  <img src="/assets/quiet/service-ai-agent.jpg" alt="Applied AI & Intelligent Systems Preview" style="width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;" loading="lazy">
+                </div>
               </div>
             </details>
 
@@ -365,19 +380,24 @@ def build_stitched_quiet_studio():
                   <span class="icon-closed">+</span>
                 </div>
               </summary>
-              <div style="padding:28px 0 12px 40px;max-width:820px;">
-                <p style="color:rgba(255,255,255,0.85);font-size:clamp(1.1rem,1.8vw,1.35rem);line-height:1.7;margin-bottom:28px;">
-                  Brand Strategy &amp; Commercial Positioning /<br>
-                  Kinetic Typography Systems &amp; Art Direction /<br>
-                  Product Messaging, Technical Copywriting &amp; Studio Voice /<br>
-                  Living Design Tokens &amp; Digital Style Guides /<br>
-                  Launch Collateral, Keynotes &amp; Interactive Showcases
-                </p>
-                <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
-                  <span>Build an enduring identity that cuts through the noise</span>
-                  <span>→</span>
-                  <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
-                </a>
+              <div class="qs-service-body" style="display:flex;align-items:center;justify-content:space-between;gap:36px;padding:28px 0 16px 40px;flex-wrap:wrap;">
+                <div style="flex:1 1 480px;max-width:640px;">
+                  <p style="color:rgba(255,255,255,0.85);font-size:clamp(1.05rem,1.7vw,1.3rem);line-height:1.75;margin-bottom:28px;">
+                    Brand Strategy &amp; Commercial Positioning /<br>
+                    Kinetic Typography Systems &amp; Art Direction /<br>
+                    Product Messaging, Technical Copywriting &amp; Studio Voice /<br>
+                    Living Design Tokens &amp; Digital Style Guides /<br>
+                    Launch Collateral, Keynotes &amp; Interactive Showcases
+                  </p>
+                  <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
+                    <span>Build an enduring identity that cuts through the noise</span>
+                    <span>→</span>
+                    <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
+                  </a>
+                </div>
+                <div class="qs-service-media-card" style="flex:0 0 380px;max-width:100%;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.12);background:#09090b;box-shadow:0 16px 36px rgba(0,0,0,0.5);">
+                  <img src="/assets/quiet/service-brand-guidelines.jpg" alt="Brand Identity & Product Narrative Preview" style="width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block;" loading="lazy">
+                </div>
               </div>
             </details>
           </div>

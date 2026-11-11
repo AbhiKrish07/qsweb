@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'wouter';
 import { BITWIP_BODY_HTML } from './bitwip-html';
 import { playClick } from '@/lib/sound';
 
@@ -11,35 +12,73 @@ interface AgencySectionProps {
 
 export default function AgencySection({ onSwitchToProducts, onOpenContact }: AgencySectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [, setLocation] = useLocation();
 
   useEffect(() => {
     const container = containerRef.current;
     if (container) {
-      const handleContactClicks = (e: MouseEvent) => {
+      const handleUniversalLinkClicks = (e: MouseEvent) => {
         const target = (e.target as HTMLElement)?.closest('a');
-        if (target) {
-          const href = target.getAttribute('href');
-          if (
-            href === '#contact' ||
-            href === '/en/contact' ||
-            target.getAttribute('data-cta') === 'contactez-nous' ||
-            href?.startsWith('mailto:')
-          ) {
-            if (onOpenContact) {
-              e.preventDefault();
-              playClick();
-              onOpenContact();
-            }
+        if (!target) return;
+
+        const href = target.getAttribute('href');
+        if (!href) return;
+
+        playClick();
+
+        // 1. Contact modal triggers
+        if (
+          href === '#contact' ||
+          href === '/en/contact' ||
+          target.getAttribute('data-cta') === 'contactez-nous' ||
+          href.startsWith('mailto:')
+        ) {
+          if (onOpenContact) {
+            e.preventDefault();
+            onOpenContact();
+            return;
           }
+        }
+
+        // 2. Products mode switchers
+        if (href === '/#apps' || href === '/#foundations' || href === '/#products' || href === '/#squad') {
+          e.preventDefault();
+          if (onSwitchToProducts) {
+            onSwitchToProducts();
+          }
+          const hash = href.split('#')[1];
+          setTimeout(() => {
+            const elem = document.getElementById(hash);
+            if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+          }, 120);
+          return;
+        }
+
+        // 3. Anchor hash links on the current page
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          const elem = document.querySelector(href);
+          if (elem) {
+            elem.scrollIntoView({ behavior: 'smooth' });
+          }
+          return;
+        }
+
+        // 4. Internal application routes
+        if (href.startsWith('/') && !href.startsWith('/assets/')) {
+          e.preventDefault();
+          setLocation(href);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
         }
       };
 
-      container.addEventListener('click', handleContactClicks);
+      container.addEventListener('click', handleUniversalLinkClicks);
       return () => {
-        container.removeEventListener('click', handleContactClicks);
+        container.removeEventListener('click', handleUniversalLinkClicks);
       };
     }
-  }, [onOpenContact]);
+  }, [onOpenContact, onSwitchToProducts, setLocation]);
 
   // Interactive Workspace Screen Controller (Tabs, Token Copy, Telemetry Diagnostics)
   useEffect(() => {
@@ -550,6 +589,50 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         }
         .bitwip-unified-container .piste__intro {
           margin-bottom: 28px !important;
+        }
+
+        /* 6. Service Dropdown Two-Column Layout & Visual Preview Cards */
+        .bitwip-unified-container .qs-service-body {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          gap: 36px !important;
+          padding: 28px 0 16px 40px !important;
+          flex-wrap: wrap !important;
+        }
+        .bitwip-unified-container .qs-service-media-card {
+          flex: 0 0 390px !important;
+          max-width: 100% !important;
+          border-radius: 14px !important;
+          overflow: hidden !important;
+          border: 1px solid rgba(255, 255, 255, 0.12) !important;
+          background: #09090b !important;
+          box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5) !important;
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease !important;
+        }
+        .bitwip-unified-container .qs-service-media-card:hover {
+          transform: translateY(-3px) scale(1.02) !important;
+          border-color: rgba(255, 90, 31, 0.45) !important;
+          box-shadow: 0 20px 48px rgba(255, 90, 31, 0.18) !important;
+        }
+        .bitwip-unified-container .qs-service-media-card img {
+          width: 100% !important;
+          height: auto !important;
+          aspect-ratio: 16 / 9 !important;
+          object-fit: cover !important;
+          display: block !important;
+        }
+        @media (max-width: 960px) {
+          .bitwip-unified-container .qs-service-body {
+            padding-left: 0 !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+          .bitwip-unified-container .qs-service-media-card {
+            flex: 1 1 100% !important;
+            width: 100% !important;
+            margin-top: 14px !important;
+          }
         }
       `}</style>
 
