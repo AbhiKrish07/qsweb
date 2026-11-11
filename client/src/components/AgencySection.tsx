@@ -643,6 +643,16 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
             padding-left: 0 !important;
           }
         }
+
+        /* Hero Video Square Optical Centering */
+        .bitwip-unified-container .mj__pile {
+          left: calc((100% - var(--c)) / 2 - var(--c) * .28) !important;
+        }
+        @media (max-width: 900px) {
+          .bitwip-unified-container .mj__pile {
+            left: calc(50% - var(--c) * .551) !important;
+          }
+        }
       `}</style>
 
       {/* Bitwip Agency Stitched Content */}
