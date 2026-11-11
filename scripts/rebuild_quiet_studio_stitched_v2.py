@@ -262,7 +262,7 @@ def build_stitched_quiet_studio():
 
           <div class="quiet-services-accordion" style="display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(255,255,255,0.12);">
             <!-- Item 1: Product Design & Systems (Open by default) -->
-            <details class="qs-service-row" open style="border-bottom:1px solid rgba(255,255,255,0.12);padding:32px 0;">
+            <details class="qs-service-row" name="services-accordion" open style="border-bottom:1px solid rgba(255,255,255,0.12);padding:32px 0;">
               <summary style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;">
                 <div style="display:flex;align-items:center;gap:20px;">
                   <span style="width:20px;height:20px;background:#a3e635;display:inline-block;-webkit-mask-image:url(/assets/img/formes/soleil.svg);mask-image:url(/assets/img/formes/soleil.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
@@ -297,7 +297,7 @@ def build_stitched_quiet_studio():
             </details>
 
             <!-- Item 2: Full-Stack Software Engineering -->
-            <details class="qs-service-row" style="border-bottom:1px solid rgba(255,255,255,0.12);padding:32px 0;">
+            <details class="qs-service-row" name="services-accordion" style="border-bottom:1px solid rgba(255,255,255,0.12);padding:32px 0;">
               <summary style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;">
                 <div style="display:flex;align-items:center;gap:20px;">
                   <span style="width:20px;height:20px;background:#f472b6;display:inline-block;-webkit-mask-image:url(/assets/img/formes/etoile-huit.svg);mask-image:url(/assets/img/formes/etoile-huit.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
@@ -332,7 +332,7 @@ def build_stitched_quiet_studio():
             </details>
 
             <!-- Item 3: Applied AI & Intelligent Systems -->
-            <details class="qs-service-row" style="border-bottom:1px solid rgba(255,255,255,0.12);padding:32px 0;">
+            <details class="qs-service-row" name="services-accordion" style="border-bottom:1px solid rgba(255,255,255,0.12);padding:32px 0;">
               <summary style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;">
                 <div style="display:flex;align-items:center;gap:20px;">
                   <span style="width:20px;height:20px;background:#4ade80;display:inline-block;-webkit-mask-image:url(/assets/img/formes/trefle.svg);mask-image:url(/assets/img/formes/trefle.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
@@ -367,7 +367,7 @@ def build_stitched_quiet_studio():
             </details>
 
             <!-- Item 4: Brand Identity & Product Narrative -->
-            <details class="qs-service-row" style="border-bottom:1px solid rgba(255,255,255,0.12);padding:32px 0;">
+            <details class="qs-service-row" name="services-accordion" style="border-bottom:1px solid rgba(255,255,255,0.12);padding:32px 0;">
               <summary style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;">
                 <div style="display:flex;align-items:center;gap:20px;">
                   <span style="width:20px;height:20px;background:#c084fc;display:inline-block;-webkit-mask-image:url(/assets/img/formes/fleur.svg);mask-image:url(/assets/img/formes/fleur.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>

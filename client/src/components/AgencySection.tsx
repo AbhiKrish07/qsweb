@@ -157,6 +157,75 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
     };
   }, []);
 
+  // Exclusive Accordion Controller (Only one row open at a time)
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleAccordionClick = (e: MouseEvent) => {
+      const summary = (e.target as HTMLElement).closest('summary');
+      if (!summary) return;
+
+      const details = summary.parentElement as HTMLDetailsElement | null;
+      if (!details || details.tagName !== 'DETAILS') return;
+
+      playClick();
+
+      const isServiceRow = details.classList.contains('qs-service-row');
+      const groupName = details.getAttribute('name');
+
+      const selector = isServiceRow
+        ? 'details.qs-service-row'
+        : groupName
+        ? `details[name="${groupName}"]`
+        : null;
+
+      if (!selector) return;
+
+      // If this details is currently closed, opening it should close all other items in the group
+      if (!details.open) {
+        const siblings = container.querySelectorAll<HTMLDetailsElement>(selector);
+        siblings.forEach((sibling) => {
+          if (sibling !== details && sibling.open) {
+            sibling.removeAttribute('open');
+            sibling.open = false;
+          }
+        });
+      }
+    };
+
+    const handleAccordionToggle = (e: Event) => {
+      const details = e.target as HTMLDetailsElement;
+      if (!details || details.tagName !== 'DETAILS' || !details.open) return;
+
+      const isServiceRow = details.classList.contains('qs-service-row');
+      const groupName = details.getAttribute('name');
+
+      const selector = isServiceRow
+        ? 'details.qs-service-row'
+        : groupName
+        ? `details[name="${groupName}"]`
+        : null;
+
+      if (!selector) return;
+
+      const siblings = container.querySelectorAll<HTMLDetailsElement>(selector);
+      siblings.forEach((sibling) => {
+        if (sibling !== details && sibling.open) {
+          sibling.removeAttribute('open');
+          sibling.open = false;
+        }
+      });
+    };
+
+    container.addEventListener('click', handleAccordionClick, true);
+    container.addEventListener('toggle', handleAccordionToggle, true);
+    return () => {
+      container.removeEventListener('click', handleAccordionClick, true);
+      container.removeEventListener('toggle', handleAccordionToggle, true);
+    };
+  }, []);
+
   useEffect(() => {
     // 1. Initialize global helper functions required by Bitwip before scripts run
     if (typeof window !== 'undefined') {
