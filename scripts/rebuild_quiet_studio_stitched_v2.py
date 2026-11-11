@@ -13,7 +13,7 @@ def build_stitched_quiet_studio():
 
     soup = BeautifulSoup(html, 'html.parser')
 
-    # Remove old nav and menus
+    # Remove old nav, menus, and skip link
     old_nav = soup.find('header', class_='nav')
     if old_nav:
         old_nav.decompose()
@@ -22,8 +22,11 @@ def build_stitched_quiet_studio():
     if old_menu:
         old_menu.decompose()
 
+    old_skip = soup.find('a', class_='skip')
+    if old_skip:
+        old_skip.decompose()
+
     # 1. HERO SECTION (#hh) — "WE [Square Reel] BUILD BRANDS. ✱"
-    # Matches user photo: "Creative work, reimagined." / "WE [Square] BUILD" / "BRANDS. ✱"
     hh = soup.find('section', id='hh')
     if hh:
         t = hh.find('h1', class_='hh__titre')
@@ -374,7 +377,6 @@ def build_stitched_quiet_studio():
         exp.append(BeautifulSoup(services_section_html, 'html.parser'))
 
     # 4. SELECTED WORK & PRODUCTS (#realisations)
-    # Using pristine Bitwip data-piste, data-piste-rail, .qr and .qr-chiffre for 100% native smooth momentum scroll!
     real = soup.find('section', id='realisations')
     if real:
         real.clear()
@@ -878,81 +880,131 @@ def build_stitched_quiet_studio():
             '''
             faq_bloc.append(BeautifulSoup(faq_html, 'html.parser'))
 
-    # 9. CTA & FOOTER (#contact & .pied)
+    # 9. CLOSING CTA & FOOTER (#contact & .pied)
+    # Remove old .pied-revele wrapper if present and replace with a stunning, mathematically aligned Apple/Google grade closing section
+    pied_revele = soup.find('div', class_='pied-revele')
+    if pied_revele:
+        # Unwrap contents so no broken transform parallax clips or misplaces elements
+        pied_revele.unwrap()
+
+    pied_revele_in = soup.find('div', class_='pied-revele__in')
+    if pied_revele_in:
+        pied_revele_in.unwrap()
+
     cta = soup.find('section', id='contact')
     if not cta:
         cta = soup.find('section', class_='cta')
     if cta:
         cta['id'] = 'contact'
-        cta_t = cta.find('h2', id='t-cta')
-        if cta_t:
-            cta_t.clear()
-            cta_t.append(BeautifulSoup('We build <span class="baila">brands</span>.<span aria-hidden="true" class="etoile"></span>', 'html.parser'))
-        
-        lead_p = cta.find('p', class_='lead')
-        if lead_p:
-            lead_p.string = 'A project, a question? The team responds Monday to Friday.'
-            
-        btn = cta.find('a', class_='btn')
-        if btn:
-            btn.string = 'Start a project →'
-            btn['href'] = '#contact'
+        cta['class'] = ['sec', 'qs-closing-cta-sec']
+        cta.clear()
+        closing_cta_html = '''
+        <div class="wrap" style="padding:120px 24px 100px;max-width:1120px;margin:0 auto;text-align:center;">
+          <p class="head__k label" style="color:#ff5a1f;font:700 12px/1 'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;">
+            <span class="head__n" style="color:#ff5a1f;">06</span>Get in touch
+          </p>
 
-    # Clean footer
+          <h2 style="font:800 clamp(3.2rem,6.5vw,5.8rem)/1.04 'Cabinet Grotesk',sans-serif;letter-spacing:-0.03em;color:#ffffff;margin:0 auto 24px;max-width:920px;">
+            We build brands that <span style="font-family:'Baila',serif;font-style:italic;color:#ff5a1f;">endure</span>.
+            <span aria-hidden="true" class="etoile" style="display:inline-block;width:32px;height:32px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/etoile-huit.svg);mask-image:url(/assets/img/formes/etoile-huit.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;vertical-align:middle;margin-left:8px;"></span>
+          </h2>
+
+          <p style="color:rgba(255,255,255,0.72);font-size:clamp(1.1rem,1.8vw,1.38rem);line-height:1.65;max-width:700px;margin:0 auto 44px;">
+            Whether you are shaping an intelligent product, building a living brand system, or deploying autonomous creative pipelines, our senior team is ready.
+          </p>
+
+          <!-- Centered Interactive Primary Action Pill -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:18px;margin-bottom:56px;">
+            <a href="mailto:hello@thequietstudio.space" class="qs-primary-cta-pill" style="display:inline-flex;align-items:center;gap:14px;padding:18px 42px;border-radius:9999px;background:#ff5a1f;color:#ffffff;font:800 17px/1 'Cabinet Grotesk',sans-serif;text-decoration:none;box-shadow:0 12px 36px rgba(255,90,31,0.35);transition:transform 0.22s cubic-bezier(0.16,1,0.3,1),box-shadow 0.22s ease;">
+              <span>hello@thequietstudio.space</span>
+              <span aria-hidden="true" style="font-size:18px;line-height:1;">→</span>
+            </a>
+            <span style="font:600 13px 'DM Mono',monospace;color:rgba(255,255,255,0.45);letter-spacing:0.04em;">
+              DIRECT SENIOR PARTNER ACCESS · RESPONSE WITHIN 24 HOURS
+            </span>
+          </div>
+
+          <!-- Studio Presence Clocks Bar -->
+          <div style="display:inline-flex;flex-wrap:wrap;justify-content:center;gap:24px 36px;padding:18px 32px;border-radius:9999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);">
+            <div style="display:flex;align-items:center;gap:8px;font:600 13px 'DM Mono',monospace;color:rgba(255,255,255,0.65);">
+              <span>SF</span><span class="clock__time c-time" data-tz="America/Los_Angeles" style="color:#ff5a1f;">--:--</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font:600 13px 'DM Mono',monospace;color:rgba(255,255,255,0.65);">
+              <span>NYC</span><span class="clock__time c-time" data-tz="America/New_York" style="color:#ff5a1f;">--:--</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font:600 13px 'DM Mono',monospace;color:rgba(255,255,255,0.65);">
+              <span>LDN</span><span class="clock__time c-time" data-tz="Europe/London" style="color:#ff5a1f;">--:--</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font:600 13px 'DM Mono',monospace;color:rgba(255,255,255,0.65);">
+              <span>PAR</span><span class="clock__time c-time" data-tz="Europe/Paris" style="color:#ff5a1f;">--:--</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font:600 13px 'DM Mono',monospace;color:rgba(255,255,255,0.65);">
+              <span>TYO</span><span class="clock__time c-time" data-tz="Asia/Tokyo" style="color:#ff5a1f;">--:--</span>
+            </div>
+          </div>
+        </div>
+        '''
+        cta.append(BeautifulSoup(closing_cta_html, 'html.parser'))
+
+    # Clean, Beautiful Studio Footer
     pied = soup.find('footer', class_='pied')
     if pied:
         pied.clear()
         footer_html = '''
-        <div class="wrap" style="padding:80px 0 60px;">
-          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:48px;padding-bottom:60px;border-bottom:1px solid rgba(255,255,255,0.12);">
-            <div style="max-width:440px;">
-              <span style="font:800 24px/1 'Cabinet Grotesk',sans-serif;color:#ffffff;display:inline-block;letter-spacing:-0.03em;margin-bottom:16px;">
+        <div class="wrap" style="padding:70px 24px 50px;max-width:1160px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:48px;padding-bottom:50px;border-bottom:1px solid rgba(255,255,255,0.08);">
+            <!-- Col 1: Identity -->
+            <div>
+              <span style="font:800 22px/1 'Cabinet Grotesk',sans-serif;color:#ffffff;display:inline-block;letter-spacing:-0.03em;margin-bottom:14px;">
                 QUIET STUDIO<span style="color:#ff5a1f;">.</span>
               </span>
-              <p style="color:rgba(255,255,255,0.75);font-size:1.05rem;line-height:1.6;margin-bottom:24px;">
-                Creative work, reimagined. An independent AI-native studio combining human creative direction with intelligent workflows to build enduring brands.
+              <p style="color:rgba(255,255,255,0.68);font-size:0.95rem;line-height:1.65;margin-bottom:20px;">
+                Independent AI-native design &amp; software product studio. We combine human creative direction with intelligent workflows to build enduring digital products.
               </p>
-              <a href="#contact" class="cmd" style="background:#ff5a1f;color:#ffffff;border:none;border-radius:9999px;padding:12px 24px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
-                <span>Start a project</span>
-                <span aria-hidden="true">→</span>
-              </a>
+              <div style="font:600 12px/1 'DM Mono',monospace;color:#ff5a1f;letter-spacing:0.04em;">
+                SAN FRANCISCO · NEW YORK · LONDON · PARIS · TOKYO
+              </div>
             </div>
 
-            <div style="display:flex;flex-wrap:wrap;gap:48px;">
-              <div>
-                <h4 style="color:#ff5a1f;font:700 12px/1 monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;">Studio</h4>
-                <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:0.95rem;">
-                  <li><a href="#agence" style="color:rgba(255,255,255,0.85);text-decoration:none;">About</a></li>
-                  <li><a href="#expertises" style="color:rgba(255,255,255,0.85);text-decoration:none;">Services</a></li>
-                  <li><a href="#realisations" style="color:rgba(255,255,255,0.85);text-decoration:none;">Selected Work</a></li>
-                  <li><a href="#workspace" style="color:rgba(255,255,255,0.85);text-decoration:none;">Creative OS</a></li>
-                  <li><a href="#pricing" style="color:rgba(255,255,255,0.85);text-decoration:none;">Pricing</a></li>
-                  <li><a href="#faq" style="color:rgba(255,255,255,0.85);text-decoration:none;">FAQ</a></li>
-                </ul>
-              </div>
+            <!-- Col 2: Studio Navigation -->
+            <div>
+              <h4 style="color:#ff5a1f;font:700 11.5px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;">Studio</h4>
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:0.92rem;">
+                <li><a href="#agence" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">About Quiet Studio</a></li>
+                <li><a href="#expertises" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Core Services</a></li>
+                <li><a href="#realisations" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Selected Work &amp; Products</a></li>
+                <li><a href="#workspace" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Creative Operating System</a></li>
+                <li><a href="#pricing" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Transparent Pricing</a></li>
+                <li><a href="#faq" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Frequently Asked Questions</a></li>
+              </ul>
+            </div>
 
-              <div>
-                <h4 style="color:#ff5a1f;font:700 12px/1 monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;">Products Mode</h4>
-                <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:0.95rem;">
-                  <li><a href="/#apps" style="color:rgba(255,255,255,0.85);text-decoration:none;">Open Core Apps</a></li>
-                  <li><a href="/blog" style="color:rgba(255,255,255,0.85);text-decoration:none;">Blog &amp; Notes</a></li>
-                  <li><a href="/#foundations" style="color:rgba(255,255,255,0.85);text-decoration:none;">Foundations</a></li>
-                  <li><a href="/about" style="color:rgba(255,255,255,0.85);text-decoration:none;">About Quiet Studio</a></li>
-                </ul>
-              </div>
+            <!-- Col 3: Products Mode -->
+            <div>
+              <h4 style="color:#ff5a1f;font:700 11.5px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;">Products Mode</h4>
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:0.92rem;">
+                <li><a href="/#apps" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Open Core Apps</a></li>
+                <li><a href="/products/zen-ai" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Zen AI Runtime</a></li>
+                <li><a href="/products/learnloop" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">LearnLoop App</a></li>
+                <li><a href="/blog" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Blog &amp; Research Notes</a></li>
+                <li><a href="/#foundations" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Design Foundations</a></li>
+                <li><a href="/about" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Founder &amp; Squad</a></li>
+              </ul>
+            </div>
 
-              <div>
-                <h4 style="color:#ff5a1f;font:700 12px/1 monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;">Direct Contact</h4>
-                <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:0.95rem;">
-                  <li><a href="mailto:hello@thequietstudio.space" style="color:rgba(255,255,255,0.85);text-decoration:none;">hello@thequietstudio.space</a></li>
-                  <li><span style="color:rgba(255,255,255,0.5);">San Francisco · New York · Paris · London · Tokyo</span></li>
-                  <li><span style="color:rgba(255,255,255,0.5);">Remote-First Worldwide</span></li>
-                </ul>
-              </div>
+            <!-- Col 4: Direct Inquiries -->
+            <div>
+              <h4 style="color:#ff5a1f;font:700 11.5px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;">Direct Inquiries</h4>
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:0.92rem;">
+                <li><a href="mailto:hello@thequietstudio.space" style="color:#ffffff;font-weight:700;text-decoration:none;">hello@thequietstudio.space</a></li>
+                <li><span style="color:rgba(255,255,255,0.5);">Sprint Availability: Open</span></li>
+                <li><span style="color:rgba(255,255,255,0.5);">Response time: &lt; 24h</span></li>
+                <li><span style="color:rgba(255,255,255,0.5);">Remote-First Worldwide</span></li>
+              </ul>
             </div>
           </div>
 
-          <div style="padding-top:32px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;color:rgba(255,255,255,0.5);font-size:0.88rem;">
+          <div style="padding-top:28px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;color:rgba(255,255,255,0.45);font-size:0.86rem;">
             <span>Thoughtfully conceived. Carefully designed. Intelligently built.</span>
             <span>© 2026 Quiet Studio. All rights reserved.</span>
           </div>
@@ -971,7 +1023,6 @@ def build_stitched_quiet_studio():
     else:
         content = str(soup)
 
-    # Clean whitespace and export as TypeScript constant
     content = content.strip()
 
     ts_path = '/Users/abhivalo360gmail.com/Downloads/quiet-studio/client/src/components/bitwip-html.ts'

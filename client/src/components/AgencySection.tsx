@@ -330,6 +330,20 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           transform: scale(1.08) rotate(0deg) !important;
           box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45) !important;
         }
+
+        /* Closing CTA Section */
+        .qs-closing-cta-sec {
+          background-color: #141413 !important;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          position: relative;
+        }
+        .qs-primary-cta-pill:hover {
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 16px 44px rgba(255, 90, 31, 0.45) !important;
+        }
+        .bitwip-unified-container footer.pied a:hover {
+          color: #ff5a1f !important;
+        }
       `}</style>
 
       {/* Bitwip Agency Stitched Content */}
