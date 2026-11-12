@@ -70,40 +70,40 @@ const MEGA_MENUS = {
   work: {
     lead: "Living brand systems built to",
     leadHighlight: "move",
-    allLink: { text: "Kinetic Brand Systems", href: "/#realisations" },
+    allLink: { text: "All Selected Work", href: "/#realisations" },
     items: [
       {
-        title: "Brand Architecture",
-        desc: "Custom wordmarks, typography scales & enduring identity contracts.",
-        href: "/#realisations",
+        title: "Zen AI Engine",
+        desc: "Local-first neural runtime with 0.2ms inference latency and zero telemetry.",
+        href: "/products/zen-ai",
         shape: "sceau",
         color: "#ff5a1f",
       },
       {
-        title: "Kinetic Typography",
-        desc: "Variable grotesque fonts, responsive axes & physical micro-interactions.",
-        href: "/#realisations",
+        title: "LearnLoop Platform",
+        desc: "Cognitive feedback loops turning curiosity into durable knowledge.",
+        href: "/products/learnloop",
         shape: "fleur",
         color: "#ff5a1f",
       },
       {
-        title: "Autonomous Workflows",
+        title: "Aethel Runtime",
         desc: "Multi-agent pipelines generating on-brand production creative.",
-        href: "/#realisations",
+        href: "/products/aethel",
         shape: "eclat",
         color: "#ff5a1f",
       },
       {
-        title: "Living Design Tokens",
-        desc: "Centralized JSON contracts powering dark/light interfaces & sound.",
-        href: "/#realisations",
+        title: "Capture Desktop",
+        desc: "Ambient screen context and intent capture built for macOS.",
+        href: "/products/capture",
         shape: "soleil",
         color: "#ff5a1f",
       },
       {
-        title: "Zero-Latency Physics",
-        desc: "Hardware-accelerated 60 FPS motion & tactile audio feedback.",
-        href: "/#realisations",
+        title: "TrendCulture Radar",
+        desc: "Cultural shift detection and emerging creative signal telemetry.",
+        href: "/products/trendculture",
         shape: "etoile-dix",
         color: "#ff5a1f",
       },
@@ -112,7 +112,7 @@ const MEGA_MENUS = {
   about: {
     lead: "Quiet Studio, that's",
     leadHighlight: "us",
-    allLink: { text: "About the studio", href: "/#agence" },
+    allLink: { text: "About the studio", href: "/about" },
     items: [
       {
         title: "Studio Philosophy",
@@ -124,14 +124,14 @@ const MEGA_MENUS = {
       {
         title: "The Autonomous Squad",
         desc: "Dedicated senior squads shipping high-velocity product sprints.",
-        href: "/#squad",
+        href: "/about",
         shape: "etoile-quatre",
         color: "#a855f7",
       },
       {
-        title: "The Method",
+        title: "The Method & Principles",
         desc: "6-stage product lifecycle: Discover, Define, Design, Engineer, Validate, Launch.",
-        href: "/#method",
+        href: "/thesis",
         shape: "trefle",
         color: "#22c55e",
       },
@@ -262,7 +262,7 @@ function Header({
       ? [
           { label: "Open Core Apps", href: "/#apps" },
           { label: "Blog & Notes", href: "/blog" },
-          { label: "Foundations", href: "/#foundations" },
+          { label: "Research", href: "/research" },
           { label: "About", href: "/about" },
         ]
       : [
@@ -276,6 +276,32 @@ function Header({
   const handleNavClick = (href: string) => {
     playClick();
     setMobileNavOpen(false);
+
+    if (href === "/#foundations") {
+      setLocation("/research");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (href === "/#squad") {
+      setLocation("/about");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (href === "/#method") {
+      setLocation("/thesis");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (href === "/#apps" || href === "/#products") {
+      if (studioMode !== "human") {
+        onStudioModeChange("human");
+      }
+      if (location !== "/") {
+        setLocation("/");
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
 
     // Auto-switch studioMode if navigating across mode sections
     if (
@@ -520,10 +546,10 @@ function Header({
                     className={`capsule-nav-btn ${activeProductsKey === "foundations" ? "is-active" : ""}`}
                     onClick={() => {
                       setActiveProductsKey("foundations");
-                      handleNavClick("/#foundations");
+                      handleNavClick("/research");
                     }}
                   >
-                    Foundations
+                    Research
                   </button>
                 </div>
                 <div className="capsule-nav-item">

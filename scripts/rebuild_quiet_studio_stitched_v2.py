@@ -426,8 +426,8 @@ def build_stitched_quiet_studio():
               <p class="piste__i" style="color:rgba(255,255,255,0.7);font-size:clamp(1.05rem,1.4vw,1.25rem);max-width:540px;line-height:1.6;margin:0;">
                 Quiet Studio's active products, open-source runtimes, and living brand architectures.
               </p>
-              <a class="lnk" href="/#apps" style="color:#ff5a1f;font-weight:600;display:inline-flex;align-items:center;gap:8px;text-decoration:none;">
-                <span>Explore all products</span>
+              <a class="lnk" href="/models" style="color:#ff5a1f;font-weight:600;display:inline-flex;align-items:center;gap:8px;text-decoration:none;">
+                <span>Explore all models &amp; runtimes</span>
                 <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" style="width:14px;height:14px;"><path d="M1 8h13M9 3l5 5-5 5" stroke="#ff5a1f" stroke-width="1.6"/></svg>
               </a>
             </div>
@@ -544,13 +544,13 @@ def build_stitched_quiet_studio():
                   <li><a class="realfin__rond" href="/products/codewell"><img src="/assets/quiet/fintech-identity.jpg" alt="" width="800" height="583" loading="lazy"><span class="realfin__nom">Codewell</span></a></li>
                 </ul>
                 <div class="realfin__appels">
-                  <a class="realfin__tous" href="/#apps"><span>All products &amp; runtimes</span><span class="realfin__go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></span></a>
+                  <a class="realfin__tous" href="/models"><span>All models &amp; runtimes</span><span class="realfin__go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></span></a>
                   <a class="btn btn--ligne btn--sm realfin__contact" href="#contact">Build with Quiet Studio<span class="btn__arrow" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></span></a>
                 </div>
               </div>
 
-              <a class="piste__fin" href="/#apps" tabindex="-1" aria-hidden="true">
-                <span class="piste__fin-t">All products</span>
+              <a class="piste__fin" href="/models" tabindex="-1" aria-hidden="true">
+                <span class="piste__fin-t">All models</span>
                 <span class="piste__fin-go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></span>
               </a>
 
@@ -1134,13 +1134,13 @@ def build_stitched_quiet_studio():
 
             <!-- Col 3: Products Mode -->
             <div>
-              <h4 style="color:#ff5a1f;font:700 11.5px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;">Products Mode</h4>
+              <h4 style="color:#ff5a1f;font:700 11.5px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;">Products &amp; Research</h4>
               <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:0.92rem;">
-                <li><a href="/#apps" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Open Core Apps</a></li>
+                <li><a href="/models" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Models &amp; Runtimes</a></li>
                 <li><a href="/products/zen-ai" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Zen AI Runtime</a></li>
                 <li><a href="/products/learnloop" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">LearnLoop App</a></li>
                 <li><a href="/blog" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Blog &amp; Research Notes</a></li>
-                <li><a href="/#foundations" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Design Foundations</a></li>
+                <li><a href="/research" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Research &amp; Whitepapers</a></li>
                 <li><a href="/about" style="color:rgba(255,255,255,0.8);text-decoration:none;transition:color 0.2s;">Founder &amp; Squad</a></li>
               </ul>
             </div>

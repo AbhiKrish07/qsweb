@@ -41,17 +41,34 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           }
         }
 
-        // 2. Products mode switchers
-        if (href === '/#apps' || href === '/#foundations' || href === '/#products' || href === '/#squad') {
+        // 2. Direct page routes & clean navigation (no scrolling down to footer)
+        if (href === '/#foundations') {
+          e.preventDefault();
+          setLocation('/research');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+
+        if (href === '/#squad') {
+          e.preventDefault();
+          setLocation('/about');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+
+        if (href === '/#method') {
+          e.preventDefault();
+          setLocation('/thesis');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+
+        if (href === '/#apps' || href === '/#products') {
           e.preventDefault();
           if (onSwitchToProducts) {
             onSwitchToProducts();
           }
-          const hash = href.split('#')[1];
-          setTimeout(() => {
-            const elem = document.getElementById(hash);
-            if (elem) elem.scrollIntoView({ behavior: 'smooth' });
-          }, 120);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           return;
         }
 

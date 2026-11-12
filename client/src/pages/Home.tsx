@@ -998,6 +998,31 @@ export default function Home({
               </div>
             </div>
           </section>
+
+          {/* =========================================================================
+              CLOSING STUDIO FOOTER (PRODUCTS MODE ONLY)
+              ========================================================================= */}
+          <section className="closing-section">
+            <div className="closing-ring" />
+            <p className="eyebrow">If this sounds like your kind of quiet</p>
+            <h2>
+              Let’s make
+              <br />
+              <em>something useful.</em>
+            </h2>
+            <div className="closing-waitlist-wrap">
+              <StudioWaitlistForm />
+            </div>
+            <a
+              href="mailto:glexionstriker@gmail.com"
+              className="primary-button"
+              onClick={() => {
+                playClick();
+              }}
+            >
+              Message the studio <ArrowUpRight size={16} />
+            </a>
+          </section>
         </>
       ) : (
         /* =========================================================================
@@ -1005,31 +1030,6 @@ export default function Home({
            ========================================================================= */
         <AgencySection />
       )}
-
-      {/* =========================================================================
-          CLOSING STUDIO FOOTER (UNIFIED ACROSS MODES)
-          ========================================================================= */}
-      <section className="closing-section">
-        <div className="closing-ring" />
-        <p className="eyebrow">If this sounds like your kind of quiet</p>
-        <h2>
-          Let’s make
-          <br />
-          <em>something useful.</em>
-        </h2>
-        <div className="closing-waitlist-wrap">
-          <StudioWaitlistForm />
-        </div>
-        <a
-          href="mailto:glexionstriker@gmail.com"
-          className="primary-button"
-          onClick={() => {
-            playClick();
-          }}
-        >
-          Message the studio <ArrowUpRight size={16} />
-        </a>
-      </section>
     </div>
   );
 }
