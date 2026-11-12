@@ -398,9 +398,8 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
       };
       hydrateImages();
 
-      // 4. Load Bitwip client runtime scripts and re-evaluate on freshly mounted DOM
+      // 4. Load Bitwip hero & section client runtime scripts on freshly mounted DOM
       const scripts = [
-        '/assets/js/bitwip.js',
         '/assets/js/p-variantes.js',
         '/assets/js/p-hero-accueil.js',
       ];
@@ -422,7 +421,6 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
       };
 
       (async () => {
-        await loadScript('/assets/js/bitwip.js');
         await loadScript('/assets/js/p-variantes.js');
         await loadScript('/assets/js/p-hero-accueil.js');
         hydrateImages();
@@ -500,21 +498,8 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         document.body.removeAttribute('data-landing');
         document.body.removeAttribute('data-outil');
 
-        // Only disable stylesheets if switching to human mode, avoiding full DOM recreation
-        const currentMode = document.documentElement.getAttribute('data-studio-mode');
-        if (currentMode === 'human') {
-          linkTags.forEach((link) => {
-            link.disabled = true;
-          });
-        }
-
-        // Remove any global elements appended to document.body by bitwip.js
-        const bitwipGlobals = document.querySelectorAll(
-          '.curseur, .jonctions, .portail, .sillage, .eclat, .visionneuse'
-        );
-        bitwipGlobals.forEach((el) => el.remove());
-
-        document.documentElement.classList.remove('has-curseur', 'curseur-tenu');
+        // Retain global Bitwip cursor, sillage trail, and has-curseur across routes
+        document.documentElement.classList.add('has-curseur');
       };
     }
   }, []);

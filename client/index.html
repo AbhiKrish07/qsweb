@@ -73,6 +73,9 @@
     <link rel="stylesheet" href="/assets/css/p-variantes.css" data-bitwip-href="/assets/css/p-variantes.css" id="bitwip-variantes-css" />
     <link rel="stylesheet" href="/assets/css/p-variantes-lot4.css" data-bitwip-href="/assets/css/p-variantes-lot4.css" id="bitwip-lot4-css" />
 
+    <!-- Global Bitwip Runtime for Universal Interactive Cursor & Ribbon Trail Across Entire Site -->
+    <script defer src="/assets/js/bitwip.js"></script>
+
     <script>
       (function() {
         try {
@@ -89,12 +92,10 @@
           var savedMode = localStorage.getItem("quiet-studio-mode");
           if (savedMode === "human") {
             document.documentElement.setAttribute("data-studio-mode", "human");
-            var bitwipLinks = document.querySelectorAll('link[data-bitwip-href]');
-            bitwipLinks.forEach(function(l) { l.disabled = true; });
           } else {
             document.documentElement.setAttribute("data-studio-mode", "agent");
-            document.documentElement.classList.add("js", "is-ready");
           }
+          document.documentElement.classList.add("js", "is-ready", "has-curseur");
         } catch(e) {}
       })();
     </script>

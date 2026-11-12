@@ -24,7 +24,6 @@ import ServicePage from "./pages/ServicePage";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
 import GooeyNav, { GooeyNavItem } from "./components/GooeyNav";
-import { CursorTrail } from "./components/CursorTrail";
 import { isSoundEnabled, toggleSound, playClick } from "./lib/sound";
 
 function ScrollToTop() {
@@ -856,24 +855,7 @@ function AppShell() {
     if (typeof window !== "undefined") {
       localStorage.setItem("quiet-studio-mode", nextMode);
       document.documentElement.setAttribute("data-studio-mode", nextMode);
-
-      if (nextMode === "human") {
-        const bitwipGlobals = document.querySelectorAll(
-          '.curseur, .jonctions, .portail, .sillage, .eclat, .visionneuse'
-        );
-        bitwipGlobals.forEach((el) => el.remove());
-        document.documentElement.classList.remove('has-curseur', 'curseur-tenu', 'js', 'is-ready');
-        // Disable Bitwip stylesheets so Products mode is pure
-        document.querySelectorAll('link[data-bitwip-href]').forEach((el) => {
-          (el as HTMLLinkElement).disabled = true;
-        });
-      } else {
-        // Re-enable Bitwip stylesheets for instant Agency mode
-        document.documentElement.classList.add('js', 'is-ready');
-        document.querySelectorAll('link[data-bitwip-href]').forEach((el) => {
-          (el as HTMLLinkElement).disabled = false;
-        });
-      }
+      document.documentElement.classList.add("js", "is-ready", "has-curseur");
     }
   };
 
@@ -1007,7 +989,6 @@ function AppShell() {
   return (
     <div className={`app-shell ${isAgencyHome ? "agency-shell" : ""}`}>
       <ScrollToTop />
-      <CursorTrail />
       <Header
         dark={dark}
         onToggle={() => setDark((value) => !value)}
