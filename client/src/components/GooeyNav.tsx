@@ -853,6 +853,7 @@ const GooeyNav = ({
     const go = (index: number, animate: boolean) => {
       if (index === target) return;
       const from = target;
+      measure();
       if (from >= 0 && from !== index) {
         burstParticles(from, index);
       }
@@ -942,7 +943,7 @@ const GooeyNav = ({
       }
       engineRef.current = null;
     };
-  }, [items.map(i => i.label).join(','), palette, activeIndex]);
+  }, [items.map(i => i.label).join(','), palette]);
 
   useEffect(() => {
     engineRef.current?.go(current);

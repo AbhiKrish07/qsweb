@@ -7375,12 +7375,33 @@ html[data-studio-mode="human"] .visionneuse {
   border: 0 !important;
 }
 
-.mj__fantome,
-.hh__couche .mj__fantome {
-  display: none !important;
-  visibility: hidden !important;
-  position: absolute !important;
+.mj__fantome {
+  display: flex !important;
   pointer-events: none !important;
+}
+
+.mj__fantome :is(.mj__m, .mj__lead) {
+  visibility: hidden !important;
+}
+
+.mj__fantome .mj__trou {
+  display: block !important;
+  visibility: visible !important;
+}
+
+.mj__fantome .mj__pile {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 5 !important;
+  pointer-events: auto !important;
+}
+
+.mj__fantome .hh__carte,
+.mj__fantome .hh__reel {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .bitwip-unified-container {
