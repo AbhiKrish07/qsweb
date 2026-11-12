@@ -21,7 +21,7 @@ if (rideau) Promise.all(rideau.getAnimations({ subtree: true }).map((an) => an.f
 const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (!reduit) {
 const partir = () => reel.play().catch(() => {});
-if (document.readyState === 'complete') partir(); else addEventListener('load', partir, { once: true });
+if (document.readyState !== 'loading') partir(); else addEventListener('DOMContentLoaded', partir, { once: true });
 }
 let a = 0, course = 1;
 const ouvert = () => 1 - Math.min(1, Math.max(0, (scrollY - a) / (course * .1)));

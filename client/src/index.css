@@ -7339,3 +7339,31 @@ html[data-studio-mode="human"] .visionneuse {
   position: fixed !important;
   pointer-events: none !important;
 }
+
+/* Anti-FOUC Hard Floor & Zero-Delay Hero Layout */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.mj__fantome,
+.hh__couche .mj__fantome {
+  display: none !important;
+  visibility: hidden !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+.bitwip-unified-container {
+  min-height: 100vh;
+  background: #000;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+

@@ -9,6 +9,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Preload Critical Display Fonts to eliminate font load delays -->
+    <link rel="preload" href="/assets/fonts/CabinetGrotesk-800.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/assets/fonts/CabinetGrotesk-900.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- Preload & Link Core Agency Stylesheets to eliminate FOUC (Flash of Unstyled Content) -->
+    <link rel="preload" href="/assets/css/bitwip.css" as="style" />
+    <link rel="preload" href="/assets/css/p-hero-accueil.css" as="style" />
+    <link rel="preload" href="/assets/css/p-variantes.css" as="style" />
+    <link rel="stylesheet" href="/assets/css/bitwip.css" data-bitwip-href="/assets/css/bitwip.css" id="bitwip-css" />
+    <link rel="stylesheet" href="/assets/css/p-hero-accueil.css" data-bitwip-href="/assets/css/p-hero-accueil.css" id="bitwip-hero-css" />
+    <link rel="stylesheet" href="/assets/css/p-variantes.css" data-bitwip-href="/assets/css/p-variantes.css" id="bitwip-variantes-css" />
+    <link rel="stylesheet" href="/assets/css/p-variantes-lot4.css" data-bitwip-href="/assets/css/p-variantes-lot4.css" id="bitwip-lot4-css" />
+
     <script>
       (function() {
         try {
@@ -20,6 +34,16 @@
           } else {
             document.documentElement.classList.remove("dark");
             document.documentElement.style.colorScheme = "light";
+          }
+
+          var savedMode = localStorage.getItem("quiet-studio-mode");
+          if (savedMode === "human") {
+            document.documentElement.setAttribute("data-studio-mode", "human");
+            var bitwipLinks = document.querySelectorAll('link[data-bitwip-href]');
+            bitwipLinks.forEach(function(l) { l.disabled = true; });
+          } else {
+            document.documentElement.setAttribute("data-studio-mode", "agent");
+            document.documentElement.classList.add("js", "is-ready");
           }
         } catch(e) {}
       })();

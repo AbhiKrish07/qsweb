@@ -782,7 +782,17 @@ function AppShell() {
           '.curseur, .jonctions, .portail, .sillage, .eclat, .visionneuse'
         );
         bitwipGlobals.forEach((el) => el.remove());
-        document.documentElement.classList.remove('has-curseur', 'curseur-tenu', 'js');
+        document.documentElement.classList.remove('has-curseur', 'curseur-tenu', 'js', 'is-ready');
+        // Disable Bitwip stylesheets so Products mode is pure
+        document.querySelectorAll('link[data-bitwip-href]').forEach((el) => {
+          (el as HTMLLinkElement).disabled = true;
+        });
+      } else {
+        // Re-enable Bitwip stylesheets for instant Agency mode
+        document.documentElement.classList.add('js', 'is-ready');
+        document.querySelectorAll('link[data-bitwip-href]').forEach((el) => {
+          (el as HTMLLinkElement).disabled = false;
+        });
       }
     }
   };

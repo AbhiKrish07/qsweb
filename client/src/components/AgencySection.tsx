@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'wouter';
 import { BITWIP_BODY_HTML } from './bitwip-html';
 import { playClick } from '@/lib/sound';
@@ -13,6 +13,7 @@ interface AgencySectionProps {
 export default function AgencySection({ onSwitchToProducts, onOpenContact }: AgencySectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [, setLocation] = useLocation();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -278,7 +279,7 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
       }
 
       // Attributes on document & body
-      document.documentElement.classList.add('js');
+      document.documentElement.classList.add('js', 'is-ready');
       document.documentElement.setAttribute('data-gdifilm', 'direct');
 
       document.body.setAttribute('data-page', 'accueil');
@@ -288,7 +289,7 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
       document.body.setAttribute('data-landing', '');
       document.body.setAttribute('data-outil', '');
 
-      // 2. Load Bitwip stylesheets
+      // 2. Enable / Link Bitwip stylesheets
       const stylesheets = [
         '/assets/css/bitwip.css',
         '/assets/css/p-hero-accueil.css',
@@ -305,9 +306,12 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           el.href = href;
           el.setAttribute('data-bitwip-href', href);
           document.head.appendChild(el);
-          linkTags.push(el);
         }
+        el.disabled = false;
+        linkTags.push(el);
       });
+
+      setIsMounted(true);
 
       // 3. Lazy image hydrating
       const hydrateImages = () => {
@@ -320,24 +324,27 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
       };
       hydrateImages();
 
-      // 4. Sequentially load Bitwip client runtime scripts
+      // 4. Sequentially load Bitwip client runtime scripts without duplication
       const scripts = [
         '/assets/js/bitwip.js',
         '/assets/js/p-variantes.js',
         '/assets/js/p-hero-accueil.js',
       ];
 
-      const scriptTags: HTMLScriptElement[] = [];
-
       const loadScript = (src: string): Promise<void> => {
         return new Promise((resolve) => {
+          const existing = document.querySelector(`script[data-bitwip-script="${src}"]`);
+          if (existing) {
+            resolve();
+            return;
+          }
           const s = document.createElement('script');
           s.src = src;
           s.defer = true;
+          s.setAttribute('data-bitwip-script', src);
           s.onload = () => resolve();
           s.onerror = () => resolve();
           document.body.appendChild(s);
-          scriptTags.push(s);
         });
       };
 
@@ -346,6 +353,8 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           await loadScript(src);
         }
         hydrateImages();
+        window.dispatchEvent(new Event('DOMContentLoaded'));
+        window.dispatchEvent(new Event('load'));
         window.dispatchEvent(new Event('scroll'));
         window.dispatchEvent(new Event('resize'));
       })();
@@ -376,7 +385,6 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
 
       return () => {
         clearInterval(clockInterval);
-        document.documentElement.classList.remove('js');
         document.documentElement.removeAttribute('data-gdifilm');
 
         document.body.removeAttribute('data-page');
@@ -386,8 +394,13 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         document.body.removeAttribute('data-landing');
         document.body.removeAttribute('data-outil');
 
-        linkTags.forEach((link) => link.remove());
-        scriptTags.forEach((script) => script.remove());
+        // Only disable stylesheets if switching to human mode, avoiding full DOM recreation
+        const currentMode = document.documentElement.getAttribute('data-studio-mode');
+        if (currentMode === 'human') {
+          linkTags.forEach((link) => {
+            link.disabled = true;
+          });
+        }
 
         // Remove any global elements appended to document.body by bitwip.js
         const bitwipGlobals = document.querySelectorAll(
@@ -395,13 +408,20 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         );
         bitwipGlobals.forEach((el) => el.remove());
 
-        document.documentElement.classList.remove('has-curseur', 'curseur-tenu', 'js');
+        document.documentElement.classList.remove('has-curseur', 'curseur-tenu');
       };
     }
   }, []);
 
   return (
-    <div className="bitwip-unified-container" ref={containerRef}>
+    <div
+      className="bitwip-unified-container"
+      ref={containerRef}
+      style={{
+        opacity: isMounted ? 1 : 0.98,
+        transition: 'opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+      }}
+    >
       {/* Hide Bitwip's default header so Quiet Studio's uniform signature header is shown */}
       <style>{`
         header.nav,
