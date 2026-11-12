@@ -816,16 +816,21 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           padding-bottom: 24px !important;
         }
         .bitwip-unified-container #expertises {
-          padding-top: clamp(68px, 7.5vw, 96px) !important;
-          padding-bottom: 24px !important;
+          padding-top: clamp(32px, 4vw, 52px) !important;
+          padding-bottom: 20px !important;
           scroll-margin-top: 80px !important;
         }
         .bitwip-unified-container #expertises .wrap {
-          padding-top: 0 !important;
-          padding-bottom: 24px !important;
+          max-width: 1200px !important;
+          margin: 0 auto !important;
+          padding: 0 24px 20px !important;
         }
         .bitwip-unified-container #expertises .head {
-          margin-bottom: 38px !important;
+          margin-bottom: 20px !important;
+        }
+        .bitwip-unified-container .quiet-services-accordion {
+          max-width: 1200px !important;
+          margin: 0 auto !important;
         }
         .bitwip-unified-container #realisations {
           padding-top: 32px !important;
@@ -835,33 +840,38 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         }
 
         /* 6. Service Dropdown Balanced Two-Column Grid & Prominent Showcase Cards */
+        .bitwip-unified-container .qs-service-row {
+          padding: 20px 0 !important;
+        }
         .bitwip-unified-container .qs-service-body {
           display: grid !important;
-          grid-template-columns: minmax(0, 1fr) minmax(0, 1.22fr) !important;
-          align-items: center !important;
-          gap: clamp(32px, 5vw, 60px) !important;
-          padding: 36px 0 24px 0 !important;
+          grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.15fr) !important;
+          align-items: flex-start !important;
+          gap: clamp(24px, 3.5vw, 44px) !important;
+          padding: 16px 0 10px 0 !important;
           width: 100% !important;
         }
         .bitwip-unified-container .qs-service-info {
           display: flex !important;
           flex-direction: column !important;
-          gap: 24px !important;
-          padding-left: 40px !important;
+          gap: 18px !important;
+          padding-left: 0 !important;
+          padding-top: 4px !important;
         }
         .bitwip-unified-container .qs-service-info p {
           color: rgba(255, 255, 255, 0.88) !important;
-          font-size: clamp(1.1rem, 1.8vw, 1.35rem) !important;
-          line-height: 1.8 !important;
+          font-size: clamp(1rem, 1.35vw, 1.18rem) !important;
+          line-height: 1.65 !important;
           margin: 0 !important;
         }
         .bitwip-unified-container .qs-service-media-card {
           width: 100% !important;
-          border-radius: 18px !important;
+          max-height: 380px !important;
+          border-radius: 16px !important;
           overflow: hidden !important;
           border: 1px solid rgba(255, 255, 255, 0.16) !important;
           background: #0c0c0e !important;
-          box-shadow: 0 24px 56px rgba(0, 0, 0, 0.65), 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+          box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.4) !important;
           transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease, box-shadow 0.28s ease !important;
         }
         .bitwip-unified-container .qs-service-media-card:hover {
@@ -872,6 +882,7 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         .bitwip-unified-container .qs-service-media-card img {
           width: 100% !important;
           height: auto !important;
+          max-height: 380px !important;
           aspect-ratio: 16 / 10 !important;
           object-fit: cover !important;
           display: block !important;
