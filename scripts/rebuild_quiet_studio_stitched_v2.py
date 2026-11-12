@@ -529,7 +529,7 @@ def build_stitched_quiet_studio():
                   <span class="tag tag--metier"><span class="forme forme--fleur forme--papaye" aria-hidden="true"></span>Trend Telemetry</span>
                 </p>
                 <div class="qr__media">
-                  <img src="/assets/quiet/startup-presentation.jpg" alt="TrendCulture Signal Dashboard" width="1600" height="1200" loading="lazy">
+                  <img src="/assets/quiet/trendculture-signal.jpg" alt="TrendCulture Signal Telemetry" width="1600" height="1200" loading="lazy">
                 </div>
                 <div class="qr__corps">
                   <h3 class="qr__q"><a class="qr__lien" href="/products/trendculture" data-verbe="View concept">TrendCulture</a></h3>
