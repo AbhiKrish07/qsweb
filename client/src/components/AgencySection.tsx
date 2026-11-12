@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'wouter';
+import gsap from 'gsap';
 import { BITWIP_BODY_HTML } from './bitwip-html';
 import { playClick } from '@/lib/sound';
 
@@ -234,6 +235,18 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           sibling.open = false;
         }
       });
+
+      if (isServiceRow) {
+        const info = details.querySelector('.qs-service-info');
+        const media = details.querySelector('.qs-service-media-card');
+        if (info || media) {
+          gsap.fromTo(
+            [info, media].filter(Boolean),
+            { opacity: 0.15, y: 12 },
+            { opacity: 1, y: 0, duration: 0.38, stagger: 0.06, ease: 'power2.out', clearProps: 'all' }
+          );
+        }
+      }
     };
 
     container.addEventListener('click', handleAccordionClick, true);
@@ -587,28 +600,25 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           transform: skewX(-6deg) scale(1.02);
         }
 
-        /* Smooth Text Reveal Animations */
+        /* Smooth Text Reveal Animations — Guaranteed Visible & Resilient */
         .bitwip-unified-container .head__t,
         .bitwip-unified-container .head__k,
         .bitwip-unified-container .head__i,
         .bitwip-unified-container .qs-service-row summary h3,
         .bitwip-unified-container .piste__intro h2,
         .bitwip-unified-container .qs-text-reveal {
-          opacity: 0;
-          transform: translateY(22px);
-          transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
-          will-change: opacity, transform;
+          opacity: 1 !important;
+          visibility: visible !important;
+          transform: translateY(0) !important;
+          transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .bitwip-unified-container .is-revealed,
-        .bitwip-unified-container .head__t.is-revealed,
-        .bitwip-unified-container .head__k.is-revealed,
-        .bitwip-unified-container .head__i.is-revealed,
-        .bitwip-unified-container .qs-service-row summary h3.is-revealed,
-        .bitwip-unified-container .piste__intro h2.is-revealed,
-        .bitwip-unified-container .qs-text-reveal.is-revealed {
+        .bitwip-unified-container .qs-service-body,
+        .bitwip-unified-container .qs-service-info,
+        .bitwip-unified-container .qs-service-info p,
+        .bitwip-unified-container .qs-service-cta {
           opacity: 1 !important;
-          transform: translateY(0) !important;
+          visibility: visible !important;
         }
 
         /* Services Accordion (#expertises) */

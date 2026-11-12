@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Code, Cpu, ExternalLink, Layers, Sparkles, Terminal, Zap, Shield, Rocket } from "lucide-react";
 import { Link, useLocation, useRoute } from "wouter";
+import gsap from "gsap";
+import FluxLines from "@/components/FluxLines";
+import TextLoop from "@/components/TextLoop";
+import ElectricLogo from "@/components/ElectricLogo";
 import { playClick } from "@/lib/sound";
 
 export interface ServiceDetail {
@@ -378,6 +382,32 @@ export default function ServicePage({ onOpenContact }: { onOpenContact?: () => v
   const service = SERVICES_DATA[normalizedSlug] || SERVICES_DATA["product-strategy-design"];
 
   const [activeWorkflowStep, setActiveWorkflowStep] = useState(0);
+  const pageContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!pageContainerRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.from(".qs-animate-fade", {
+        opacity: 0,
+        y: 22,
+        duration: 0.6,
+        stagger: 0.08,
+        ease: "power3.out",
+        clearProps: "all",
+      });
+      gsap.from(".qs-animate-card", {
+        opacity: 0,
+        scale: 0.96,
+        y: 20,
+        duration: 0.65,
+        stagger: 0.09,
+        ease: "power3.out",
+        clearProps: "all",
+      });
+    }, pageContainerRef);
+
+    return () => ctx.revert();
+  }, [normalizedSlug]);
 
   const handleContactClick = () => {
     playClick();
@@ -393,10 +423,26 @@ export default function ServicePage({ onOpenContact }: { onOpenContact?: () => v
   );
 
   return (
-    <div className="service-page-container" style={{ background: "#111110", color: "#f4f1ea", minHeight: "100vh", paddingBottom: "100px" }}>
+    <div ref={pageContainerRef} className="service-page-container" style={{ background: "#111110", color: "#f4f1ea", minHeight: "100vh", paddingBottom: "100px", position: "relative" }}>
+      {/* Top Ambient React Bits FluxLines Background */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "700px", pointerEvents: "none", overflow: "hidden", zIndex: 0 }}>
+        <FluxLines
+          colors={["#ff5a1f", "#ffffff", service.color]}
+          speed={0.4}
+          scale={1.5}
+          turbulence={0.9}
+          fluidity={0.12}
+          opacity={0.15}
+          mouseInteraction={true}
+          transparent={true}
+          flowDirection="down"
+        />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 40%, #111110 100%)" }} />
+      </div>
+
       {/* Top Breadcrumb & Studio Header */}
-      <div className="wrap" style={{ maxWidth: "1180px", margin: "0 auto", padding: "130px 24px 0" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", paddingBottom: "24px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+      <div className="wrap" style={{ maxWidth: "1180px", margin: "0 auto", padding: "130px 24px 0", position: "relative", zIndex: 2 }}>
+        <div className="qs-animate-fade" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "16px", paddingBottom: "24px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", font: "600 11px/1 'DM Mono', monospace", letterSpacing: "0.08em", textTransform: "uppercase" }}>
             <Link href="/" className="hover:text-orange-500 transition-colors" style={{ color: "rgba(255,255,255,0.5)", textDecoration: "none" }} onClick={() => playClick()}>
               Quiet Studio
@@ -416,7 +462,7 @@ export default function ServicePage({ onOpenContact }: { onOpenContact?: () => v
         </div>
 
         {/* Hero Section */}
-        <div style={{ padding: "50px 0 60px" }}>
+        <div className="qs-animate-fade" style={{ padding: "50px 0 60px" }}>
           <h1 style={{ font: "800 clamp(2.8rem, 5.8vw, 5.2rem)/1.04 'Cabinet Grotesk', -apple-system, sans-serif", letterSpacing: "-0.035em", color: "#ffffff", maxWidth: "980px", margin: "0 0 28px" }}>
             Conceived with <span style={{ fontFamily: "'Baila', Georgia, serif", fontStyle: "italic", color: "#ff5a1f" }}>{service.headlineItalic}</span>{service.headlineSuffix}
           </h1>
@@ -448,9 +494,9 @@ export default function ServicePage({ onOpenContact }: { onOpenContact?: () => v
         </div>
 
         {/* Key Practice Performance Metrics Strip */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "20px", marginBottom: "70px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "20px", marginBottom: "40px" }}>
           {service.metrics.map((m, idx) => (
-            <div key={idx} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "20px", padding: "28px", display: "flex", flexDirection: "column", gap: "8px" }}>
+            <div key={idx} className="qs-animate-card" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "20px", padding: "28px", display: "flex", flexDirection: "column", gap: "8px" }}>
               <span style={{ font: "800 clamp(2.2rem, 3.4vw, 3rem)/1 'Cabinet Grotesk', sans-serif", color: "#ff5a1f", letterSpacing: "-0.03em" }}>
                 {m.value}
               </span>
@@ -462,6 +508,24 @@ export default function ServicePage({ onOpenContact }: { onOpenContact?: () => v
               </span>
             </div>
           ))}
+        </div>
+
+        {/* React Bits TextLoop Dynamic Capability Ribbon */}
+        <div style={{ margin: "20px 0 60px", overflow: "hidden", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)" }}>
+          <TextLoop
+            text={`${service.title.toUpperCase()} ✦ RAPID SPRINT ✦ PRODUCTION READY ✦ ZERO BLOAT ✦ DIRECT FOUNDER ACCESS`}
+            shape="line"
+            speed={90}
+            direction="forward"
+            separator="✦"
+            fontSize={13}
+            fontWeight={700}
+            letterSpacing={2}
+            uppercase
+            ribbon={false}
+            color="#ff5a1f"
+            style={{ padding: "14px 0", height: "auto" }}
+          />
         </div>
 
         {/* Practice Overview Narrative */}
@@ -620,13 +684,27 @@ export default function ServicePage({ onOpenContact }: { onOpenContact?: () => v
             </Link>
           </div>
 
-          <div style={{ borderRadius: "20px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.12)", aspectRatio: "16/10", background: "#000000" }}>
+          <div style={{ position: "relative", borderRadius: "20px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.12)", aspectRatio: "16/10", background: "#0c0c0e" }}>
             <img
               src={service.featuredProduct.image}
               alt={service.featuredProduct.name}
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
               loading="lazy"
             />
+            {/* Ambient React Bits ElectricLogo Aperture Emblem */}
+            <div style={{ position: "absolute", top: "14px", right: "14px", width: "48px", height: "48px", borderRadius: "50%", background: "rgba(17,17,16,0.85)", border: "1px solid rgba(255,90,31,0.4)", backdropFilter: "blur(8px)", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+              <div style={{ width: "70px", height: "70px", transform: "scale(0.55)" }}>
+                <ElectricLogo
+                  color="#ffffff"
+                  glowColor="#ff5a1f"
+                  scale={0.8}
+                  strands={3}
+                  speed={2.0}
+                  interactive={false}
+                  theme="dark"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -715,3 +793,4 @@ function ArrowDown({ size = 14 }: { size?: number }) {
     </svg>
   );
 }
+

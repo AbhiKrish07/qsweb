@@ -281,7 +281,7 @@ def build_stitched_quiet_studio():
                 </div>
               </summary>
               <div class="qs-service-body">
-                <div class="qs-service-info qs-text-reveal">
+                <div class="qs-service-info">
                   <p>
                     UX/UI &amp; Interface Architecture /<br>
                     Design Systems &amp; Token Libraries /<br>
@@ -316,7 +316,7 @@ def build_stitched_quiet_studio():
                 </div>
               </summary>
               <div class="qs-service-body">
-                <div class="qs-service-info qs-text-reveal">
+                <div class="qs-service-info">
                   <p>
                     High-Performance Web &amp; Mobile Applications /<br>
                     Next.js, React, Node.js, TypeScript &amp; Rust /<br>
@@ -351,7 +351,7 @@ def build_stitched_quiet_studio():
                 </div>
               </summary>
               <div class="qs-service-body">
-                <div class="qs-service-info qs-text-reveal">
+                <div class="qs-service-info">
                   <p>
                     Custom Agentic Workflows &amp; Multi-Agent Swarms /<br>
                     LLM Fine-Tuning &amp; Local On-Device Models (Apple Silicon/NPU) /<br>
@@ -386,7 +386,7 @@ def build_stitched_quiet_studio():
                 </div>
               </summary>
               <div class="qs-service-body">
-                <div class="qs-service-info qs-text-reveal">
+                <div class="qs-service-info">
                   <p>
                     Brand Strategy &amp; Commercial Positioning /<br>
                     Kinetic Typography Systems &amp; Art Direction /<br>
