@@ -899,34 +899,6 @@ function AppShell() {
     };
   }, []);
 
-  // Coordinated Architectural Site Reveal Curtain
-  useEffect(() => {
-    const curtain = document.getElementById("qs-reveal-curtain");
-    if (!curtain) return;
-
-    const statusText = document.getElementById("qs-curtain-status-text");
-
-    const tStatus = setTimeout(() => {
-      if (statusText) statusText.textContent = "SYSTEM READY // REVEALING";
-    }, 850);
-
-    const tReveal = setTimeout(() => {
-      curtain.classList.add("is-revealed");
-    }, 1150);
-
-    const tCleanup = setTimeout(() => {
-      curtain.remove();
-      const styleEl = document.getElementById("qs-curtain-styles");
-      if (styleEl) styleEl.remove();
-    }, 2200);
-
-    return () => {
-      clearTimeout(tStatus);
-      clearTimeout(tReveal);
-      clearTimeout(tCleanup);
-    };
-  }, []);
-
   useEffect(() => {
     // Register GSAP ScrollTrigger
     if (typeof window !== "undefined") {
