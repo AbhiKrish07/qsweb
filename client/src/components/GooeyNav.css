@@ -54,6 +54,8 @@
   top: 0;
   left: 0;
   pointer-events: none;
+  max-width: none !important;
+  max-height: none !important;
 }
 
 .gooey-nav__particle-canvas {
@@ -63,13 +65,17 @@
   height: 100%;
   pointer-events: none;
   z-index: 10;
+  max-width: none !important;
+  max-height: none !important;
 }
 
 .gooey-nav__fallback {
   position: absolute;
   top: 0;
   left: 0;
-  display: none !important;
+  display: none;
+  border-radius: 999px;
+  background: var(--gn-pill);
   pointer-events: none;
 }
 
@@ -120,10 +126,7 @@
 }
 
 .gooey-nav__item[data-active] .gooey-nav__link {
-  background: var(--gn-pill, #ff5a1f) !important;
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  box-shadow: 0 2px 10px rgba(255, 90, 31, 0.45);
+  color: var(--gn-ink);
 }
 
 .gooey-nav__link:focus-visible {
