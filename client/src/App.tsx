@@ -187,15 +187,20 @@ function Header({
       setActiveAgencyKey("news");
     } else if (location.startsWith("/research") || location.startsWith("/foundations")) {
       setActiveProductsKey("foundations");
+      if (studioMode !== "human") {
+        onStudioModeChange("human");
+      }
     } else if (location.startsWith("/about") || location.startsWith("/thesis")) {
       setActiveProductsKey("about");
       setActiveAgencyKey("about");
+    } else if (location.startsWith("/services")) {
+      setActiveAgencyKey("services");
     } else if (location === "/") {
       if (studioMode === "human") {
         setActiveProductsKey("apps");
       }
     }
-  }, [location, studioMode]);
+  }, [location, studioMode, onStudioModeChange]);
 
   const gooeyItems: GooeyNavItem[] = useMemo(() => {
     if (studioMode === "human") {
@@ -283,7 +288,12 @@ function Header({
   const activeNavIndex = useMemo(() => {
     if (studioMode === "human") {
       if (location.startsWith("/blog") || location.startsWith("/notes")) return 1;
-      if (location.startsWith("/research") || location.startsWith("/foundations")) return 2;
+      if (
+        location.startsWith("/research") ||
+        location.startsWith("/foundations") ||
+        activeProductsKey === "foundations"
+      )
+        return 2;
       if (location.startsWith("/about") || location.startsWith("/thesis")) return 3;
       return 0; // Open Core Apps
     } else {
@@ -292,7 +302,7 @@ function Header({
       if (activeAgencyKey === "about" || location.startsWith("/about")) return 2;
       return 0; // Services
     }
-  }, [studioMode, location, activeAgencyKey]);
+  }, [studioMode, location, activeAgencyKey, activeProductsKey]);
 
   const handleDropdownEnter = (menu: "services" | "work" | "about") => {
     if (dropdownTimerRef.current) {
@@ -346,7 +356,11 @@ function Header({
     playClick();
     setMobileNavOpen(false);
 
-    if (href === "/#foundations") {
+    if (href === "/#foundations" || href === "/foundations" || href === "/research") {
+      if (studioMode !== "human") {
+        onStudioModeChange("human");
+      }
+      setActiveProductsKey("foundations");
       setLocation("/research");
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
@@ -748,11 +762,37 @@ function AppShell() {
   const [contactOpen, setContactOpen] = useState(false);
   const [studioMode, setStudioMode] = useState<"human" | "agent">(() => {
     if (typeof window !== "undefined") {
+      const p = window.location.pathname;
+      if (
+        p.startsWith("/research") ||
+        p.startsWith("/foundations") ||
+        p.startsWith("/about") ||
+        p.startsWith("/blog") ||
+        p.startsWith("/thesis") ||
+        p.startsWith("/products")
+      ) {
+        return "human";
+      }
       const saved = localStorage.getItem("quiet-studio-mode");
       if (saved === "human" || saved === "agent") return saved;
     }
     return "agent";
   });
+
+  useEffect(() => {
+    if (
+      location.startsWith("/research") ||
+      location.startsWith("/foundations") ||
+      location.startsWith("/about") ||
+      location.startsWith("/blog") ||
+      location.startsWith("/thesis") ||
+      location.startsWith("/products")
+    ) {
+      if (studioMode !== "human") {
+        setStudioMode("human");
+      }
+    }
+  }, [location, studioMode]);
 
   const handleStudioModeChange = (nextMode: "human" | "agent") => {
     playClick();
@@ -920,6 +960,8 @@ function AppShell() {
             <Route path="/products/:slug" component={ProductPage} />
             <Route path="/research" component={Research} />
             <Route path="/research/:slug" component={ResearchArticle} />
+            <Route path="/foundations" component={Research} />
+            <Route path="/foundations/:slug" component={ResearchArticle} />
             <Route path="/templates" component={Templates} />
             <Route path="/notion-templates" component={Templates} />
             <Route path="/prompt-templates" component={Templates} />

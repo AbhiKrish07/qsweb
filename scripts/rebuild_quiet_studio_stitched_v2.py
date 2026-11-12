@@ -29,6 +29,13 @@ def build_stitched_quiet_studio():
     # 1. HERO SECTION (#hh) — "WE [Square Reel] BUILD BRANDS. ✱"
     hh = soup.find('section', id='hh')
     if hh:
+        hh['data-effet'] = '1'
+        
+        # Decompose any old curtain layer so it never blocks the video reel
+        old_rideau = hh.find('div', class_='hh__rideau')
+        if old_rideau:
+            old_rideau.decompose()
+
         t = hh.find('h1', class_='hh__titre')
         if t:
             t.clear()
@@ -81,6 +88,8 @@ def build_stitched_quiet_studio():
             fl1 = fantome.find('div', class_='mj__l1')
             if fl1:
                 pile = fl1.find('span', class_='mj__pile')
+                if pile:
+                    pile.extract()
                 fl1.clear()
                 m1 = BeautifulSoup('<span aria-hidden="true" class="mj__m"><span class="mj__c" style="--r:0">W</span><span class="mj__c" style="--r:1">E</span></span>', 'html.parser')
                 trou = soup.new_tag('span', **{'class': 'mj__trou'})
@@ -97,19 +106,10 @@ def build_stitched_quiet_studio():
                 l2_ghost = BeautifulSoup('''<span aria-hidden="true" class="mj__m"><span class="mj__c" style="--r:7">B</span><span class="mj__c" style="--r:8">R</span><span class="mj__c" style="--r:9">A</span><span class="mj__c" style="--r:10">N</span><span class="mj__c" style="--r:11">D</span><span class="mj__c" style="--r:12">S</span><span class="mj__c" style="--r:13">.</span></span><span class="etoile mj__etoile"></span>''', 'html.parser')
                 fl2.append(l2_ghost)
 
-        # Curtain Layer (.mj__copie in .hh__rideau)
+        # Decompose any remaining curtain copy if still lingering
         copie = hh.find('div', class_='mj__copie')
         if copie:
-            clead = copie.find('div', class_='mj__lead')
-            if clead: clead.string = 'Creative work, reimagined.'
-            cl1 = copie.find('div', class_='mj__l1')
-            if cl1:
-                cl1.clear()
-                cl1.append(BeautifulSoup('''<span class="mj__m"><span class="mj__c" style="--r:0">W</span><span class="mj__c" style="--r:1">E</span></span> <span class="mj__trou"></span> <span class="mj__m"><span class="mj__c" style="--r:2">B</span><span class="mj__c" style="--r:3">U</span><span class="mj__c" style="--r:4">I</span><span class="mj__c" style="--r:5">L</span><span class="mj__c" style="--r:6">D</span></span>''', 'html.parser'))
-            cl2 = copie.find('div', class_='mj__l2')
-            if cl2:
-                cl2.clear()
-                cl2.append(BeautifulSoup('''<span class="mj__m"><span class="mj__c" style="--r:7">B</span><span class="mj__c" style="--r:8">R</span><span class="mj__c" style="--r:9">A</span><span class="mj__c" style="--r:10">N</span><span class="mj__c" style="--r:11">D</span><span class="mj__c" style="--r:12">S</span><span class="mj__c" style="--r:13">.</span></span><span class="etoile mj__etoile"></span>''', 'html.parser'))
+            copie.decompose()
 
         # Update Video Reel to use uploaded MP4
         reel = hh.find('video', class_='hh__reel')

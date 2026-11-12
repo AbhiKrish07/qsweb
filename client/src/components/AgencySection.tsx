@@ -43,8 +43,11 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         }
 
         // 2. Direct page routes & clean navigation (no scrolling down to footer)
-        if (href === '/#foundations') {
+        if (href === '/#foundations' || href === '/foundations' || href === '/research') {
           e.preventDefault();
+          if (onSwitchToProducts) {
+            onSwitchToProducts();
+          }
           setLocation('/research');
           window.scrollTo({ top: 0, behavior: 'smooth' });
           return;
@@ -899,8 +902,29 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         }
 
         /* Hero Video Square Optical Centering & Guaranteed Visibility */
+        .bitwip-unified-container .hh__rideau,
+        .hh__rideau {
+          display: none !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+          opacity: 0 !important;
+        }
+
+        .bitwip-unified-container .hh {
+          --course: 220svh;
+        }
+
+        .bitwip-unified-container .hh__couche {
+          z-index: 4 !important;
+          pointer-events: none !important;
+        }
+
         .bitwip-unified-container .mj__pile {
           left: calc((100% - var(--c)) / 2 - var(--c) * .28) !important;
+          z-index: 5 !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          pointer-events: auto !important;
         }
         @media (max-width: 900px) {
           .bitwip-unified-container .mj__pile {
@@ -911,10 +935,13 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           opacity: 1 !important;
           display: block !important;
           visibility: visible !important;
+          border-radius: inherit !important;
+          object-fit: cover !important;
         }
         .bitwip-unified-container .hh__carte {
           opacity: 1 !important;
           visibility: visible !important;
+          box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.12) !important;
         }
       `}</style>
 

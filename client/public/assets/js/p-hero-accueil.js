@@ -103,7 +103,7 @@ return Math.hypot(e.clientX - r.left - r.width / 2, e.clientY - r.top - r.height
 ressort([{ el: etoile }], scene, pres);
 scene.addEventListener('touchstart', (e) => { if (e.touches.length === 1 && pres(e.touches[0])) e.preventDefault(); }, { passive: false });
 }
-if (reduit) return;
+if (!reduit) {
 let pencher = null;
 {
 const TX = 1.02, TY = 1.43, ROT = .26, MAX = 40, LISSE = .1;
@@ -137,6 +137,7 @@ sx = e.clientX; sy = e.clientY;
 if (!rq) rq = requestAnimationFrame(pas);
 }, { passive: true });
 else pencher = (x, y) => { incl = [x, y]; if (!rq) rq = requestAnimationFrame(pas); };
+}
 }
 hh.dataset.effet = '1';
 const mots = [...hh.querySelectorAll('.hh__w')];
@@ -229,38 +230,25 @@ if (e > .5 && bis.classList.contains('is-pret')) { if (!relaye) { relaye = true;
 else if (relaye && e <= .5) { relaye = false; reel.currentTime = bis.currentTime; reel.play().catch(() => {}); }
 };
 let tout;
-if (window.ScrollTimeline) {
-const racine = document.documentElement, tl = new ScrollTimeline({ source: racine, axis: 'block' }), anims = new Map();
-const hauteur = () => {
-const m = racine.scrollHeight - racine.clientHeight, t = tl.currentTime?.value, v = scrollY * 100 / t;
-return scrollY > 50 && t > 0 && Math.abs(v / m - 1) < .1 ? v : m;
-};
-let M = 0, attente = 0;
-const construire = () => {
-M = hauteur();
-const o = (p) => B((a + p * course) / M);
-pistes().forEach(([el, pts, f], i) => {
-const kf = [{ offset: 0, ...f(pts[0]) }, ...pts.map((p) => ({ offset: o(p), ...f(p) })), { offset: 1, ...f(pts.at(-1)) }];
-const an = anims.get(i);
-if (an) an.effect.setKeyframes(kf);
-else anims.set(i, el.animate(kf, { timeline: tl, fill: 'both' }));
-});
-};
-tout = () => { mesurer(); construire(); relais(); };
-const verifier = () => { attente = 0; if (Math.abs(hauteur() - M) > 1) construire(); };
-const planifier = () => { clearTimeout(attente); attente = setTimeout(verifier, scrollY > a + course + innerHeight ? 0 : 200); };
-new ResizeObserver(planifier).observe(document.body);
-addEventListener('scroll', () => { relais(); if (attente) planifier(); }, { passive: true });
-} else {
 let image = 0, liste = [];
 const peindre = () => {
 image = 0;
 const p = B((scrollY - a) / course);
-for (const [el, , f] of liste) Object.assign(el.style, f(p));
+for (const [el, , f] of liste) {
+  if (el && typeof f === 'function') Object.assign(el.style, f(p));
+}
 relais();
 };
 tout = () => { mesurer(); liste = pistes(); peindre(); };
 addEventListener('scroll', () => { if (!image) image = requestAnimationFrame(peindre); }, { passive: true });
+if (typeof window !== 'undefined') {
+  const syncLenis = () => {
+    if (window.lenis) {
+      window.lenis.on('scroll', () => { if (!image) image = requestAnimationFrame(peindre); });
+    }
+  };
+  syncLenis();
+  setTimeout(syncLenis, 600);
 }
 let ecran = '';
 const taille = () => innerWidth + 'x' + scene.clientHeight;

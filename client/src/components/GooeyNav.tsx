@@ -269,6 +269,7 @@ const GooeyNav = ({
   const current = Math.min(Math.max(0, activeIndex ?? innerIndex), Math.max(0, items.length - 1));
   const stageRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const particleCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const listRef = useRef<HTMLUListElement | null>(null);
   const overlayRef = useRef<HTMLUListElement | null>(null);
   const fallbackRef = useRef<HTMLSpanElement | null>(null);
@@ -345,6 +346,11 @@ const GooeyNav = ({
       if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;
+      }
+      const pCanvas = particleCanvasRef.current;
+      if (pCanvas) {
+        pCanvas.width = Math.max(1, Math.round(box.width * ratio));
+        pCanvas.height = Math.max(1, Math.round(box.height * ratio));
       }
       rects = Array.from(list.children).map(item => {
         const rect = item.getBoundingClientRect();
@@ -689,9 +695,168 @@ const GooeyNav = ({
       render();
     };
 
+    const pCanvas = particleCanvasRef.current;
+    let sparkList: {
+      startX: number;
+      startY: number;
+      targetX: number;
+      targetY: number;
+      x: number;
+      y: number;
+      t: number;
+      speed: number;
+      arcH: number;
+      size: number;
+      color: string;
+      tail: { x: number; y: number }[];
+    }[] = [];
+    let impactSparks: {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      color: string;
+      life: number;
+    }[] = [];
+    let pRaf = 0;
+
+    const burstParticles = (fromIdx: number, toIdx: number) => {
+      if (!pCanvas || fromIdx < 0 || toIdx < 0 || fromIdx === toIdx) return;
+      const rFrom = rects[fromIdx];
+      const rTo = rects[toIdx];
+      if (!rFrom || !rTo) return;
+
+      const x0 = rFrom.x + rFrom.w / 2;
+      const y0 = rFrom.y + rFrom.h / 2;
+      const x1 = rTo.x + rTo.w / 2;
+      const y1 = rTo.y + rTo.h / 2;
+
+      const paletteColors = ['#ff5a1f', '#ff7a3d', '#ffab70', '#ffffff', '#ff4500'];
+      const count = 28;
+
+      for (let i = 0; i < count; i++) {
+        const speed = 0.024 + Math.random() * 0.032;
+        const arcH = (Math.random() > 0.5 ? -1 : 1) * (14 + Math.random() * 20);
+        sparkList.push({
+          startX: x0 + (Math.random() - 0.5) * rFrom.w * 0.5,
+          startY: y0 + (Math.random() - 0.5) * rFrom.h * 0.4,
+          targetX: x1 + (Math.random() - 0.5) * rTo.w * 0.5,
+          targetY: y1 + (Math.random() - 0.5) * rTo.h * 0.4,
+          x: x0,
+          y: y0,
+          t: 0,
+          speed,
+          arcH,
+          size: 1.6 + Math.random() * 2.5,
+          color: paletteColors[Math.floor(Math.random() * paletteColors.length)],
+          tail: [],
+        });
+      }
+
+      if (!pRaf) {
+        pRaf = requestAnimationFrame(animateParticles);
+      }
+    };
+
+    const animateParticles = () => {
+      if (!pCanvas) return;
+      const pCtx = pCanvas.getContext('2d');
+      if (!pCtx) return;
+
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      pCtx.save();
+      pCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      pCtx.clearRect(0, 0, view.width, view.height);
+
+      for (let i = sparkList.length - 1; i >= 0; i--) {
+        const p = sparkList[i];
+        p.t += p.speed;
+
+        const cx = p.startX + (p.targetX - p.startX) * p.t;
+        const cy = p.startY + (p.targetY - p.startY) * p.t + Math.sin(p.t * Math.PI) * p.arcH;
+
+        p.tail.unshift({ x: p.x, y: p.y });
+        if (p.tail.length > 5) p.tail.pop();
+
+        p.x = cx;
+        p.y = cy;
+
+        if (p.tail.length > 1) {
+          pCtx.beginPath();
+          pCtx.moveTo(p.tail[0].x, p.tail[0].y);
+          for (let j = 1; j < p.tail.length; j++) {
+            pCtx.lineTo(p.tail[j].x, p.tail[j].y);
+          }
+          pCtx.strokeStyle = p.color;
+          pCtx.globalAlpha = Math.max(0, (1 - p.t * 0.7) * 0.55);
+          pCtx.lineWidth = p.size * 0.75;
+          pCtx.stroke();
+        }
+
+        pCtx.beginPath();
+        pCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        pCtx.fillStyle = p.color;
+        pCtx.globalAlpha = Math.max(0, 1 - p.t * 0.25);
+        pCtx.shadowColor = '#ff5a1f';
+        pCtx.shadowBlur = 8;
+        pCtx.fill();
+        pCtx.shadowBlur = 0;
+
+        if (p.t >= 1) {
+          for (let k = 0; k < 4; k++) {
+            const angle = Math.random() * Math.PI * 2;
+            const spd = 0.6 + Math.random() * 2.2;
+            impactSparks.push({
+              x: p.targetX,
+              y: p.targetY,
+              vx: Math.cos(angle) * spd,
+              vy: Math.sin(angle) * spd,
+              size: 1 + Math.random() * 1.5,
+              color: p.color,
+              life: 1,
+            });
+          }
+          sparkList.splice(i, 1);
+        }
+      }
+
+      for (let i = impactSparks.length - 1; i >= 0; i--) {
+        const s = impactSparks[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life -= 0.06;
+
+        pCtx.beginPath();
+        pCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        pCtx.fillStyle = s.color;
+        pCtx.globalAlpha = Math.max(0, s.life);
+        pCtx.fill();
+
+        if (s.life <= 0) {
+          impactSparks.splice(i, 1);
+        }
+      }
+
+      pCtx.restore();
+
+      if (sparkList.length > 0 || impactSparks.length > 0) {
+        pRaf = requestAnimationFrame(animateParticles);
+      } else {
+        pRaf = 0;
+        if (pCtx) {
+          pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+        }
+      }
+    };
+
     const go = (index: number, animate: boolean) => {
       if (index === target) return;
-      if (!rects[index] || !animate || reduced || target < 0) {
+      const from = target;
+      if (from >= 0 && from !== index) {
+        burstParticles(from, index);
+      }
+      if (!rects[index] || !animate || target < 0) {
         settle(index);
         return;
       }
@@ -708,8 +873,8 @@ const GooeyNav = ({
           plan(drop, index, now, false);
         }
       }
-      Array.from(pills.keys()).forEach(from => {
-        if (from !== index) emit(from, index, now);
+      Array.from(pills.keys()).forEach(f => {
+        if (f !== index) emit(f, index, now);
       });
       wake();
     };
@@ -767,6 +932,7 @@ const GooeyNav = ({
     return () => {
       disposed = true;
       cancelAnimationFrame(raf);
+      cancelAnimationFrame(pRaf);
       resizeObserver.disconnect();
       list.removeEventListener('pointerover', onOver as EventListener);
       list.removeEventListener('pointerleave', onLeave as EventListener);
@@ -776,7 +942,7 @@ const GooeyNav = ({
       }
       engineRef.current = null;
     };
-  }, [items.length]);
+  }, [items.map(i => i.label).join(','), palette, activeIndex]);
 
   useEffect(() => {
     engineRef.current?.go(current);
@@ -845,6 +1011,7 @@ const GooeyNav = ({
       {frame && <span className="gooey-nav__rim" />}
       <div ref={stageRef} className="gooey-nav__stage">
         <canvas ref={canvasRef} className="gooey-nav__canvas" aria-hidden="true" />
+        <canvas ref={particleCanvasRef} className="gooey-nav__particle-canvas" aria-hidden="true" />
         <span ref={fallbackRef} className="gooey-nav__fallback" aria-hidden="true" />
         <ul ref={listRef} className="gooey-nav__list">
           {labels(true)}
