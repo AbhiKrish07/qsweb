@@ -7557,21 +7557,50 @@
   position: relative;
 }
 
-/* Safety isolation: prevent any Bitwip cursor or canvas elements from leaking below footer or capturing clicks */
-html[data-studio-mode="human"] .curseur,
+/* Safety isolation: prevent non-cursor Bitwip canvas overlays from blocking clicks */
 html[data-studio-mode="human"] .jonctions,
 html[data-studio-mode="human"] .portail,
-html[data-studio-mode="human"] .sillage,
-html[data-studio-mode="human"] .eclat,
 html[data-studio-mode="human"] .visionneuse {
   display: none !important;
   visibility: hidden !important;
   pointer-events: none !important;
 }
 
-.curseur {
+.curseur,
+.sillage {
   position: fixed !important;
   pointer-events: none !important;
+}
+
+/* Universal Butter-Smooth Scroll Reveals for Titles, Subtitles, Ledes, and Body Text */
+.qs-scroll-reveal,
+.qs-text-reveal,
+[data-qs-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.qs-scroll-reveal.is-in-view,
+.qs-scroll-reveal.is-revealed,
+.qs-text-reveal.is-in-view,
+.qs-text-reveal.is-revealed,
+[data-qs-reveal].is-in-view,
+[data-qs-reveal].is-revealed {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qs-scroll-reveal,
+  .qs-text-reveal,
+  [data-qs-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 /* Anti-FOUC Hard Floor & Zero-Delay Hero Layout */

@@ -24,6 +24,7 @@ import ServicePage from "./pages/ServicePage";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
 import GooeyNav, { GooeyNavItem } from "./components/GooeyNav";
+import { CursorTrail } from "./components/CursorTrail";
 import { isSoundEnabled, toggleSound, playClick } from "./lib/sound";
 
 function ScrollToTop() {
@@ -951,11 +952,62 @@ function AppShell() {
     };
   }, []);
 
+  // Universal Scroll Text Animation Engine for Smooth Scroll
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-revealed", "is-in-view");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    const observeTargets = () => {
+      const selectors = [
+        "h1", "h2", "h3", "h4",
+        ".head__t", ".head__k", ".head__i",
+        ".qs-text-reveal", ".qs-scroll-reveal",
+        ".piste__intro h2", ".piste__intro p",
+        ".mj__lead", ".mj__phr",
+        ".sensee__txt p", ".qs-service-info p",
+        ".quiet-sub", ".section-title", ".section-subtitle"
+      ].join(", ");
+
+      const els = document.querySelectorAll(selectors);
+      els.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          el.classList.add("is-revealed", "is-in-view");
+        } else {
+          el.classList.add("qs-scroll-reveal");
+          observer.observe(el);
+        }
+      });
+    };
+
+    observeTargets();
+    const t1 = setTimeout(observeTargets, 250);
+    const t2 = setTimeout(observeTargets, 800);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      observer.disconnect();
+    };
+  }, [location, studioMode]);
+
   const isAgencyHome = studioMode === "agent" && location === "/";
 
   return (
     <div className={`app-shell ${isAgencyHome ? "agency-shell" : ""}`}>
       <ScrollToTop />
+      <CursorTrail />
       <Header
         dark={dark}
         onToggle={() => setDark((value) => !value)}

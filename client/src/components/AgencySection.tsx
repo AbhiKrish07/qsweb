@@ -287,7 +287,14 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
     const targets = container.querySelectorAll(
       '.head__t, .head__k, .head__i, .qs-service-row summary h3, .piste__intro, .piste__intro h2, .qs-text-reveal, [data-reveal]'
     );
-    targets.forEach((el) => observer.observe(el));
+    targets.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        el.classList.add('is-revealed');
+      } else {
+        observer.observe(el);
+      }
+    });
 
     return () => {
       observer.disconnect();
@@ -624,17 +631,30 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           transform: skewX(-6deg) scale(1.02);
         }
 
-        /* Smooth Text Reveal Animations — Guaranteed Visible & Resilient */
+        /* Smooth Text Reveal Animations — Fluid Kinetic Scroll Transitions */
         .bitwip-unified-container .head__t,
         .bitwip-unified-container .head__k,
         .bitwip-unified-container .head__i,
         .bitwip-unified-container .qs-service-row summary h3,
         .bitwip-unified-container .piste__intro h2,
         .bitwip-unified-container .qs-text-reveal {
+          opacity: 0;
+          transform: translateY(24px);
+          transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+          will-change: opacity, transform;
+        }
+
+        .bitwip-unified-container .head__t.is-revealed,
+        .bitwip-unified-container .head__k.is-revealed,
+        .bitwip-unified-container .head__i.is-revealed,
+        .bitwip-unified-container .qs-service-row summary h3.is-revealed,
+        .bitwip-unified-container .piste__intro h2.is-revealed,
+        .bitwip-unified-container .qs-text-reveal.is-revealed,
+        .bitwip-unified-container .is-in-view,
+        .bitwip-unified-container .is-revealed {
           opacity: 1 !important;
           visibility: visible !important;
           transform: translateY(0) !important;
-          transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .bitwip-unified-container .qs-service-body,
