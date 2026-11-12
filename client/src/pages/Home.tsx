@@ -1013,22 +1013,27 @@ export default function Home({
             <div className="closing-waitlist-wrap">
               <StudioWaitlistForm />
             </div>
-            <a
-              href="mailto:glexionstriker@gmail.com"
+            <button
+              type="button"
               className="primary-button"
               onClick={() => {
                 playClick();
+                if (onOpenContact) {
+                  onOpenContact();
+                } else {
+                  window.location.href = "mailto:hello@thequietstudio.space";
+                }
               }}
             >
               Message the studio <ArrowUpRight size={16} />
-            </a>
+            </button>
           </section>
         </>
       ) : (
         /* =========================================================================
-           AGENCY SPRINT EXPERIENCE (REPLACES AI LAB WITH DEDICATED STUDIO SQUAD)
+           AGENCY SPRINT EXPERIENCE (DEDICATED STUDIO DESIGN & ENGINEERING SQUAD)
            ========================================================================= */
-        <AgencySection />
+        <AgencySection onSwitchToProducts={() => onModeChange?.("human")} onOpenContact={onOpenContact} />
       )}
     </div>
   );

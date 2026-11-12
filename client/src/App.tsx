@@ -797,6 +797,34 @@ function AppShell() {
     };
   }, []);
 
+  // Coordinated Architectural Site Reveal Curtain
+  useEffect(() => {
+    const curtain = document.getElementById("qs-reveal-curtain");
+    if (!curtain) return;
+
+    const statusText = document.getElementById("qs-curtain-status-text");
+
+    const tStatus = setTimeout(() => {
+      if (statusText) statusText.textContent = "SYSTEM READY // REVEALING";
+    }, 850);
+
+    const tReveal = setTimeout(() => {
+      curtain.classList.add("is-revealed");
+    }, 1150);
+
+    const tCleanup = setTimeout(() => {
+      curtain.remove();
+      const styleEl = document.getElementById("qs-curtain-styles");
+      if (styleEl) styleEl.remove();
+    }, 2200);
+
+    return () => {
+      clearTimeout(tStatus);
+      clearTimeout(tReveal);
+      clearTimeout(tCleanup);
+    };
+  }, []);
+
   useEffect(() => {
     // Initialize Lenis smooth scroll for butter-smooth momentum scrolling
     const lenis = new Lenis({
@@ -841,6 +869,18 @@ function AppShell() {
         <div key={`${String(location)}-${studioMode}`} className="page-transition">
           <Switch>
             <Route path="/">{() => <Home mode={studioMode} onModeChange={handleStudioModeChange} onOpenContact={() => setContactOpen(true)} />}</Route>
+            <Route path="/contact">
+              {() => {
+                setTimeout(() => setContactOpen(true), 50);
+                return <Home mode={studioMode} onModeChange={handleStudioModeChange} onOpenContact={() => setContactOpen(true)} />;
+              }}
+            </Route>
+            <Route path="/en/contact">
+              {() => {
+                setTimeout(() => setContactOpen(true), 50);
+                return <Home mode={studioMode} onModeChange={handleStudioModeChange} onOpenContact={() => setContactOpen(true)} />;
+              }}
+            </Route>
             <Route path="/models" component={Models} />
             <Route path="/products/:slug" component={ProductPage} />
             <Route path="/research" component={Research} />
