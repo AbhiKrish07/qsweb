@@ -35,7 +35,10 @@ export interface GooeyNavItem {
   label: string;
   href?: string;
   icon?: ReactNode;
+  iconPosition?: 'start' | 'end';
   onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const DEFAULT_ITEMS: GooeyNavItem[] = [
@@ -292,7 +295,6 @@ const GooeyNav = ({
   settingsRef.current = settings;
 
   const select = (index: number) => {
-    if (index === current) return;
     if (activeIndex === undefined) setInnerIndex(index);
     onChange?.(index, items[index]);
   };
@@ -790,8 +792,9 @@ const GooeyNav = ({
     items.map((item, index) => {
       const content = (
         <>
-          {item.icon && <span className="gooey-nav__icon">{item.icon}</span>}
+          {item.icon && item.iconPosition !== 'end' && <span className="gooey-nav__icon">{item.icon}</span>}
           {item.label && <span className="gooey-nav__label">{item.label}</span>}
+          {item.icon && item.iconPosition === 'end' && <span className="gooey-nav__icon">{item.icon}</span>}
         </>
       );
       if (!interactive) {
@@ -810,7 +813,9 @@ const GooeyNav = ({
           }
           select(index);
           item.onClick?.();
-        }
+        },
+        onMouseEnter: item.onMouseEnter,
+        onMouseLeave: item.onMouseLeave,
       };
       return (
         <li

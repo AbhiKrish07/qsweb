@@ -20,6 +20,7 @@ import System from "./pages/System";
 import Models from "./pages/Models";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
+import GooeyNav, { GooeyNavItem } from "./components/GooeyNav";
 import { isSoundEnabled, toggleSound, playClick } from "./lib/sound";
 
 function ScrollToTop() {
@@ -171,16 +172,15 @@ function Header({
   // Navigation active tabs & sliding orange highlight pill state
   const [activeProductsKey, setActiveProductsKey] = useState<string>("apps");
   const [activeAgencyKey, setActiveAgencyKey] = useState<string>("services");
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, top: 0, width: 0, height: 0, opacity: 0 });
-  const navContainerRef = useRef<HTMLElement | null>(null);
-  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   // Sync active key with route/hash
   useEffect(() => {
     if (location.startsWith("/blog") || location.startsWith("/notes")) {
       setActiveProductsKey("blog");
       setActiveAgencyKey("news");
-    } else if (location.startsWith("/about")) {
+    } else if (location.startsWith("/research") || location.startsWith("/foundations")) {
+      setActiveProductsKey("foundations");
+    } else if (location.startsWith("/about") || location.startsWith("/thesis")) {
       setActiveProductsKey("about");
       setActiveAgencyKey("about");
     } else if (location === "/") {
@@ -190,40 +190,102 @@ function Header({
     }
   }, [location, studioMode]);
 
-  // Recalculate indicator position on active tab or mode change
-  const updateIndicator = () => {
-    const currentKey = studioMode === "human" ? activeProductsKey : activeAgencyKey;
-    const currentBtn = itemRefs.current[currentKey];
-    const container = navContainerRef.current;
-    if (currentBtn && container) {
-      const containerRect = container.getBoundingClientRect();
-      const btnRect = currentBtn.getBoundingClientRect();
-      if (btnRect.width > 0) {
-        setIndicatorStyle({
-          left: btnRect.left - containerRect.left,
-          top: btnRect.top - containerRect.top,
-          width: btnRect.width,
-          height: btnRect.height,
-          opacity: 1,
-        });
-      }
+  const gooeyItems: GooeyNavItem[] = useMemo(() => {
+    if (studioMode === "human") {
+      return [
+        {
+          label: "Open Core Apps",
+          href: "/#apps",
+          onClick: () => {
+            setActiveProductsKey("apps");
+            handleNavClick("/#apps");
+          },
+        },
+        {
+          label: "Blog & Notes",
+          href: "/blog",
+          onClick: () => {
+            setActiveProductsKey("blog");
+            handleNavClick("/blog");
+          },
+        },
+        {
+          label: "Foundations",
+          href: "/research",
+          onClick: () => {
+            setActiveProductsKey("foundations");
+            handleNavClick("/research");
+          },
+        },
+        {
+          label: "About",
+          href: "/about",
+          onClick: () => {
+            setActiveProductsKey("about");
+            handleNavClick("/about");
+          },
+        },
+      ];
+    } else {
+      return [
+        {
+          label: "Services",
+          href: "/#expertises",
+          icon: <ChevronDown size={11} className="capsule-chevron" />,
+          iconPosition: "end",
+          onMouseEnter: () => handleDropdownEnter("services"),
+          onClick: () => {
+            setActiveAgencyKey("services");
+            handleNavClick("/#expertises");
+          },
+        },
+        {
+          label: "Work",
+          href: "/#realisations",
+          icon: <ChevronDown size={11} className="capsule-chevron" />,
+          iconPosition: "end",
+          onMouseEnter: () => handleDropdownEnter("work"),
+          onClick: () => {
+            setActiveAgencyKey("work");
+            handleNavClick("/#realisations");
+          },
+        },
+        {
+          label: "About",
+          href: "/#agence",
+          icon: <ChevronDown size={11} className="capsule-chevron" />,
+          iconPosition: "end",
+          onMouseEnter: () => handleDropdownEnter("about"),
+          onClick: () => {
+            setActiveAgencyKey("about");
+            handleNavClick("/#agence");
+          },
+        },
+        {
+          label: "News",
+          href: "/blog",
+          onClick: () => {
+            setActiveAgencyKey("news");
+            handleNavClick("/blog");
+          },
+        },
+      ];
     }
-  };
+  }, [studioMode, location]);
 
-  useEffect(() => {
-    updateIndicator();
-    const t1 = setTimeout(updateIndicator, 40);
-    const t2 = setTimeout(updateIndicator, 150);
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-    };
-  }, [studioMode, activeProductsKey, activeAgencyKey, location]);
-
-  useEffect(() => {
-    window.addEventListener("resize", updateIndicator);
-    return () => window.removeEventListener("resize", updateIndicator);
-  }, [studioMode, activeProductsKey, activeAgencyKey]);
+  const activeNavIndex = useMemo(() => {
+    if (studioMode === "human") {
+      if (location.startsWith("/blog") || location.startsWith("/notes")) return 1;
+      if (location.startsWith("/research") || location.startsWith("/foundations")) return 2;
+      if (location.startsWith("/about") || location.startsWith("/thesis")) return 3;
+      return 0; // Open Core Apps
+    } else {
+      if (location.startsWith("/blog") || location.startsWith("/notes")) return 3;
+      if (activeAgencyKey === "work") return 1;
+      if (activeAgencyKey === "about" || location.startsWith("/about")) return 2;
+      return 0; // Services
+    }
+  }, [studioMode, location, activeAgencyKey]);
 
   const handleDropdownEnter = (menu: "services" | "work" | "about") => {
     if (dropdownTimerRef.current) {
@@ -429,145 +491,34 @@ function Header({
             </button>
           </div>
 
-          {/* Nav Links with Animated Sliding Orange Pill Highlight */}
-          <nav className="capsule-links" ref={navContainerRef} onMouseLeave={handleDropdownLeave}>
-            {/* The sliding animated orange highlight pill */}
-            <span
-              className="capsule-sliding-indicator"
-              style={{
-                transform: `translate3d(${indicatorStyle.left}px, ${indicatorStyle.top}px, 0)`,
-                width: `${indicatorStyle.width}px`,
-                height: `${indicatorStyle.height}px`,
-                opacity: indicatorStyle.opacity,
+          {/* Nav Links with GooeyNav Particle Animation */}
+          <div className="capsule-gooey-nav-wrap" onMouseLeave={handleDropdownLeave}>
+            <GooeyNav
+              items={gooeyItems}
+              activeIndex={activeNavIndex}
+              theme={dark ? "dark" : "light"}
+              color="#ff5a1f"
+              activeTextColor="#ffffff"
+              colors={["#ff5a1f", "#ff844b", "#ffa07a"]}
+              size="sm"
+              frame={false}
+              particleCount={14}
+              spread={48}
+              animationTime={520}
+              timeVariance={250}
+              gooeyness={0.5}
+              wobble={0.45}
+              hoverEffect={true}
+              onChange={(index) => {
+                const item = gooeyItems[index];
+                if (item?.onClick) {
+                  item.onClick();
+                } else if (item?.href) {
+                  handleNavClick(item.href);
+                }
               }}
             />
-
-            {studioMode === "agent" ? (
-              <>
-                {/* Services Dropdown */}
-                <div className="capsule-nav-item">
-                  <button
-                    ref={(el) => { itemRefs.current["services"] = el; }}
-                    type="button"
-                    className={`capsule-nav-btn ${activeAgencyKey === "services" ? "is-active" : ""} ${activeDropdown === "services" ? "is-open" : ""}`}
-                    onMouseEnter={() => handleDropdownEnter("services")}
-                    onClick={() => {
-                      setActiveAgencyKey("services");
-                      handleNavClick("/#expertises");
-                    }}
-                    aria-expanded={activeDropdown === "services"}
-                  >
-                    Services <ChevronDown size={11} className="capsule-chevron" />
-                  </button>
-                </div>
-
-                {/* Work Dropdown */}
-                <div className="capsule-nav-item">
-                  <button
-                    ref={(el) => { itemRefs.current["work"] = el; }}
-                    type="button"
-                    className={`capsule-nav-btn ${activeAgencyKey === "work" ? "is-active" : ""} ${activeDropdown === "work" ? "is-open" : ""}`}
-                    onMouseEnter={() => handleDropdownEnter("work")}
-                    onClick={() => {
-                      setActiveAgencyKey("work");
-                      handleNavClick("/#realisations");
-                    }}
-                    aria-expanded={activeDropdown === "work"}
-                  >
-                    Work <ChevronDown size={11} className="capsule-chevron" />
-                  </button>
-                </div>
-
-                {/* About Dropdown */}
-                <div className="capsule-nav-item">
-                  <button
-                    ref={(el) => { itemRefs.current["about"] = el; }}
-                    type="button"
-                    className={`capsule-nav-btn ${activeAgencyKey === "about" ? "is-active" : ""} ${activeDropdown === "about" ? "is-open" : ""}`}
-                    onMouseEnter={() => handleDropdownEnter("about")}
-                    onClick={() => {
-                      setActiveAgencyKey("about");
-                      handleNavClick("/#agence");
-                    }}
-                    aria-expanded={activeDropdown === "about"}
-                  >
-                    About <ChevronDown size={11} className="capsule-chevron" />
-                  </button>
-                </div>
-
-                {/* News */}
-                <div className="capsule-nav-item">
-                  <button
-                    ref={(el) => { itemRefs.current["news"] = el; }}
-                    type="button"
-                    className={`capsule-nav-btn ${activeAgencyKey === "news" ? "is-active" : ""}`}
-                    onClick={() => {
-                      setActiveAgencyKey("news");
-                      handleNavClick("/blog");
-                    }}
-                  >
-                    News
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Products Mode Nav Links */}
-                <div className="capsule-nav-item">
-                  <button
-                    ref={(el) => { itemRefs.current["apps"] = el; }}
-                    type="button"
-                    className={`capsule-nav-btn ${activeProductsKey === "apps" ? "is-active" : ""}`}
-                    onClick={() => {
-                      setActiveProductsKey("apps");
-                      handleNavClick("/#apps");
-                    }}
-                  >
-                    Open Core Apps
-                  </button>
-                </div>
-                <div className="capsule-nav-item">
-                  <button
-                    ref={(el) => { itemRefs.current["blog"] = el; }}
-                    type="button"
-                    className={`capsule-nav-btn ${activeProductsKey === "blog" ? "is-active" : ""}`}
-                    onClick={() => {
-                      setActiveProductsKey("blog");
-                      handleNavClick("/blog");
-                    }}
-                  >
-                    Blog &amp; Notes
-                  </button>
-                </div>
-                <div className="capsule-nav-item">
-                  <button
-                    ref={(el) => { itemRefs.current["foundations"] = el; }}
-                    type="button"
-                    className={`capsule-nav-btn ${activeProductsKey === "foundations" ? "is-active" : ""}`}
-                    onClick={() => {
-                      setActiveProductsKey("foundations");
-                      handleNavClick("/research");
-                    }}
-                  >
-                    Research
-                  </button>
-                </div>
-                <div className="capsule-nav-item">
-                  <button
-                    ref={(el) => { itemRefs.current["about"] = el; }}
-                    type="button"
-                    className={`capsule-nav-btn ${activeProductsKey === "about" ? "is-active" : ""}`}
-                    onClick={() => {
-                      setActiveProductsKey("about");
-                      handleNavClick("/about");
-                    }}
-                  >
-                    About
-                  </button>
-                </div>
-              </>
-            )}
-          </nav>
+          </div>
 
           {/* Action Controls */}
           <div className="capsule-actions">

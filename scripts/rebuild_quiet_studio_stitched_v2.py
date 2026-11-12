@@ -116,6 +116,11 @@ def build_stitched_quiet_studio():
         if reel:
             reel['aria-label'] = 'Quiet Studio: Ideas into intelligent products'
             reel['poster'] = '/assets/quiet/craft-software-code.jpg'
+            reel['autoplay'] = ''
+            reel['muted'] = ''
+            reel['playsinline'] = ''
+            reel['loop'] = ''
+            reel['preload'] = 'auto'
             reel.clear()
             reel.append(BeautifulSoup('<source src="/assets/video/quiet-studio-launch.mp4" type="video/mp4"/>', 'html.parser'))
 

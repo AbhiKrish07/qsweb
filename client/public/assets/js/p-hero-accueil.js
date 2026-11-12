@@ -3,12 +3,15 @@ const hh = document.querySelector('.hh');
 if (!hh) return;
 const DEBUT = 0, FIN = 63.0;
 const boucler = (v) => {
-const garde = () => { if (v.currentTime >= FIN || v.currentTime < DEBUT - .05) v.currentTime = DEBUT; };
+if (!v) return;
+const getFin = () => (v.duration && isFinite(v.duration) && v.duration > 1) ? v.duration : FIN;
+const garde = () => { const f = getFin(); if (v.currentTime >= f || v.currentTime < DEBUT - .05) v.currentTime = DEBUT; };
 v.addEventListener('timeupdate', garde);
+v.addEventListener('ended', () => { v.currentTime = DEBUT; v.play().catch(() => {}); });
 if (!v.requestVideoFrameCallback) return;
 let suivi = false;
-const image = () => { garde(); suivi = v.currentTime > FIN - 1; if (suivi) v.requestVideoFrameCallback(image); };
-v.addEventListener('timeupdate', () => { if (!suivi && v.currentTime > FIN - 1) { suivi = true; v.requestVideoFrameCallback(image); } });
+const image = () => { garde(); const f = getFin(); suivi = v.currentTime > f - 1; if (suivi) v.requestVideoFrameCallback(image); };
+v.addEventListener('timeupdate', () => { const f = getFin(); if (!suivi && v.currentTime > f - 1) { suivi = true; v.requestVideoFrameCallback(image); } });
 v.addEventListener('loadstart', () => { suivi = false; });
 };
 const q = (s) => hh.querySelector(s);
@@ -16,8 +19,9 @@ const scene = q('.hh__scene'), carte = q('.hh__carte'), reel = q('.hh__reel'), v
 const titre = q('.hh__titre'), cadreTitre = q('.mj__cadre--titre'), fuseaux = q('.hh__fuseaux'), plaques = [...hh.querySelectorAll('.mj__plaque')];
 boucler(reel);
 const rideau = q('.hh__rideau');
-const oter = () => { rideau.remove(); dispatchEvent(new Event('scroll')); };
+const oter = () => { if (rideau && rideau.parentNode) rideau.remove(); dispatchEvent(new Event('scroll')); };
 if (rideau) Promise.all(rideau.getAnimations({ subtree: true }).map((an) => an.finished)).then(oter, oter);
+else { oter(); }
 const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (!reduit) {
 const partir = () => reel.play().catch(() => {});
@@ -187,11 +191,10 @@ return [el, [d, d + .04, d + .08], (p) => { const t = S(B((p - d) / .08)); retur
 }),
 ];
 let format = '', relaye = false;
+const QUIET_LAUNCH_VIDEO = '/assets/video/quiet-studio-launch.mp4';
 const FILMS = {
-paysage: { av1: '/assets/video/showreel-bitwip-agence-communication-paysage-av1.mp4',
-hevc: '/assets/video/showreel-bitwip-agence-communication-paysage-hevc.mp4', h264: '/assets/video/showreel-bitwip-agence-communication-paysage.mp4' },
-portrait: { av1: '/assets/video/showreel-bitwip-agence-communication-portrait-av1.mp4',
-hevc: '/assets/video/showreel-bitwip-agence-communication-portrait-hevc.mp4', h264: '/assets/video/showreel-bitwip-agence-communication-portrait.mp4' },
+paysage: { av1: QUIET_LAUNCH_VIDEO, hevc: QUIET_LAUNCH_VIDEO, h264: QUIET_LAUNCH_VIDEO },
+portrait: { av1: QUIET_LAUNCH_VIDEO, hevc: QUIET_LAUNCH_VIDEO, h264: QUIET_LAUNCH_VIDEO },
 };
 const charger = () => {
 const f = portrait ? 'portrait' : 'paysage';

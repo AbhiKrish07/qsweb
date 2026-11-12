@@ -375,7 +375,7 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
       };
       hydrateImages();
 
-      // 4. Sequentially load Bitwip client runtime scripts without duplication
+      // 4. Load Bitwip client runtime scripts and re-evaluate on freshly mounted DOM
       const scripts = [
         '/assets/js/bitwip.js',
         '/assets/js/p-variantes.js',
@@ -386,8 +386,7 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         return new Promise((resolve) => {
           const existing = document.querySelector(`script[data-bitwip-script="${src}"]`);
           if (existing) {
-            resolve();
-            return;
+            existing.remove();
           }
           const s = document.createElement('script');
           s.src = src;
@@ -401,11 +400,21 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
 
       (async () => {
         await loadScript('/assets/js/bitwip.js');
-        await Promise.all([
-          loadScript('/assets/js/p-variantes.js'),
-          loadScript('/assets/js/p-hero-accueil.js'),
-        ]);
+        await loadScript('/assets/js/p-variantes.js');
+        await loadScript('/assets/js/p-hero-accueil.js');
         hydrateImages();
+
+        // Ensure Hero Video starts and plays reliably
+        const reel = containerRef.current?.querySelector<HTMLVideoElement>('.hh__reel');
+        if (reel) {
+          reel.muted = true;
+          reel.defaultMuted = true;
+          reel.playsInline = true;
+          reel.loop = true;
+          reel.preload = 'auto';
+          reel.play().catch(() => {});
+        }
+
         window.dispatchEvent(new Event('DOMContentLoaded'));
         window.dispatchEvent(new Event('load'));
         window.dispatchEvent(new Event('scroll'));
@@ -868,7 +877,7 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           }
         }
 
-        /* Hero Video Square Optical Centering */
+        /* Hero Video Square Optical Centering & Guaranteed Visibility */
         .bitwip-unified-container .mj__pile {
           left: calc((100% - var(--c)) / 2 - var(--c) * .28) !important;
         }
@@ -876,6 +885,15 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           .bitwip-unified-container .mj__pile {
             left: calc(50% - var(--c) * .551) !important;
           }
+        }
+        .bitwip-unified-container .hh__reel {
+          opacity: 1 !important;
+          display: block !important;
+          visibility: visible !important;
+        }
+        .bitwip-unified-container .hh__carte {
+          opacity: 1 !important;
+          visibility: visible !important;
         }
       `}</style>
 
