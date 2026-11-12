@@ -255,7 +255,7 @@ def build_stitched_quiet_studio():
           <header class="head" style="margin-bottom:36px;">
             <p class="head__k label" style="color:#ff5a1f;font:700 12px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;"><span class="head__n" style="color:#ff5a1f;">02</span>Services</p>
             <h2 class="head__t" id="t-services" style="font-family:'Epure Titres',serif,sans-serif;font-size:clamp(3.5rem,7vw,6.5rem);font-weight:400;letter-spacing:-0.03em;color:#ffffff;display:flex;align-items:center;gap:12px;">
-              Our services<span style="font-family:'Cabinet Grotesk',sans-serif;color:#ffffff;">.</span>
+              Our <span class="baila" style="font-family:'Baila',Georgia,serif;font-style:italic;color:#ff5a1f;display:inline-block;margin-left:0.22em;">services</span><span style="font-family:'Cabinet Grotesk',sans-serif;color:#ffffff;">.</span>
               <span aria-hidden="true" class="etoile" style="display:inline-block;width:32px;height:32px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/etoile-huit.svg);mask-image:url(/assets/img/formes/etoile-huit.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
             </h2>
           </header>

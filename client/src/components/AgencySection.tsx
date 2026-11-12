@@ -511,6 +511,16 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           font-weight: 700 !important;
         }
 
+        /* Services Section Title Baila Styling */
+        .bitwip-unified-container #expertises .head__t .baila,
+        .bitwip-unified-container #t-services .baila {
+          font-family: 'Baila', Georgia, serif !important;
+          font-style: italic !important;
+          color: #ff5a1f !important;
+          display: inline-block !important;
+          margin-left: 0.22em !important;
+        }
+
         /* Services Accordion (#expertises) */
         .qs-service-row summary::-webkit-details-marker {
           display: none !important;
