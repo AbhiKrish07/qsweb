@@ -689,6 +689,34 @@ function Header({
               </div>
             </div>
 
+            {/* Mobile Quick Search (⌘K) */}
+            <button
+              className="mobile-search-trigger"
+              onClick={() => {
+                setMobileNavOpen(false);
+                onOpenCommand();
+              }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                width: "100%",
+                padding: "10px 14px",
+                margin: "8px 0 6px",
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                borderRadius: "8px",
+                color: "rgba(255, 255, 255, 0.7)",
+                font: "500 11.5px 'DM Mono', monospace",
+                cursor: "pointer",
+                textAlign: "left",
+              }}
+            >
+              <Search size={14} style={{ color: "#ff5a1f" }} />
+              <span style={{ flex: 1 }}>Search studio (⌘K)...</span>
+              <span style={{ font: "600 9px 'DM Mono', monospace", color: "rgba(255, 255, 255, 0.4)", border: "1px solid rgba(255, 255, 255, 0.15)", padding: "2px 5px", borderRadius: "4px" }}>⌘K</span>
+            </button>
+
             <div className="mobile-nav-links">
               {navLinks.map((link, idx) => {
                 const isActive =
@@ -708,6 +736,42 @@ function Header({
                   </button>
                 );
               })}
+            </div>
+
+            {/* Direct Practices Links */}
+            <div style={{ padding: "12px 0 16px", borderTop: "1px solid rgba(255, 255, 255, 0.08)" }}>
+              <span style={{ display: "block", font: "700 9.5px 'DM Mono', monospace", color: "#ff5a1f", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "10px" }}>
+                CORE PRACTICES
+              </span>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "6px" }}>
+                {MEGA_MENUS.services.items.map((srv, idx) => (
+                  <a
+                    key={idx}
+                    href={srv.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMobileNavOpen(false);
+                      setLocation(srv.href);
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "8px 12px",
+                      background: "rgba(255, 255, 255, 0.03)",
+                      border: "1px solid rgba(255, 255, 255, 0.06)",
+                      borderRadius: "6px",
+                      color: "rgba(255, 255, 255, 0.8)",
+                      textDecoration: "none",
+                      fontSize: "12.5px",
+                      fontWeight: 500,
+                    }}
+                  >
+                    <span>{srv.title}</span>
+                    <ArrowRight size={12} style={{ color: "rgba(255, 255, 255, 0.35)" }} />
+                  </a>
+                ))}
+              </div>
             </div>
 
             <div className="mobile-nav-foot">

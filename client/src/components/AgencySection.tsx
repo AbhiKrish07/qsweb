@@ -920,8 +920,11 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           pointer-events: auto !important;
         }
         @media (max-width: 900px) {
-          .bitwip-unified-container .mj__pile {
+          .bitwip-unified-container .mj__pile,
+          .mj__fantome .mj__pile {
             left: calc(50% - var(--c) * .551) !important;
+            top: auto !important;
+            bottom: calc(var(--c) * .136) !important;
           }
         }
         .bitwip-unified-container .hh__reel {
