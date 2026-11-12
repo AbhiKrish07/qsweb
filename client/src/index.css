@@ -686,6 +686,7 @@
   }
   .site-header .mobile-menu-toggle {
     display: flex !important;
+    pointer-events: auto !important;
     align-items: center;
     justify-content: center;
     width: 36px;
@@ -1042,6 +1043,7 @@
 /* Mobile Collapsible Navigation Drawer */
 .site-header .mobile-menu-toggle {
   display: none;
+  pointer-events: auto !important;
   background: rgba(26, 26, 26, 0.94);
   -webkit-backdrop-filter: blur(28px) saturate(1.8);
   backdrop-filter: blur(28px) saturate(1.8);
