@@ -7639,11 +7639,21 @@ html[data-studio-mode="human"] .visionneuse {
   max-width: 100vw !important;
 }
 
-/* Global Viewport & Container Guard: Stop all accidental horizontal panning / track displacement */
+/* Guard against horizontal track overflows on mobile and tablets */
+.ag-vie,
+.piste,
+#agence,
+#realisations,
+#expertises {
+  overflow-x: clip !important;
+  max-width: 100vw !important;
+}
+
+/* Global Viewport & Container Guard: Stop accidental horizontal panning / track displacement */
 html,
 body {
   overflow-x: hidden !important;
-  max-width: 100% !important;
+  max-width: 100vw !important;
   width: 100% !important;
   position: relative;
 }
@@ -7654,29 +7664,12 @@ body {
 main.vx--allegee,
 .bitwip-unified-container {
   overflow-x: clip !important;
-  max-width: 100% !important;
+  max-width: 100vw !important;
   width: 100% !important;
   position: relative;
 }
 
-/* Guard against horizontal track overflows on mobile and tablets */
-.ag-vie,
-.piste,
-#hh,
-#agence,
-#realisations,
-#expertises,
-#confiance,
-#workspace,
-#pricing,
-#faq,
-#contact {
-  overflow-x: clip !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-/* Universal section wrapper padding floor across all viewports */
+/* Universal section wrapper padding floor: prevents text from ever clipping at left edge */
 .wrap {
   width: 100% !important;
   max-width: var(--wrap, 1680px) !important;
@@ -7686,7 +7679,7 @@ main.vx--allegee,
   box-sizing: border-box !important;
 }
 
-/* Agency section alignment & text margin floor */
+/* Agency section text alignment floor */
 #agence {
   width: 100% !important;
   max-width: 100% !important;
@@ -7713,184 +7706,48 @@ main.vx--allegee,
   text-wrap: pretty !important;
 }
 
+/* Realisations (Project Showcase) text alignment floor (strictly preserves all pin & scroll animations) */
+#realisations .piste__intro .head__t {
+  box-sizing: border-box !important;
+  text-wrap: pretty !important;
+}
+
+/* FAQ section text alignment and full-width accordion on all screen sizes */
 @media (max-width: 900px) {
-  #agence .head__t,
-  #agence .sensee__txt,
-  #agence .sensee__chiffres {
+  #faq .wrap.faq-accueil {
+    display: block !important;
+    width: 100% !important;
+  }
+  #faq .faq,
+  #faq .faq--accueil {
+    display: block !important;
+    width: 100% !important;
+  }
+  #faq .faq__list,
+  #faq .faq__accordeon {
     grid-column: 1 / -1 !important;
     width: 100% !important;
     max-width: 100% !important;
     margin-inline-start: 0 !important;
-  }
-}
-
-/* ==========================================================================
-   Project Showcase (#realisations) Mobile & Tablet Alignment & Track Flow
-   ========================================================================== */
-#realisations {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  overflow: clip !important;
-}
-
-@media (max-width: 1024px) {
-  #realisations .piste__scene {
-    position: relative !important;
-    height: auto !important;
-    top: auto !important;
-    overflow: visible !important;
     display: block !important;
-    padding: 0 !important;
-    margin: 0 !important;
   }
-  #realisations .piste__rail {
-    display: block !important;
+  #faq .qa {
     width: 100% !important;
     max-width: 100% !important;
-    transform: none !important;
-    position: relative !important;
   }
-  #realisations .piste__intro {
-    flex: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding-inline: max(20px, env(safe-area-inset-left, 20px), clamp(20px, 4vw, 64px)) !important;
-    margin-bottom: 24px !important;
-    box-sizing: border-box !important;
-  }
-  #realisations .piste__intro .piste__haut,
-  #realisations .piste__intro .head__t {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-  #realisations .piste__cartes {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    overscroll-behavior-x: contain !important;
-    scroll-snap-type: x mandatory !important;
-    -webkit-overflow-scrolling: touch !important;
-    padding-left: max(20px, env(safe-area-inset-left, 20px), clamp(20px, 4vw, 64px)) !important;
-    padding-right: max(20px, env(safe-area-inset-right, 20px), clamp(20px, 4vw, 64px)) !important;
-    gap: 20px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    scrollbar-width: none !important;
-  }
-  #realisations .piste__cartes::-webkit-scrollbar {
-    display: none !important;
-  }
-  #realisations .piste__cartes > .qr {
-    flex: 0 0 clamp(280px, 80vw, 460px) !important;
-    width: clamp(280px, 80vw, 460px) !important;
-    scroll-snap-align: start !important;
-    box-sizing: border-box !important;
-  }
-}
-
-/* ==========================================================================
-   FAQ Section Alignment & Full-Width Accordion Fix (Eliminates 14px sliver)
-   ========================================================================== */
-#faq {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-#faq .wrap.faq-accueil {
-  width: 100% !important;
-  max-width: var(--wrap, 1680px) !important;
-  box-sizing: border-box !important;
-}
-
-#faq .faq,
-#faq .faq--accueil {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-#faq .faq__accordeon,
-#faq .faq__list {
-  grid-column: 1 / -1 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  margin-inline-start: 0 !important;
-  box-sizing: border-box !important;
-}
-
-#faq .qa {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-#faq .qa summary {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  cursor: pointer;
-  padding: clamp(16px, 1.4vw, 22px) 0 !important;
-  user-select: none;
-}
-
-#faq .qa .qa__ico {
-  flex-shrink: 0 !important;
-  margin-left: 16px !important;
-}
-
-#faq .qa .qa__a {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  padding: 0 0 20px 0 !important;
-}
-
-#faq .qa .qa__a p {
-  width: 100% !important;
-  max-width: 68ch !important;
-  box-sizing: border-box !important;
-  font-size: var(--t-body, 1.0625rem) !important;
-  line-height: 1.6 !important;
 }
 
 @media (min-width: 901px) {
-  html:root :is(.faq-accueil, .faq-bloc) {
-    display: grid !important;
-    grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-    column-gap: var(--g) !important;
-  }
-  html:root :is(.faq-accueil, .faq-bloc) > .head {
-    grid-column: 1 / span 4 !important;
-  }
-  html:root :is(.faq--accueil, .faq--bloc) {
+  #faq .faq--accueil,
+  #faq .faq--bloc {
     grid-column: 5 / -1 !important;
     margin-inline-start: 0 !important;
     width: 100% !important;
   }
-  html:root :is(.faq--accueil, .faq--bloc) .faq__accordeon,
-  html:root :is(.faq--accueil, .faq--bloc) .faq__list {
+  #faq .faq__accordeon,
+  #faq .faq__list {
     width: 100% !important;
-  }
-}
-
-@media (max-width: 900px) {
-  html:root :is(.faq-accueil, .faq-bloc) {
-    display: block !important;
-    width: 100% !important;
-  }
-  html:root :is(.faq-accueil, .faq-bloc) > .head {
-    width: 100% !important;
-    margin-bottom: 32px !important;
-  }
-  html:root :is(.faq--accueil, .faq--bloc) {
-    width: 100% !important;
-    display: block !important;
+    max-width: 100% !important;
   }
 }
 
