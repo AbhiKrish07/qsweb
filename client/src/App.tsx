@@ -18,6 +18,7 @@ import Templates from "./pages/Templates";
 import Changelog from "./pages/Changelog";
 import System from "./pages/System";
 import Models from "./pages/Models";
+import ServicePage from "./pages/ServicePage";
 import CommandPalette from "./components/CommandPalette";
 import ContactModal from "./components/ContactModal";
 import GooeyNav, { GooeyNavItem } from "./components/GooeyNav";
@@ -41,28 +42,28 @@ const MEGA_MENUS = {
       {
         title: "Product Strategy & Design",
         desc: "PRDs, UX/UI, wireframes, interaction design, token systems & prototypes.",
-        href: "/#expertises",
+        href: "/services/product-strategy-design",
         shape: "sceau",
         color: "#b4a0e5",
       },
       {
         title: "Software & Product Engineering",
         desc: "Full-stack Next.js 15, TypeScript, PostgreSQL, low-latency APIs & dashboards.",
-        href: "/#expertises",
+        href: "/services/software-product-engineering",
         shape: "fleur",
         color: "#ff5a1f",
       },
       {
         title: "Applied AI & Intelligent Systems",
         desc: "RAG architectures, multi-agent workflows, quantized edge inference & pipelines.",
-        href: "/#expertises",
+        href: "/services/applied-ai-intelligent-systems",
         shape: "etoile-huit",
         color: "#eab308",
       },
       {
         title: "Brand, Experience & Launch",
         desc: "Product positioning, design systems, narrative, landing pages & conversion.",
-        href: "/#expertises",
+        href: "/services/brand-experience-launch",
         shape: "trefle",
         color: "#22c55e",
       },
@@ -880,6 +881,9 @@ function AppShell() {
                 setTimeout(() => setContactOpen(true), 50);
                 return <Home mode={studioMode} onModeChange={handleStudioModeChange} onOpenContact={() => setContactOpen(true)} />;
               }}
+            </Route>
+            <Route path="/services/:slug">
+              {() => <ServicePage onOpenContact={() => setContactOpen(true)} />}
             </Route>
             <Route path="/models" component={Models} />
             <Route path="/products/:slug" component={ProductPage} />

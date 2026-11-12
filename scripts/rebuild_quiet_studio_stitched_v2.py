@@ -289,7 +289,7 @@ def build_stitched_quiet_studio():
                     Tactile Click &amp; Audio Feedback /<br>
                     Interactive Figma &amp; React Prototypes
                   </p>
-                  <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
+                  <a href="/services/product-strategy-design" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
                     <span>Give your design &amp; software engineering a clear structure</span>
                     <span>→</span>
                     <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
@@ -324,7 +324,7 @@ def build_stitched_quiet_studio():
                     API Integrations, Real-Time Sync &amp; Database Design /<br>
                     Production Infrastructure &amp; CI/CD Pipelines
                   </p>
-                  <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
+                  <a href="/services/software-product-engineering" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
                     <span>Ship production software that scales with your ambition</span>
                     <span>→</span>
                     <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
@@ -359,7 +359,7 @@ def build_stitched_quiet_studio():
                     Intelligent Automation Pipelines &amp; Workspaces /<br>
                     Autonomous Research, Synthesis &amp; Code Synthesis
                   </p>
-                  <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
+                  <a href="/services/applied-ai-intelligent-systems" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
                     <span>Turn complex AI capabilities into simple, useful software</span>
                     <span>→</span>
                     <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
@@ -394,7 +394,7 @@ def build_stitched_quiet_studio():
                     Living Design Tokens &amp; Digital Style Guides /<br>
                     Launch Collateral, Keynotes &amp; Interactive Showcases
                   </p>
-                  <a href="#contact" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
+                  <a href="/services/brand-experience-launch" class="qs-service-cta" style="display:inline-flex;align-items:center;gap:10px;color:#ff5a1f;font-size:1.05rem;font-weight:600;text-decoration:underline;text-underline-offset:6px;">
                     <span>Build an enduring identity that cuts through the noise</span>
                     <span>→</span>
                     <span style="display:inline-block;width:16px;height:16px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/sceau.svg);mask-image:url(/assets/img/formes/sceau.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
