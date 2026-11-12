@@ -252,9 +252,9 @@ def build_stitched_quiet_studio():
         exp['class'] = ['sec']
         services_section_html = '''
         <div class="wrap" style="padding:0 0 24px;">
-          <header class="head" style="margin-bottom:36px;">
+          <header class="head qs-text-reveal" style="margin-bottom:36px;">
             <p class="head__k label" style="color:#ff5a1f;font:700 12px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;"><span class="head__n" style="color:#ff5a1f;">02</span>Services</p>
-            <h2 class="head__t" id="t-services" style="font-family:'Epure Titres',serif,sans-serif;font-size:clamp(3.5rem,7vw,6.5rem);font-weight:400;letter-spacing:-0.03em;color:#ffffff;display:flex;align-items:center;gap:12px;">
+            <h2 class="head__t qs-text-reveal" id="t-services" style="font-family:'Epure Titres',serif,sans-serif;font-size:clamp(3.5rem,7vw,6.5rem);font-weight:400;letter-spacing:-0.03em;color:#ffffff;display:flex;align-items:center;gap:12px;">
               Our <span class="baila" style="font-family:'Baila',Georgia,serif;font-style:italic;color:#ff5a1f;display:inline-block;margin-left:0.22em;">services</span><span style="font-family:'Cabinet Grotesk',sans-serif;color:#ffffff;">.</span>
               <span aria-hidden="true" class="etoile" style="display:inline-block;width:32px;height:32px;background:#ff5a1f;-webkit-mask-image:url(/assets/img/formes/etoile-huit.svg);mask-image:url(/assets/img/formes/etoile-huit.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
             </h2>
@@ -266,7 +266,7 @@ def build_stitched_quiet_studio():
               <summary style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;">
                 <div style="display:flex;align-items:center;gap:20px;">
                   <span style="width:20px;height:20px;background:#a3e635;display:inline-block;-webkit-mask-image:url(/assets/img/formes/soleil.svg);mask-image:url(/assets/img/formes/soleil.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
-                  <h3 style="font:700 clamp(1.8rem,3.2vw,2.75rem)/1.15 'Cabinet Grotesk',sans-serif;color:#ffffff;letter-spacing:-0.02em;margin:0;">
+                  <h3 class="qs-text-reveal" style="font:700 clamp(1.8rem,3.2vw,2.75rem)/1.15 'Cabinet Grotesk',sans-serif;color:#ffffff;letter-spacing:-0.02em;margin:0;">
                     Product Design &amp; Systems
                   </h3>
                 </div>
@@ -276,7 +276,7 @@ def build_stitched_quiet_studio():
                 </div>
               </summary>
               <div class="qs-service-body">
-                <div class="qs-service-info">
+                <div class="qs-service-info qs-text-reveal">
                   <p>
                     UX/UI &amp; Interface Architecture /<br>
                     Design Systems &amp; Token Libraries /<br>
@@ -301,7 +301,7 @@ def build_stitched_quiet_studio():
               <summary style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;">
                 <div style="display:flex;align-items:center;gap:20px;">
                   <span style="width:20px;height:20px;background:#f472b6;display:inline-block;-webkit-mask-image:url(/assets/img/formes/etoile-huit.svg);mask-image:url(/assets/img/formes/etoile-huit.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
-                  <h3 style="font:700 clamp(1.8rem,3.2vw,2.75rem)/1.15 'Cabinet Grotesk',sans-serif;color:#ffffff;letter-spacing:-0.02em;margin:0;">
+                  <h3 class="qs-text-reveal" style="font:700 clamp(1.8rem,3.2vw,2.75rem)/1.15 'Cabinet Grotesk',sans-serif;color:#ffffff;letter-spacing:-0.02em;margin:0;">
                     Full-Stack Software Engineering
                   </h3>
                 </div>
@@ -311,7 +311,7 @@ def build_stitched_quiet_studio():
                 </div>
               </summary>
               <div class="qs-service-body">
-                <div class="qs-service-info">
+                <div class="qs-service-info qs-text-reveal">
                   <p>
                     High-Performance Web &amp; Mobile Applications /<br>
                     Next.js, React, Node.js, TypeScript &amp; Rust /<br>
@@ -336,7 +336,7 @@ def build_stitched_quiet_studio():
               <summary style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;">
                 <div style="display:flex;align-items:center;gap:20px;">
                   <span style="width:20px;height:20px;background:#4ade80;display:inline-block;-webkit-mask-image:url(/assets/img/formes/trefle.svg);mask-image:url(/assets/img/formes/trefle.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
-                  <h3 style="font:700 clamp(1.8rem,3.2vw,2.75rem)/1.15 'Cabinet Grotesk',sans-serif;color:#ffffff;letter-spacing:-0.02em;margin:0;">
+                  <h3 class="qs-text-reveal" style="font:700 clamp(1.8rem,3.2vw,2.75rem)/1.15 'Cabinet Grotesk',sans-serif;color:#ffffff;letter-spacing:-0.02em;margin:0;">
                     Applied AI &amp; Intelligent Systems
                   </h3>
                 </div>
@@ -346,7 +346,7 @@ def build_stitched_quiet_studio():
                 </div>
               </summary>
               <div class="qs-service-body">
-                <div class="qs-service-info">
+                <div class="qs-service-info qs-text-reveal">
                   <p>
                     Custom Agentic Workflows &amp; Multi-Agent Swarms /<br>
                     LLM Fine-Tuning &amp; Local On-Device Models (Apple Silicon/NPU) /<br>
@@ -371,7 +371,7 @@ def build_stitched_quiet_studio():
               <summary style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;">
                 <div style="display:flex;align-items:center;gap:20px;">
                   <span style="width:20px;height:20px;background:#c084fc;display:inline-block;-webkit-mask-image:url(/assets/img/formes/fleur.svg);mask-image:url(/assets/img/formes/fleur.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span>
-                  <h3 style="font:700 clamp(1.8rem,3.2vw,2.75rem)/1.15 'Cabinet Grotesk',sans-serif;color:#ffffff;letter-spacing:-0.02em;margin:0;">
+                  <h3 class="qs-text-reveal" style="font:700 clamp(1.8rem,3.2vw,2.75rem)/1.15 'Cabinet Grotesk',sans-serif;color:#ffffff;letter-spacing:-0.02em;margin:0;">
                     Brand Identity &amp; Product Narrative
                   </h3>
                 </div>
@@ -381,7 +381,7 @@ def build_stitched_quiet_studio():
                 </div>
               </summary>
               <div class="qs-service-body">
-                <div class="qs-service-info">
+                <div class="qs-service-info qs-text-reveal">
                   <p>
                     Brand Strategy &amp; Commercial Positioning /<br>
                     Kinetic Typography Systems &amp; Art Direction /<br>

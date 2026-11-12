@@ -244,6 +244,40 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
     };
   }, []);
 
+  // Scroll Text Reveal Controller (adds smooth reveal animation to all section text)
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    if (typeof IntersectionObserver === 'undefined') {
+      container.querySelectorAll('.qs-text-reveal, .head__t, .head__k, .head__i, [data-reveal]').forEach((el) => {
+        el.classList.add('is-revealed');
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    const targets = container.querySelectorAll(
+      '.head__t, .head__k, .head__i, .qs-service-row summary h3, .piste__intro, .piste__intro h2, .qs-text-reveal, [data-reveal]'
+    );
+    targets.forEach((el) => observer.observe(el));
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     // 1. Initialize global helper functions required by Bitwip before scripts run
     if (typeof window !== 'undefined') {
@@ -366,9 +400,11 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
       };
 
       (async () => {
-        for (const src of scripts) {
-          await loadScript(src);
-        }
+        await loadScript('/assets/js/bitwip.js');
+        await Promise.all([
+          loadScript('/assets/js/p-variantes.js'),
+          loadScript('/assets/js/p-hero-accueil.js'),
+        ]);
         hydrateImages();
         window.dispatchEvent(new Event('DOMContentLoaded'));
         window.dispatchEvent(new Event('load'));
@@ -536,6 +572,34 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           color: #ff5a1f !important;
           display: inline-block !important;
           margin-left: 0.22em !important;
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .bitwip-unified-container #t-services:hover .baila {
+          transform: skewX(-6deg) scale(1.02);
+        }
+
+        /* Smooth Text Reveal Animations */
+        .bitwip-unified-container .head__t,
+        .bitwip-unified-container .head__k,
+        .bitwip-unified-container .head__i,
+        .bitwip-unified-container .qs-service-row summary h3,
+        .bitwip-unified-container .piste__intro h2,
+        .bitwip-unified-container .qs-text-reveal {
+          opacity: 0;
+          transform: translateY(22px);
+          transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+          will-change: opacity, transform;
+        }
+
+        .bitwip-unified-container .is-revealed,
+        .bitwip-unified-container .head__t.is-revealed,
+        .bitwip-unified-container .head__k.is-revealed,
+        .bitwip-unified-container .head__i.is-revealed,
+        .bitwip-unified-container .qs-service-row summary h3.is-revealed,
+        .bitwip-unified-container .piste__intro h2.is-revealed,
+        .bitwip-unified-container .qs-text-reveal.is-revealed {
+          opacity: 1 !important;
+          transform: translateY(0) !important;
         }
 
         /* Services Accordion (#expertises) */
@@ -543,10 +607,33 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           display: none !important;
         }
         .qs-service-row summary {
-          transition: color 0.2s ease;
+          transition: color 0.25s ease;
+        }
+        .qs-service-row summary h3 {
+          transition: color 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
         .qs-service-row summary:hover h3 {
           color: #ff5a1f !important;
+          transform: translateX(6px) !important;
+        }
+        .qs-service-row summary:hover .qs-accordion-icon {
+          transform: scale(1.08) rotate(90deg) !important;
+        }
+        .qs-service-row .qs-accordion-icon {
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease !important;
+        }
+        .qs-service-row[open] .qs-service-body {
+          animation: qs-service-expand 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        @keyframes qs-service-expand {
+          from {
+            opacity: 0;
+            transform: translateY(14px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         .qs-service-row[open] .icon-open {
           display: block !important;
@@ -710,16 +797,16 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           padding-bottom: 24px !important;
         }
         .bitwip-unified-container #expertises {
-          padding-top: 24px !important;
-          padding-bottom: 20px !important;
+          padding-top: clamp(68px, 7.5vw, 96px) !important;
+          padding-bottom: 24px !important;
           scroll-margin-top: 80px !important;
         }
         .bitwip-unified-container #expertises .wrap {
           padding-top: 0 !important;
-          padding-bottom: 20px !important;
+          padding-bottom: 24px !important;
         }
         .bitwip-unified-container #expertises .head {
-          margin-bottom: 36px !important;
+          margin-bottom: 38px !important;
         }
         .bitwip-unified-container #realisations {
           padding-top: 32px !important;
