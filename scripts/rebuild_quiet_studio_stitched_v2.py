@@ -476,23 +476,7 @@ def build_stitched_quiet_studio():
                 </div>
               </article>
 
-              <!-- Case 3: Performance Metric Card (.qr-chiffre) -->
-              <article class="qr-chiffre" data-metier="activation">
-                <div class="qr-chiffre__haut">
-                  <p class="qr-chiffre__client">Local-First Edge Execution</p>
-                  <p class="qr-chiffre__tags"><span class="qr-chiffre__canal"><span class="forme forme--trefle forme--vert" aria-hidden="true"></span>Neural Latency</span><span class="tag">Apple Silicon</span></p>
-                </div>
-                <div class="qr-chiffre__milieu">
-                  <p class="qr-chiffre__n" data-counts><span data-count="0.2" data-decimals="1">0.2</span><span class="qr-chiffre__s">&#8239;ms</span></p>
-                  <p class="qr-chiffre__u">local inference latency with zero cloud dependency</p>
-                </div>
-                <div class="qr-chiffre__pied">
-                  <p class="qr-chiffre__t">Zero API subscriptions, zero latency, zero telemetry. High-velocity computing directly on Apple Silicon &amp; edge NPUs.</p>
-                  <a class="lnk qr-chiffre__lien" href="/#foundations" data-verbe="Read architecture">Read technical architecture<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a>
-                </div>
-              </article>
-
-              <!-- Case 4: Aethel Runtime (Autonomous Production Pipelines) -->
+              <!-- Case 3: Aethel Runtime (Autonomous Production Pipelines) -->
               <article class="qr" data-metier="conseil">
                 <p class="qr__client">
                   <span class="label">AI Lab</span>
@@ -512,7 +496,7 @@ def build_stitched_quiet_studio():
                 </div>
               </article>
 
-              <!-- Case 5: Capture Desktop (macOS Screen Context & Intent) -->
+              <!-- Case 4: Capture Desktop (macOS Screen Context & Intent) -->
               <article class="qr" data-metier="web">
                 <p class="qr__client">
                   <span class="label">macOS Native</span>
@@ -532,7 +516,7 @@ def build_stitched_quiet_studio():
                 </div>
               </article>
 
-              <!-- Case 6: TrendCulture (Culture & Signal Radar) -->
+              <!-- Case 5: TrendCulture (Culture & Signal Radar) -->
               <article class="qr" data-metier="direction">
                 <p class="qr__client">
                   <span class="label">Research Concept</span>
