@@ -187,9 +187,6 @@ function Header({
       setActiveAgencyKey("news");
     } else if (location.startsWith("/research") || location.startsWith("/foundations")) {
       setActiveProductsKey("foundations");
-      if (studioMode !== "human") {
-        onStudioModeChange("human");
-      }
     } else if (location.startsWith("/about") || location.startsWith("/thesis")) {
       setActiveProductsKey("about");
       setActiveAgencyKey("about");
@@ -492,6 +489,9 @@ function Header({
               onClick={() => {
                 playClick();
                 onStudioModeChange("human");
+                if (location !== "/") {
+                  setLocation("/");
+                }
               }}
               title="Products: Open Core Apps & Systems"
             >
@@ -504,6 +504,9 @@ function Header({
               onClick={() => {
                 playClick();
                 onStudioModeChange("agent");
+                if (location !== "/") {
+                  setLocation("/");
+                }
               }}
               title="Agency: Independent Design & Software Studio"
             >
@@ -659,6 +662,9 @@ function Header({
                     playClick();
                     onStudioModeChange("human");
                     setMobileNavOpen(false);
+                    if (location !== "/") {
+                      setLocation("/");
+                    }
                   }}
                 >
                   <span className="mode-btn-symbol">✦</span>
@@ -672,6 +678,9 @@ function Header({
                     playClick();
                     onStudioModeChange("agent");
                     setMobileNavOpen(false);
+                    if (location !== "/") {
+                      setLocation("/");
+                    }
                   }}
                 >
                   <span className="mode-btn-symbol">✱</span>
@@ -762,37 +771,19 @@ function AppShell() {
   const [contactOpen, setContactOpen] = useState(false);
   const [studioMode, setStudioMode] = useState<"human" | "agent">(() => {
     if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("quiet-studio-mode");
+      if (saved === "human" || saved === "agent") return saved;
       const p = window.location.pathname;
       if (
         p.startsWith("/research") ||
         p.startsWith("/foundations") ||
-        p.startsWith("/about") ||
-        p.startsWith("/blog") ||
-        p.startsWith("/thesis") ||
         p.startsWith("/products")
       ) {
         return "human";
       }
-      const saved = localStorage.getItem("quiet-studio-mode");
-      if (saved === "human" || saved === "agent") return saved;
     }
     return "agent";
   });
-
-  useEffect(() => {
-    if (
-      location.startsWith("/research") ||
-      location.startsWith("/foundations") ||
-      location.startsWith("/about") ||
-      location.startsWith("/blog") ||
-      location.startsWith("/thesis") ||
-      location.startsWith("/products")
-    ) {
-      if (studioMode !== "human") {
-        setStudioMode("human");
-      }
-    }
-  }, [location, studioMode]);
 
   const handleStudioModeChange = (nextMode: "human" | "agent") => {
     playClick();

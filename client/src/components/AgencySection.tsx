@@ -902,13 +902,6 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         }
 
         /* Hero Video Square Optical Centering & Guaranteed Visibility */
-        .bitwip-unified-container .hh__rideau,
-        .hh__rideau {
-          display: none !important;
-          visibility: hidden !important;
-          pointer-events: none !important;
-          opacity: 0 !important;
-        }
 
         .bitwip-unified-container .hh {
           --course: 220svh;
