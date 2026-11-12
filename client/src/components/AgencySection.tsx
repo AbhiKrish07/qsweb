@@ -420,7 +420,7 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
         await loadScript('/assets/js/p-hero-accueil.js');
         hydrateImages();
 
-        // Ensure Hero Video starts and plays reliably
+        // Ensure Hero Video starts and plays reliably across mobile, tablet & desktop
         const reel = containerRef.current?.querySelector<HTMLVideoElement>('.hh__reel');
         if (reel) {
           reel.muted = true;
@@ -428,7 +428,28 @@ export default function AgencySection({ onSwitchToProducts, onOpenContact }: Age
           reel.playsInline = true;
           reel.loop = true;
           reel.preload = 'auto';
-          reel.play().catch(() => {});
+          reel.setAttribute('playsinline', '');
+          reel.setAttribute('webkit-playsinline', '');
+          reel.setAttribute('x5-playsinline', '');
+          reel.removeAttribute('poster');
+
+          const startPlayback = () => {
+            reel.muted = true;
+            reel.play().catch(() => {});
+          };
+
+          startPlayback();
+
+          // Fallback listeners for iOS Safari and mobile browsers that require user gesture
+          const handleFirstInteraction = () => {
+            startPlayback();
+            window.removeEventListener('touchstart', handleFirstInteraction);
+            window.removeEventListener('pointerdown', handleFirstInteraction);
+            window.removeEventListener('scroll', handleFirstInteraction);
+          };
+          window.addEventListener('touchstart', handleFirstInteraction, { passive: true });
+          window.addEventListener('pointerdown', handleFirstInteraction, { passive: true });
+          window.addEventListener('scroll', handleFirstInteraction, { passive: true });
         }
 
         window.dispatchEvent(new Event('DOMContentLoaded'));
