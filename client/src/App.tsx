@@ -455,9 +455,10 @@ function Header({
         {/* Three Line Collapsible Menu Icon (Mobile Left) */}
         <button
           className="mobile-menu-toggle"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             playClick();
-            setMobileNavOpen(!mobileNavOpen);
+            setMobileNavOpen((prev) => !prev);
           }}
           aria-label={mobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
           title="Toggle Navigation Menu"
